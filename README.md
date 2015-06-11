@@ -1,7 +1,8 @@
 ## Process
 
-1. Get version for latest, testing, and local versions
-1. Get changelog version (local and remote)
+1. <del>Get version for latest, testing, and local versions</del>
+1. <del>Get changelog version (local and remote)</del>
+1. Fix permissions
 1. Sync files from one to another
 1. Full sync from one to another
 1. Full files deploy
@@ -13,7 +14,21 @@
 
 
 
-### Examples for ntdr_ls.py
+## Examples
+
+### ntdr_ls.py
+
+    ansible all -i "localhost," -c local --module-path modules -m ntdr_ls.py
     ansible -i inventory/cottage-servers br --module-path modules -m ntdr_ls.py
     ansible -i inventory/cottage-servers br --module-path modules -m ntdr_ls.py -a "/var/www/latest"
     ansible -i inventory/cottage-servers br --module-path modules -m ntdr_ls.py -a "/var/www/testing"
+
+### ntdr_get_version.py
+    
+    ansible all -i "localhost," -c local --module-path modules -m ntdr_get_version.py -a /home/tobias/workspace/Cottaging/sites/br/
+    ansible -i inventory/cottage-servers br --module-path modules -m ntdr_get_version.py
+    ansible -i inventory/cottage-servers br --module-path modules -m ntdr_get_version.py -a "/var/www/latest /var/www/testing"
+
+### Fix permissions
+
+http://docs.ansible.com/file_module.html

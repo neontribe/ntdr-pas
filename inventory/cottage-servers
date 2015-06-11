@@ -17,3 +17,6 @@
 [wl]
 178.62.7.133 ansible_ssh_user=neonwl
 178.62.98.134 ansible_ssh_user=neonwl
+
+[cottage]
+192.168.21.44
