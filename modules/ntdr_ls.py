@@ -1,28 +1,25 @@
 #! /usr/bin/env python
 
 # Find symbolic links and show where they point to.
-# Arguments are directories to search; default is current directory.
+# Arguments are directories to search; default is /var/www
 # No recursion.
-# (This is a totally different program from "findsymlinks.py"!)
 
-import sys, os
+import sys, os, json, shlex
 
-def lll(dirname):
-    for name in os.listdir(dirname):
+''' Ansible uploads the args as a fil '''
+args_file = sys.argv[1]
+args_data = file(args_file).read()
+
+arguments = shlex.split(args_data)
+if not arguments: arguments = ['/var/www/']
+
+data = {}
+for arg in arguments:
+    for name in os.listdir(arg):
         if name not in (os.curdir, os.pardir):
-            full = os.path.join(dirname, name)
+            full = os.path.join(arg, name)
             if os.path.islink(full):
-                print name, '->', os.readlink(full)
-def main():
-    args = sys.argv[1:]
-    if not args: args = ['/var/www']
-    first = 1
-    for arg in args:
-        if len(args) > 1:
-            if not first: print
-            first = 0
-            print arg + ':'
-    lll(arg)
+                data[name] =  os.readlink(full)
 
-if __name__ == '__main__':
-    main()
+print json.dumps(data)
+sys.exit(0)
