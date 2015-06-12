@@ -1,22 +1,22 @@
 [br]
-178.62.8.177 ansible_ssh_user=neonbr
-178.62.100.70 ansible_ssh_user=neonbr
+br_live ansible_ssh_host=178.62.8.177 ansible_ssh_user=neonbr
+br_test ansible_ssh_host=178.62.100.70 ansible_ssh_user=neonbr
 
 [ch]
-178.62.24.86 ansible_ssh_user=neonch
-178.62.81.46 ansible_ssh_user=neonch
+ch_live ansible_ssh_host=178.62.24.86 ansible_ssh_user=neonch
+ch_test ansible_ssh_host=178.62.81.46 ansible_ssh_user=neonch
 
 [fb]
-178.62.80.42 ansible_ssh_user=neonfb
-178.62.81.44 ansible_ssh_user=neonfb
+fb_live ansible_ssh_host=178.62.80.42 ansible_ssh_user=neonfb
+fb_test ansible_ssh_host=178.62.81.44 ansible_ssh_user=neonfb
 
 [lb]
-178.62.79.248 ansible_ssh_user=neonlb
-178.62.80.5 ansible_ssh_user=neonlb
+lb_live ansible_ssh_host=178.62.79.248 ansible_ssh_user=neonlb
+lb_test ansible_ssh_host=178.62.80.5 ansible_ssh_user=neonlb
 
 [wl]
-178.62.7.133 ansible_ssh_user=neonwl
-178.62.98.134 ansible_ssh_user=neonwl
+wl_live ansible_ssh_host=178.62.7.133 ansible_ssh_user=neonwl
+wl_test ansible_ssh_host=178.62.98.134 ansible_ssh_user=neonwl
 
 [cottage]
-192.168.21.44
+neoncottage ansible_ssh_host=192.168.21.44
