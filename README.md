@@ -22,28 +22,32 @@
 ## Examples
 
 ### ntdr_ls.py
-    ansible all -i "localhost," -c local --module-path modules -m ntdr_ls.py
-    ansible -i inventory/cottage-servers br --module-path modules -m ntdr_ls.py
-    ansible -i inventory/cottage-servers br --module-path modules -m ntdr_ls.py -a "/var/www/latest"
-    ansible -i inventory/cottage-servers br --module-path modules -m ntdr_ls.py -a "/var/www/testing"
+    ansible all -i "localhost," -c local -m ntdr_ls.py
+    ansible -i inventory/cottage-servers br -m ntdr_ls.py
+    ansible -i inventory/cottage-servers br -m ntdr_ls.py -a "/var/www/latest"
+    ansible -i inventory/cottage-servers br -m ntdr_ls.py -a "/var/www/testing"
 
 ### ntdr_get_version.py
-    ansible all -i "localhost," -c local --module-path modules -m ntdr_get_version.py -a /home/tobias/workspace/Cottaging/sites/br/
-    ansible -i inventory/cottage-servers br --module-path modules -m ntdr_get_version.py
-    ansible -i inventory/cottage-servers br --module-path modules -m ntdr_get_version.py -a "/var/www/latest /var/www/testing"
+    ansible all -i "localhost," -c local -m ntdr_get_version.py -a /home/tobias/workspace/Cottaging/sites/br/
+    ansible -i inventory/cottage-servers br -m ntdr_get_version.py
+    ansible -i inventory/cottage-servers br -m ntdr_get_version.py -a "/var/www/latest /var/www/testing"
 
 ### Fix permissions
     ansible -i inventory/cottage-servers br -m shell -a "sudo ntdrchown /var/www/br_0.1.18"
 
 ### Sync files from one dir to another
-    ansible -i inventory/cottage-servers br --module-path modules -m shell -a "rsync -a /var/www/br_0.1.16 /home/neonbr"
+    ansible -i inventory/cottage-servers br -m shell -a "rsync -a /var/www/br_0.1.16 /home/neonbr"
 
 ### Sync files to/from remote host to ntdr-pas server
-    rsync -a neon[brand code]@host /local/path
-    rsync -a --exclude='.git' neon[brand code]@host /local/path
+    ansible all -i "localhost," -c local -m shell -a "rsync -a neon[brand code]@host:/local/path /remote/path"
+    ansible all -i "localhost," -c local -m shell -a "rsync -a neon[brand code]@host:/local/path /remote/path"
+
+
+    rsync -a neon[brand code]@host:/local/path /remote/path
+    rsync -a --exclude='.git' neon[brand code]@host:/remote/path /local/path
 
 ### Create drushrc.alias on remote
-    ansible -i inventory/cottage-servers br --module-path modules -m ntdr_create_drushrc_alias.py -a "/var/www/latest"
+    ansible -i inventory/cottage-servers br -m ntdr_create_drushrc_alias.py -a "/var/www/latest"
 
 ### Fetch alias
     rsync -a neon[brand code]@host:/var/www/br_0.1.16/sites/all/drush/ALIAS.alias.drushrc.php ~/.drush
