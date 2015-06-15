@@ -1,19 +1,43 @@
-## Process
+## Playbooks
 
-1. <del>Get version for latest, testing, and local versions</del>
-1. <del>Get changelog version (local and remote)</del>
-1. <del>Fix permissions</del>
-1. Sync files from one dir to another
-1. Sync files to/from remote host to ntdr-pas server
-1. Check DB connection
-1. Create DB conection
-1. Dump sql
-1. Upload sql
-1. Sync DB from one to another on same host
-1. Sync DB from remote host to ntdr-pas server
-1. Sync DB from ntdr-pas server to remote host
-1. Full mirror
-1. Check robots.txt
+1. Create new RC site from live site. Minor version bump
+    1. Sync Live to RC
+    1. Sync DB into RC
+    1. Run up and updb
+    1. Set testing symlink to point at RC
+    1. Set robots.txt to no follow
+    1. Fix remote permissions
+1. Push staging site to RC
+    1. Fix rc permissions
+    1. Fix staging permissions
+    1. Sync down sites/default/files
+    1. Sync up full file system
+    1. Run up and dbup
+    1. Set robots.txt to no follow
+    1. Create change log and patch bump
+    1. Run tests on RC
+1. Freshen staging
+    1. Fix permissions on latest
+    1. Fix Permissions on staging
+    1. Sync down latest sites/default/files
+    1. Sync down database
+1. Pull a copy of remote (Latest, RC or Staging)
+    1. Fix permissions on latest
+    1. If local exists fix permissions on local
+    1. Full fs sync from latest to Local
+    1. Sync DB latest to local
+1. Send RC live
+    1. Put latest into read only
+    1. Remote file sync from latest to RC
+    1. Remote DB sync from latest to RC
+    1. Run up and updb on RC
+    1. Set robots.txt to crawl on RC
+    1. Set robots.txt to no follow on latest
+    1. Rewrite latest symlink to point at RC
+    1. Send (new) latest live
+    1. Remove testing symlink
+    1. Fix latest permission
+    1. Create new RC site from live site. Minor version bump
 
 ## Install
 
@@ -39,18 +63,14 @@
     ansible -i inventory/cottage-servers br -m shell -a "rsync -a /var/www/br_0.1.16 /home/neonbr"
 
 ### Sync files to/from remote host to ntdr-pas server
-    ansible all -i "localhost," -c local -m shell -a "rsync -a neon[brand code]@host:/local/path /remote/path"
-    ansible all -i "localhost," -c local -m shell -a "rsync -a neon[brand code]@host:/local/path /remote/path"
-
-
-    rsync -a neon[brand code]@host:/local/path /remote/path
-    rsync -a --exclude='.git' neon[brand code]@host:/remote/path /local/path
+    ansible all -i "localhost," -c local -m shell -a "rsync -a neon{{ brand code }}@host:/local/path /remote/path"
+    ansible all -i "localhost," -c local -m shell -a "rsync -a neon{{ brand code }}@host:/local/path /remote/path"
 
 ### Create drushrc.alias on remote
     ansible -i inventory/cottage-servers br -m ntdr_create_drushrc_alias.py -a "/var/www/latest"
 
 ### Fetch alias
-    rsync -a neon[brand code]@host:/var/www/br_0.1.16/sites/all/drush/ALIAS.alias.drushrc.php ~/.drush
+    ansible all -i "localhost," -c local -m shell -a "rsync -a neon{{ brand code }}@host:/var/www/br_0.1.16/sites/all/drush/ALIAS.alias.drushrc.php ~/.drush"
 
 ### Check DB connection
     ansible -i inventory/cottage-servers br -m shell -a "drush -r /var/www/latest sqlq 'show tables'>/dev/null"
@@ -60,14 +80,14 @@
     ansible -i inventory/cottage-servers br -m shell -a "mysql-create-user-and-db -u XXX -p XXX -m XXX"
 
 ### Dump sql
-    ssh neon[brand code]@host drush -r /var/www/latest sql-dump --ordered-dump --structure-tables-key=common > dumpfile.sql
+    ssh neon{{ brand code }}@host drush -r /var/www/latest sql-dump --ordered-dump --structure-tables-key=common --result-file={{ brand code }}-latest.sql
 
 ### Upload sql
     drush @ALIAS sqlc < /path/to/sql
 
 ### Sync DB from one to another on remote host
-    ssh neon[brand code]@host drush -r /var/www/latest sql-sync /path/to/src @self
-    ssh neon[brand code]@host drush -r /var/www/latest sql-sync @self /path/to/src
+    ssh neon{{ brand code }}@host drush -r /var/www/latest sql-sync /path/to/src @self
+    ssh neon{{ brand code }}@host drush -r /var/www/latest sql-sync @self /path/to/src
 
 ### Sync DB from remote host to ntdr-pas server
     drush sql-sync @REMOTE @LOCAL
