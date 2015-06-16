@@ -1,12 +1,15 @@
 ## Playbooks
 
 1. Create new RC site from live site. Minor version bump
+    1. Fix latest permissions
     1. Sync Live to RC
     1. Sync DB into RC
+    1. Create alias file
+    1. Sync down alias
     1. Run up and updb
     1. Set testing symlink to point at RC
     1. Set robots.txt to no follow
-    1. Fix remote permissions
+    1. Fix RC permissions
 1. Push staging site to RC
     1. Fix rc permissions
     1. Fix staging permissions
@@ -24,8 +27,16 @@
 1. Pull a copy of remote (Latest, RC or Staging)
     1. Fix permissions on latest
     1. If local exists fix permissions on local
+    1. Fetch alias file
     1. Full fs sync from latest to Local
     1. Sync DB latest to local
+    1. Set robots.txt to no follow
+1. Push a full new deploy
+    1. Fix permissions on local
+    1. Full fs sync from Local to target
+    1. Sync DB from local to target
+    1. Fix permission on target
+    1. Set robots to no follow
 1. Send RC live
     1. Put latest into read only
     1. Remote file sync from latest to RC

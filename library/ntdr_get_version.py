@@ -1,35 +1,39 @@
 #! /usr/bin/env python
 
 # Find changelog vesion
-# Arguments are directories to search; default is /var/www/latest
-# No recursion.
 
 import sys, os, json, shlex
 
-def get_version(name):
-    full = os.path.join(name, 'changelog.txt')
+def main():
+    module = AnsibleModule(
+        argument_spec = dict(
+            path = dict(required=True),
+            version = dict(default='no', type='bool'),
+        ),
+        supports_check_mode = True
+    )
+
+    path = module.params.get('path')
+    path = os.path.expanduser(path)
+
+    full = os.path.join(path, 'changelog.txt')
     if os.path.isfile(full):
         with open(full, 'r') as f:
             first_line = f.readline()
         parts = first_line.split();
-        return parts[1]
-    return False
+        version = parts[1]
+    else:
+        version = False
 
-def get_versions(arguments):
-    data = {}
-    for name in arguments:
-        data[name] = get_version(name)
-    return data
+    # back to ansible
+    d = {
+        'path'     : path,
+        'version'  : version,
+    }
 
-if __name__ == "__main__":
-    ''' Ansible uploads the args as a fil '''
-    args_file = sys.argv[1]
-    args_data = file(args_file).read()
+    module.exit_json(changed=False, stat=d)
 
-    arguments = shlex.split(args_data)
-    if not arguments: arguments = ['/var/www/latest']
+# import module snippets
+from ansible.module_utils.basic import *
 
-    data = get_versions(arguments)
-    print json.dumps(data)
-    sys.exit(0)
-
+main()

@@ -47,14 +47,17 @@ response = proc.stdout.read()
 lines = response.split(os.linesep)
 for index in range(len(lines)):
     line = lines[index]
+    if 'aliases' in line:
+        line = '$aliases["' + version + '"] = array ('
+        lines[index] = line
     if 'self' in line:
         line = line.replace('self', aliasname)
         lines[index] = line
     if 'root' in line:
         line = "  'root' => '" + os.path.realpath(drpath) + "',"
         lines[index] = line
-lines.insert(1, "  'remote_user' => '" + getpass.getuser() + "',")
-lines.insert(1, "  'remote_host' => '" + socket.gethostname() + "',")
+lines.insert(1, "  'remote-user' => '" + getpass.getuser() + "',")
+lines.insert(1, "  'remote-host' => '" + socket.gethostname() + "',")
 
 mkdir_p(dirname)
 if os.path.isfile(aliaspath):

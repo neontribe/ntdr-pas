@@ -1,0 +1,11 @@
+---
+# src: source drupal root for pulling file
+# dest: destination drupal root for putting files
+
+name: Fix latest permissions
+name: Sync Latest to RC
+name: Sync DB into RC
+name: Run up and updb on RC
+name: Set testing symlink to point at RC
+name: Set robots.txt to no follow
+name: Fix RC permissions

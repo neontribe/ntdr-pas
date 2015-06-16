@@ -1,0 +1,49 @@
+---
+# local = the local drupal root
+# source = the remote drupal root
+
+- stat: path={{ local }}/sites/default/settings.php
+  delegate_to: 127.0.0.1
+  register: local_settings
+
+- ntdr_get_version.py: path={{ target }}
+  register: target_version
+
+- stat: path={{ target }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php
+  register: remote_alias
+
+- name: Fix permissions on target
+  shell: sudo ntdrchown {{ target }}
+  tags: permissions
+
+- name: If local exists fix permissions on local
+  shell: sudo ntdrchown {{ target }}
+  delegate_to: 127.0.0.1
+  when: local_settings.stat.exists
+  tags: permissions
+
+- name: Create alias file
+  ntdr_create_drushrc_alias.py: "{{ target }}"
+  when: not remote_alias.stat.exists
+  tags: alias
+
+- name: Create sites/all/drush
+  file: path={{ local }}/sites/all/drush state=directory mode=0755
+  delegate_to: 127.0.0.1
+
+- name: Fetch alias to local site
+  fetch: src={{ target }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php dest={{ local }}/sites/all/drush/ flat=yes
+  when: local_settings.stat.exists
+  tags: alias
+
+- name: Fetch alias to ~/.drush
+  fetch: src={{ target }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php dest=~/.drush/ flat=yes
+  when: not local_settings.stat.exists
+  tags: alias
+
+- name: Full fs sync from target to local
+  shell: drush -y rsync @{{ target_version.stat.version }} {{ local }} --include-conf --include-vcs
+  delegate_to: 127.0.0.1
+
+# - name: Sync DB {{ target }} to {{ local }}
+# - name: Set robots.txt to no follow
