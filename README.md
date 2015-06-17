@@ -56,6 +56,10 @@
 
 ## Examples
 
+    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-live --limit br --extra-vars="mysql_root_pw=b191wkm target=/var/www/br_0.4.3"
+
+## Using the modules/stages individually
+
 ### ntdr_ls.py
     ansible all -i "localhost," -c local -m ntdr_ls.py
     ansible -i inventory/cottage-servers br -m ntdr_ls.py

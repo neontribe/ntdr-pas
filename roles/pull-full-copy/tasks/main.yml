@@ -6,6 +6,10 @@
   delegate_to: 127.0.0.1
   register: local_settings
 
+- stat: path={{ local }}
+  delegate_to: 127.0.0.1
+  register: local_site
+
 - ntdr_get_version.py: path={{ target }}
   register: target_version
 
@@ -17,10 +21,16 @@
   tags: permissions
 
 - name: If local exists fix permissions on local
-  shell: sudo ntdrchown {{ target }}
+  shell: sudo ntdrchown -a {{ local }}
   delegate_to: 127.0.0.1
   when: local_settings.stat.exists
   tags: permissions
+
+- name: Fetch fresh drupal
+  shell: drush dl --destination={{ local | dirname }} --drupal-project-rename={{ local | basename }}
+  delegate_to: 127.0.0.1
+  when: not local_site.stat.exists
+  tags: files
 
 - name: Create alias file
   ntdr_create_drushrc_alias.py: "{{ target }}"
@@ -42,8 +52,43 @@
   tags: alias
 
 - name: Full fs sync from target to local
-  shell: drush -y rsync @{{ target_version.stat.version }} {{ local }} --include-conf --include-vcs
+  shell: drush -y -r {{ local }} rsync @{{ target_version.stat.version }} @self --include-conf --include-vcs --progress --mode=a
+  delegate_to: 127.0.0.1
+  tags: files
+
+- ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php
+  delegate_to: 127.0.0.1
+  register: local_alias
+
+#####
+# Python seems to refuse to allow dots in DB names.  I'd really like to use the ansible scripts but WTF
+#####
+#- name: Create DB
+#  mysql_db: name={{ local_alias.stat.dbname }} state=present login_user=root login_password={{ mysql_root_pw }}
+#  delegate_to: 127.0.0.1
+#- name: Create User
+#  mysql_user: name={{ local_alias.stat.dbuser }} password={{ local_alias.stat.dbpass }} priv={{ local_alias.stat.dbname }}.*:ALL state=present login_user=root login_password={{ mysql_root_pw }}
+#  delegate_to: 127.0.0.1
+
+- name: Drop local DB and user
+  shell: mysql-dropuser-and-db -u {{ local_alias.stat.dbuser }} -m {{ mysql_root_pw }}
   delegate_to: 127.0.0.1
 
-# - name: Sync DB {{ target }} to {{ local }}
-# - name: Set robots.txt to no follow
+- name: Create DB and user
+  shell: mysql-create-user-and-db -u {{ local_alias.stat.dbuser }} -p {{ local_alias.stat.dbpass }} -n {{ local_alias.stat.dbname }} -m {{ mysql_root_pw }}
+  delegate_to: 127.0.0.1
+
+- name: Database sync from target to local
+  shell: drush --verbose -y sql-sync --uri=default @{{ target_version.stat.version }} @self chdir={{ local }}
+  delegate_to: 127.0.0.1
+
+- name: Set robots.txt to no follow
+  copy: src=robots.nofollow.conf dest={{ local }}/.htaccess mode=0775 backup=yes
+  when: devsite is defined
+  delegate_to: 127.0.0.1
+
+- name: Re-fix permissions on local
+  shell: sudo ntdrchown {{ local }}
+  delegate_to: 127.0.0.1
+  when: local_settings.stat.exists
+  tags: permissions

@@ -2,6 +2,12 @@
 - hosts: all
   vars:
     target: /var/www/latest
-    local: /var/tmp/cottage
+    local: /var/tmp/cottage_{{ ansible_hostname }}
+    devsite: true
+  vars_prompt:
+    - name: mysql_root_pw
+      prompt: "Enter mysql root password for the local mysql server"
+      private: true
+      when: mysql_root_pw is not defined
   roles:
     - pull-full-copy
