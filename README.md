@@ -56,7 +56,7 @@
 
 ## Examples
 
-    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-live --limit br --extra-vars="mysql_root_pw=b191wkm target=/var/www/br_0.4.3"
+    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-live --limit br --extra-vars="target=/var/www/br_0.4.3"
 
 ## Using the modules/stages individually
 
