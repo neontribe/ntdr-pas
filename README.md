@@ -1,62 +1,68 @@
 ## Playbooks
 
-1. Create new RC site from live site. Minor version bump
-    1. Fix latest permissions
-    1. Sync Live to RC
-    1. Sync DB into RC
-    1. Create alias file
-    1. Sync down alias
-    1. Run up and updb
-    1. Set testing symlink to point at RC
-    1. Set robots.txt to no follow
-    1. Fix RC permissions
-1. Push staging site to RC
-    1. Fix rc permissions
-    1. Fix staging permissions
-    1. Sync down sites/default/files
-    1. Sync up full file system
-    1. Run up and dbup
-    1. Set robots.txt to no follow
-    1. Create change log and patch bump
-    1. Run tests on RC
-1. Freshen staging
-    1. Fix permissions on latest
-    1. Fix Permissions on staging
-    1. Sync down latest sites/default/files
-    1. Sync down database
-1. Pull a copy of remote (Latest, RC or Staging)
-    1. Fix permissions on latest
-    1. If local exists fix permissions on local
-    1. Fetch alias file
-    1. Full fs sync from latest to Local
-    1. Sync DB latest to local
-    1. Set robots.txt to no follow
-1. Push a full new deploy
-    1. Fix permissions on local
-    1. Full fs sync from Local to target
-    1. Sync DB from local to target
-    1. Fix permission on target
-    1. Set robots to no follow
-1. Send RC live
-    1. Put latest into read only
-    1. Remote file sync from latest to RC
-    1. Remote DB sync from latest to RC
-    1. Run up and updb on RC
-    1. Set robots.txt to crawl on RC
-    1. Set robots.txt to no follow on latest
-    1. Rewrite latest symlink to point at RC
-    1. Send (new) latest live
-    1. Remove testing symlink
-    1. Fix latest permission
-    1. Create new RC site from live site. Minor version bump
-
 ## Install
 
     mkdir ~/.drush
 
 ## Examples
 
+### Pull a copy of remote (Latest, RC or Staging)
+
+1. Fix permissions on latest
+1. If local exists fix permissions on local
+1. Fetch alias file
+1. Full fs sync from latest to Local
+1. Sync DB latest to local
+1. Set robots.txt to no follow
+
     ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-live --limit br --extra-vars="mysql_root_pw=b191wkm target=/var/www/br_0.4.3"
+
+### Freshen local
+1. Fix permissions on latest
+1. Fix Permissions on local
+1. Sync down latest sites/default/files
+1. Sync down database
+
+### Create new RC site from live site. Minor version bump
+1. Fix latest permissions
+1. Sync Live to RC
+1. Sync DB into RC
+1. Create alias file
+1. Sync down alias
+1. Run up and updb
+1. Set testing symlink to point at RC
+1. Set robots.txt to no follow
+1. Fix RC permissions
+
+### Push staging site to RC
+1. Fix rc permissions
+1. Fix staging permissions
+1. Sync down sites/default/files
+1. Sync up full file system
+1. Run up and dbup
+1. Set robots.txt to no follow
+1. Create change log and patch bump
+1. Run tests on RC
+
+### Push a full new deploy
+1. Fix permissions on local
+1. Full fs sync from Local to target
+1. Sync DB from local to target
+1. Fix permission on target
+1. Set robots to no follow
+
+### Send RC live
+1. Put latest into read only
+1. Remote file sync from latest to RC
+1. Remote DB sync from latest to RC
+1. Run up and updb on RC
+1. Set robots.txt to crawl on RC
+1. Set robots.txt to no follow on latest
+1. Rewrite latest symlink to point at RC
+1. Send (new) latest live
+1. Remove testing symlink
+1. Fix latest permission
+1. Create new RC site from live site. Minor version bump
 
 ## Using the modules/stages individually
 
