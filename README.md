@@ -36,6 +36,8 @@
 1. Set robots.txt to no follow
 1. Fix RC permissions
 
+    ansible-playbook new-rc.yml -i inventory/cottage-servers-zz --extra-vars="target=/var/www/zz_1.2.3"
+
 ### Push staging site to RC
 1. Fix rc permissions
 1. Fix staging permissions
