@@ -5,26 +5,30 @@
 - stat: path={{ local }}/sites/default/settings.php
   delegate_to: 127.0.0.1
   register: local_settings
+  tags: local_permissions, alias
 
 - stat: path={{ local }}
   delegate_to: 127.0.0.1
   register: local_site
+  tags: files
 
-- ntdr_get_version.py: path={{ target }}
-  register: target_version
+- ntdr_get_version.py: path={{ source }}
+  register: source_version
+  tags: always
 
-- stat: path={{ target }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php
+- stat: path={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php
   register: remote_alias
+  tags: always
 
-- name: Fix permissions on target
-  shell: sudo ntdrchown {{ target }}
-  tags: permissions
+- name: Fix permissions on source
+  shell: sudo ntdrchown {{ source }}
+  tags: pre-permissions, freshen
 
 - name: If local exists fix permissions on local
   shell: sudo ntdrchown -a {{ local }}
   delegate_to: 127.0.0.1
   when: local_settings.stat.exists
-  tags: permissions
+  tags: pre-permissions, freshen
 
 - name: Fetch fresh drupal
   shell: drush dl --destination={{ local | dirname }} --drupal-project-rename={{ local | basename }}
@@ -33,7 +37,7 @@
   tags: files
 
 - name: Create alias file
-  ntdr_create_drushrc_alias.py: "{{ target }}"
+  ntdr_create_drushrc_alias.py: "{{ source }}"
   when: not remote_alias.stat.exists
   tags: alias
 
@@ -42,21 +46,21 @@
   delegate_to: 127.0.0.1
 
 - name: Fetch alias to local site
-  fetch: src={{ target }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php dest={{ local }}/sites/all/drush/ flat=yes
+  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php dest={{ local }}/sites/all/drush/ flat=yes
   when: local_settings.stat.exists
   tags: alias
 
 - name: Fetch alias to ~/.drush
-  fetch: src={{ target }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php dest=~/.drush/ flat=yes
+  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php dest=~/.drush/ flat=yes
   when: not local_settings.stat.exists
   tags: alias
 
-- name: Full fs sync from target to local
-  shell: drush -y -r {{ local }} rsync @{{ target_version.stat.version }} @self --include-conf --include-vcs --progress --mode=a
+- name: Full fs sync from source to local
+  shell: drush -y -r {{ local }} rsync @{{ source_version.stat.version }} @self --include-conf --include-vcs --progress --mode=a
   delegate_to: 127.0.0.1
   tags: files
 
-- ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php
+- ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php
   delegate_to: 127.0.0.1
   register: local_alias
 
@@ -73,22 +77,26 @@
 - name: Drop local DB and user
   shell: mysql-dropuser-and-db -u {{ local_alias.stat.dbuser }} -m {{ mysql_root_pw }}
   delegate_to: 127.0.0.1
+  tags: db
 
 - name: Create DB and user
   shell: mysql-create-user-and-db -u {{ local_alias.stat.dbuser }} -p {{ local_alias.stat.dbpass }} -n {{ local_alias.stat.dbname }} -m {{ mysql_root_pw }}
   delegate_to: 127.0.0.1
+  tags: db
 
-- name: Database sync from target to local
-  shell: drush --verbose -y sql-sync --uri=default @{{ target_version.stat.version }} @self chdir={{ local }}
+- name: Database sync from source to local
+  shell: drush --verbose -y sql-sync --uri=default @{{ source_version.stat.version }} @self chdir={{ local }}
   delegate_to: 127.0.0.1
+  tags: db-sync, freshen
 
 - name: Set robots.txt to no follow
   copy: src=robots.nofollow.conf dest={{ local }}/.htaccess mode=0775 backup=yes
   when: devsite is defined
   delegate_to: 127.0.0.1
+  tags: post-pull, robots
 
 - name: Re-fix permissions on local
   shell: sudo ntdrchown {{ local }}
   delegate_to: 127.0.0.1
   when: local_settings.stat.exists
-  tags: permissions
+  tags: post-pull

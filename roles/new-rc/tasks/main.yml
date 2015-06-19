@@ -1,11 +1,57 @@
 ---
-# src: source drupal root for pulling file
-# dest: destination drupal root for putting files
+- name: Fix latest permissions
+  shell: sudo ntdrchown {{ source }}
 
-name: Fix latest permissions
-name: Sync Latest to RC
-name: Sync DB into RC
-name: Run up and updb on RC
-name: Set testing symlink to point at RC
-name: Set robots.txt to no follow
-name: Fix RC permissions
+- ntdr_get_version.py: path={{ source }}
+  register: source_version
+
+- stat: path={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php
+  register: source_alias
+  tags: always
+
+- name: Create alias file
+  ntdr_create_drushrc_alias.py: "{{ source }}"
+  when: not source_alias.stat.exists
+  tags: alias
+
+- name: Sync Live to RC
+  shell: drush -y -r {{ source }} rsync @{{ source_version.stat.version }} {{ target }} --include-conf --include-vcs --progress --mode=a
+
+- name: Create new alias file
+  ntdr_create_drushrc_alias.py: "{{ target }}"
+
+- ntdr_get_db_details.py: path={{ target }}/sites/all/drush/{{ target | basename }}.alias.drushrc.php
+  register: target_alias
+
+- name: Drop local DB and user
+  shell: mysql-dropuser-and-db -u {{ target_alias.stat.dbuser }} -m {{ mysql_root_pw }}
+  tags: db
+
+- name: Create DB
+  shell: mysql-create-user-and-db -u {{ target_alias.stat.dbuser }} -p {{ target_alias.stat.dbpass }} -n {{ target_alias.stat.dbname }} -m {{ mysql_root_pw }}
+
+- name: Dump live DB
+  shell: drush sql-dump --ordered-dump --structure-tables-key=common --result-file=/var/tmp/{{ source_version.stat.version }}.sql chdir={{ source }}
+
+- name: Import DB
+  shell: "drush -r {{ target }} sqlc < /var/tmp/{{ source_version.stat.version }}.sql"
+
+- name: Create sites/all/drush
+  file: path={{ target }}/sites/all/drush state=directory mode=0755
+
+- name: Create alias file
+  ntdr_create_drushrc_alias.py: "{{ target }}"
+
+- name: Run up and updb
+  shell: drush --verbose -y --uri=default @self chdir={{ target }} up
+  shell: drush --verbose -y --uri=default @self chdir={{ target }} updb
+
+- name: Set testing symlink to point at RC
+  file: path=/var/www/testing state=absent
+  file: src={{ target }} dest=/var/www/testing state=link
+
+- name: Fix RC permissions
+  shell: sudo ntdrchown {{ target }}
+
+- name: Add no follow robots.txt
+  shell: 'echo -e "User-agent: *\nDisallow: /" > {{ target }}/robotx.txt'

@@ -15,20 +15,22 @@
 1. Sync DB latest to local
 1. Set robots.txt to no follow
 
-    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-live --limit br --extra-vars="mysql_root_pw=b191wkm target=/var/www/br_0.4.3"
+    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-live --limit br --extra-vars="target=/var/www/br_0.4.3"
 
 ### Freshen local
+
 1. Fix permissions on latest
 1. Fix Permissions on local
 1. Sync down latest sites/default/files
 1. Sync down database
+
+    ansible-playbook freshen-local.yml -i inventory/cottage-servers-live --limit br --extra-vars="target=/var/www/br_0.4.3"
 
 ### Create new RC site from live site. Minor version bump
 1. Fix latest permissions
 1. Sync Live to RC
 1. Sync DB into RC
 1. Create alias file
-1. Sync down alias
 1. Run up and updb
 1. Set testing symlink to point at RC
 1. Set robots.txt to no follow

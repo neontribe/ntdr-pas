@@ -1,7 +1,8 @@
 ---
+
 - hosts: all
   vars:
-    source: /var/www/latest
+    target: /var/www/latest
     local: /var/tmp/cottage_{{ ansible_hostname }}
     devsite: true
   vars_prompt:
@@ -10,4 +11,7 @@
       private: true
       when: mysql_root_pw is not defined
   roles:
-    - pull-full-copy
+    - { role: pull-full-copy, tags: ['pre-permissions', 'db-sync'] }
+    - freshen-local
+    - { role: pull-full-copy, tags: ['post-pull'] }
+
