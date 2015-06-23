@@ -1,0 +1,22 @@
+[13:52:37] [Client thread/INFO]: Setting user: tobias
+[13:52:37] [Client thread/INFO]: (Session ID is token:d1f58304c0084cde9f8026b02b3299e8:7c348b938802431aa9a5ff55ca5cc39d)
+[13:52:38] [Client thread/INFO]: LWJGL Version: 2.9.4
+[13:52:39] [Client thread/INFO]: Reloading ResourceManager: Default
+[13:52:39] [Client thread/ERROR]: Couldn't initialize twitch stream
+[13:52:39] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[13:52:39] [Thread-6/INFO]: Initializing LWJGL OpenAL
+[13:52:39] [Thread-6/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[13:52:39] [Thread-6/INFO]: OpenAL initialized.
+[13:52:40] [Sound Library Loader/INFO]: Sound engine started
+[13:52:41] [Client thread/INFO]: Created: 512x512 textures-atlas
+[13:52:48] [Client thread/INFO]: Connecting to home.batch.org.uk, 25565
+[13:52:49] [Client thread/INFO]: [CHAT] [Server] Welcome back, tobias
+[13:52:49] [Client thread/INFO]: [CHAT] Server whispers to you: Hey there, tobias!
+[13:52:49] [Client thread/INFO]: [CHAT] Server whispers to you: Welcome to Survival One
+[13:53:36] [Client thread/INFO]: Connecting to home.batch.org.uk, 25565
+[13:53:39] [Client thread/INFO]: [CHAT] [Server] Welcome back, tobias
+[13:53:39] [Client thread/INFO]: [CHAT] Server whispers to you: Hey there, tobias!
+[13:53:39] [Client thread/INFO]: [CHAT] Server whispers to you: Welcome to Survival One
+[13:54:22] [Client thread/INFO]: Stopping!
+[13:54:22] [Client thread/INFO]: SoundSystem shutting down...
+[13:54:23] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com

@@ -22,13 +22,40 @@ def main():
             first_line = f.readline()
         parts = first_line.split();
         version = parts[1]
+        found = True
     else:
-        version = False
+        version = os.path.basename(path)
+        found = False
+
+    parts = version.split('.')
+    count = len(parts)
+
+    if (count > 0):
+        major = parts[0]
+    else:
+        major = 0
+
+    if (count > 1):
+        minor = parts[1]
+    else:
+        minor = 0
+    
+    if (count > 2):
+        patch = parts[2]
+    else:
+        patch = 0
+    
+    version = str(major) + '.' + str(minor) + '.' + str(patch)
 
     # back to ansible
     d = {
         'path'     : path,
         'version'  : version,
+        'found'    : found,
+        'db_ver'   : str(major) + '.' + str(minor),
+        'major'    : str(major),
+        'minor'    : str(minor),
+        'patch'    : str(patch),
     }
 
     module.exit_json(changed=False, stat=d)

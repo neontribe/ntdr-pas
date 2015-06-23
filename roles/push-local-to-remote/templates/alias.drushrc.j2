@@ -1,0 +1,35 @@
+<?php
+$aliases["{{ target_version.stat.version }}"] = array (
+  'structure-tables' =>
+  array (
+    'common' =>
+    array (
+      0 => 'cache*',
+      1 => 'history',
+      2 => 'sessions',
+      3 => 'watchdog',
+    ),
+  ),
+  'root' => '/var/www/{{ target_version.stat.version }}',
+  'uri' => 'http://default',
+  '#name' => '{{ target_version.stat.version }}',
+  'remote-user' => '{{ ansible_ssh_user }}',
+  'remote-host' => '{{ ansible_ssh_host }}',
+  'databases' =>
+  array (
+    'default' =>
+    array (
+      'default' =>
+      array (
+      'database' => '{{ target_version.stat.db_ver }}',
+      'username' => '{{ target_version.stat.db_ver }}',
+      'password' => '{{ target_version.stat.db_ver }}',
+        'host' => 'localhost',
+        'port' => '',
+        'driver' => 'mysql',
+        'prefix' => '',
+      ),
+    ),
+  ),
+);
+

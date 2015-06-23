@@ -42,18 +42,17 @@
 1. Fix rc permissions
 1. Fix staging permissions
 1. Sync down sites/default/files
+1. Bump minor version/update changelog
 1. Sync up full file system
+1. [Sync DB from local to target]
 1. Run up and dbup
 1. Set robots.txt to no follow
-1. Create change log and patch bump
 1. Run tests on RC
 
-### Push a full new deploy
-1. Fix permissions on local
-1. Full fs sync from Local to target
-1. Sync DB from local to target
-1. Fix permission on target
-1. Set robots to no follow
+### Freshen remote
+1. Copy files from target to source on remote
+1. Dump DB on source
+1. Import DB
 
 ### Send RC live
 1. Put latest into read only
