@@ -53,7 +53,7 @@ def main():
         'realpath' : os.path.realpath(path),
         'version'  : version,
         'found'    : found,
-        'db_ver'   : str(major) + '.' + str(minor),
+        'shortver'   : str(major) + '.' + str(minor),
         'major'    : str(major),
         'minor'    : str(minor),
         'patch'    : str(patch),

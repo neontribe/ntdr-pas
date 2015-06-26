@@ -40,7 +40,7 @@
   ntdr_create_drushrc_alias.py:
     path: "{{ source }}"
     name: source_version.version
-    dbver: source_version.db_ver
+    shortver: source_version.shortver
   when: not remote_alias.stat.exists
   tags: alias
 
@@ -49,21 +49,21 @@
   delegate_to: 127.0.0.1
 
 - name: Fetch alias to local site
-  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.db_ver }}.alias.drushrc.php dest={{ local }}/sites/all/drush/ flat=yes
+  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.shortver }}.alias.drushrc.php dest={{ local }}/sites/all/drush/ flat=yes
   when: local_settings.stat.exists
   tags: alias
 
 - name: Fetch alias to ~/.drush
-  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.db_ver }}.alias.drushrc.php dest=~/.drush/ flat=yes
+  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.shortver }}.alias.drushrc.php dest=~/.drush/ flat=yes
   when: not local_settings.stat.exists
   tags: alias
 
 - name: Full fs sync from source to local
-  shell: drush -y -r {{ local }} rsync @{{ source_version.stat.db_ver }} @self --include-conf --include-vcs --progress --mode=a
+  shell: drush -y -r {{ local }} rsync @{{ source_version.stat.shortver }} @self --include-conf --include-vcs --progress --mode=a
   delegate_to: 127.0.0.1
   tags: files
 
-- ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ source_version.stat.db_ver }}.alias.drushrc.php
+- ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ source_version.stat.shortver }}.alias.drushrc.php
   delegate_to: 127.0.0.1
   register: local_alias
 
@@ -90,7 +90,7 @@
   tags: db
 
 - name: Database sync from source to local
-  shell: drush --verbose -y sql-sync --uri=default @{{ source_version.stat.db_ver }} @self chdir={{ local }}
+  shell: drush --verbose -y sql-sync --uri=default @{{ source_version.stat.shortver }} @self chdir={{ local }}
   delegate_to: 127.0.0.1
   when: with_db is defined
   tags: db-sync, freshen

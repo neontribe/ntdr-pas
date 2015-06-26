@@ -24,6 +24,6 @@
   delegate_to: 127.0.0.1
 
 - name: Sync DB
-  shell: drush -r {{ local }} -y sql-sync @{{ source_version.stat.db_ver }} @self
+  shell: drush -r {{ local }} -y sql-sync @{{ source_version.stat.shortver }} @self
   delegate_to: 127.0.0.1
   when: with_db is defined
