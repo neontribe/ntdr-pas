@@ -50,6 +50,7 @@ def main():
     # back to ansible
     d = {
         'path'     : path,
+        'realpath' : os.path.realpath(path),
         'version'  : version,
         'found'    : found,
         'db_ver'   : str(major) + '.' + str(minor),

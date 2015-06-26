@@ -4,7 +4,33 @@
 
     mkdir ~/.drush
 
-## Examples
+## Quick Examples
+
+Create a whole new site on a remote site
+    ansible-playbook push-local-to-remote.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ with_db=true"
+
+Freshen a remote site with local files, no DB push/update
+    ansible-playbook push-local-to-remote.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
+
+Pull a remote site to local, including new DB
+    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0"
+
+Pull a remote site to local, No DB
+    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0 with_db=true"
+
+Freshen local, files folder and DB
+    ansible-playbook freshen-local.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0"
+
+Freshen local, files folder, No DB
+    ansible-playbook freshen-local.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0"
+
+Create a new RC site, minor version bump
+
+Freshen remote (from live)
+
+Send live
+
+## Full exmaples
 
 ### Pull a copy of remote (Latest, RC or Staging)
 
@@ -15,16 +41,12 @@
 1. Sync DB latest to local
 1. Set robots.txt to no follow
 
-    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-live --limit br --extra-vars="target=/var/www/br_0.4.3"
-
 ### Freshen local
 
 1. Fix permissions on latest
 1. Fix Permissions on local
 1. Sync down latest sites/default/files
 1. Sync down database
-
-    ansible-playbook freshen-local.yml -i inventory/cottage-servers-live --limit br --extra-vars="target=/var/www/br_0.4.3"
 
 ### Create new RC site from live site. Minor version bump
 1. Fix latest permissions
@@ -36,13 +58,11 @@
 1. Set robots.txt to no follow
 1. Fix RC permissions
 
-    ansible-playbook new-rc.yml -i inventory/cottage-servers-zz --extra-vars="target=/var/www/zz_1.2.3"
-
 ### Push staging site to RC
 1. Fix rc permissions
 1. Fix staging permissions
 1. Sync down sites/default/files
-1. Bump minor version/update changelog
+1. Bump patch version/update changelog
 1. Sync up full file system
 1. [Sync DB from local to target]
 1. Run up and dbup

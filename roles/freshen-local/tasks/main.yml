@@ -1,4 +1,29 @@
 ---
-- name: Sync down latest sites/default/files
-  shell: drush -y -r {{ local }} rsync @{{ source_version.stat.version }}:%files/ @self:%files --include-conf --include-vcs --progress --mode=a
+- name: Fix permissions on source
+  shell: sudo ntdrchown {{ source }}
+
+- name: Slacken permissions on local
+  shell: sudo ntdrchown -a {{ local }}
   delegate_to: 127.0.0.1
+
+- name: Sync down latest sites/default/files
+  synchronize: src={{ source }}/sites/default/files dest={{ local }}/sites/default mode=pull checksum=yes times=no
+
+- name: Sync down latest sites/all/drush
+  synchronize: src={{ source }}/sites/all/drush dest={{ local }}/sites/all mode=pull checksum=yes times=no
+
+- name: Fix permissions on local
+  shell: sudo ntdrchown {{ local }}
+  delegate_to: 127.0.0.1
+
+- ntdr_get_version.py: path={{ source }}
+  register: source_version
+
+- ntdr_get_version.py: path={{ local }}
+  register: local_version
+  delegate_to: 127.0.0.1
+
+- name: Sync DB
+  shell: drush -r {{ local }} -y sql-sync @{{ source_version.stat.db_ver }} @self
+  delegate_to: 127.0.0.1
+  when: with_db is defined

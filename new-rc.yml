@@ -5,7 +5,7 @@
     source: /var/www/latest
   vars_prompt:
     - name: mysql_root_pw
-      prompt: "Enter mysql root password for the local mysql server"
+      prompt: "Enter mysql root password for the remote mysql server"
       private: true
       when: mysql_root_pw is not defined
   roles:

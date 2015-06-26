@@ -37,7 +37,10 @@
   tags: files
 
 - name: Create alias file
-  ntdr_create_drushrc_alias.py: "{{ source }}"
+  ntdr_create_drushrc_alias.py:
+    path: "{{ source }}"
+    name: source_version.version
+    dbver: source_version.db_ver
   when: not remote_alias.stat.exists
   tags: alias
 
@@ -46,21 +49,21 @@
   delegate_to: 127.0.0.1
 
 - name: Fetch alias to local site
-  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php dest={{ local }}/sites/all/drush/ flat=yes
+  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.db_ver }}.alias.drushrc.php dest={{ local }}/sites/all/drush/ flat=yes
   when: local_settings.stat.exists
   tags: alias
 
 - name: Fetch alias to ~/.drush
-  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php dest=~/.drush/ flat=yes
+  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.db_ver }}.alias.drushrc.php dest=~/.drush/ flat=yes
   when: not local_settings.stat.exists
   tags: alias
 
 - name: Full fs sync from source to local
-  shell: drush -y -r {{ local }} rsync @{{ source_version.stat.version }} @self --include-conf --include-vcs --progress --mode=a
+  shell: drush -y -r {{ local }} rsync @{{ source_version.stat.db_ver }} @self --include-conf --include-vcs --progress --mode=a
   delegate_to: 127.0.0.1
   tags: files
 
-- ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php
+- ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ source_version.stat.db_ver }}.alias.drushrc.php
   delegate_to: 127.0.0.1
   register: local_alias
 
@@ -77,16 +80,19 @@
 - name: Drop local DB and user
   shell: mysql-dropuser-and-db -u {{ local_alias.stat.dbuser }} -m {{ mysql_root_pw }}
   delegate_to: 127.0.0.1
+  when: with_db is defined
   tags: db
 
 - name: Create DB and user
   shell: mysql-create-user-and-db -u {{ local_alias.stat.dbuser }} -p {{ local_alias.stat.dbpass }} -n {{ local_alias.stat.dbname }} -m {{ mysql_root_pw }}
   delegate_to: 127.0.0.1
+  when: with_db is defined
   tags: db
 
 - name: Database sync from source to local
-  shell: drush --verbose -y sql-sync --uri=default @{{ source_version.stat.version }} @self chdir={{ local }}
+  shell: drush --verbose -y sql-sync --uri=default @{{ source_version.stat.db_ver }} @self chdir={{ local }}
   delegate_to: 127.0.0.1
+  when: with_db is defined
   tags: db-sync, freshen
 
 - name: Set robots.txt to no follow
