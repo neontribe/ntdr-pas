@@ -11,7 +11,7 @@ def main():
         argument_spec = dict(
             path = dict(default='/var/www/latest', type='str'),
             name = dict(default='no', type='str'),
-            shortver = dict(default='no', type='str'),
+            dbver = dict(default='no', type='str'),
             user = dict(default='no', type='str'),
             host = dict(default='no', type='str'),
         ), 
@@ -21,14 +21,14 @@ def main():
     path = module.params.get('path')
     path = os.path.expanduser(path)
     name = module.params.get('name')
-    shortver = module.params.get('shortver')
+    dbver = module.params.get('dbver')
     user = module.params.get('user')
     host = module.params.get('host')
 
     drpath = path.rstrip("/")
 
     dirname = os.path.join(drpath, 'sites/all/drush')
-    aliaspath = os.path.join(dirname, shortver + '.alias.drushrc.php')
+    aliaspath = os.path.join(dirname, dbver + '.alias.drushrc.php')
 
     with open(aliaspath, 'w') as f:
         f.write("<?php\n")
@@ -56,9 +56,9 @@ def main():
         f.write("    array (\n")
         f.write("      'default' => \n")
         f.write("      array (\n")
-        f.write("        'database' => '" + shortver + "',\n")
-        f.write("        'username' => '" + shortver + "',\n")
-        f.write("        'password' => '" + shortver + "',\n")
+        f.write("        'database' => '" + dbver + "',\n")
+        f.write("        'username' => '" + dbver + "',\n")
+        f.write("        'password' => '" + dbver + "',\n")
         f.write("        'host' => 'localhost',\n")
         f.write("        'port' => '',\n")
         f.write("        'driver' => 'mysql',\n")
@@ -73,7 +73,7 @@ def main():
         'path':      path,
         'aliaspath': aliaspath,
         'name':      name,
-        'shortver':     shortver,
+        'dbver':     dbver,
     }
 
     module.exit_json(changed=False, stat=d)

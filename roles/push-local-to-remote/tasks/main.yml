@@ -56,7 +56,7 @@
   ntdr_create_drushrc_alias.py:
     path: "{{ target }}"
     name: "{{ target_version.stat.version }}"
-    shortver: "{{ target_version.stat.version }}"
+    dbver: "{{ target_version.stat.shortver }}"
     user: "{{ ansible_ssh_user }}"
     host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
 
