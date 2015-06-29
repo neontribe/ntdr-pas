@@ -4,6 +4,14 @@
 
     mkdir ~/.drush
 
+## Cleaning up ZZ
+
+If you have been testing against the ZZ site(s) and you want to reset them:
+
+    mysql-dropuser-and-db -u zz_0.0.2 -m b191wkm && sudo rm -rf /var/www/*
+
+Where the DB name is set correctly.
+
 ## Quick Examples
 
 Create a whole new site on a remote site
