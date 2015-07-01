@@ -28,7 +28,7 @@ def main():
     drpath = path.rstrip("/")
 
     dirname = os.path.join(drpath, 'sites/all/drush')
-    aliaspath = os.path.join(dirname, dbver + '.alias.drushrc.php')
+    aliaspath = os.path.join(dirname, name + '.alias.drushrc.php')
 
     with open(aliaspath, 'w') as f:
         f.write("<?php\n")

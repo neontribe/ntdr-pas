@@ -5,8 +5,15 @@
   shell: sudo ntdrchown -a {{ source }}
   delegate_to: 127.0.0.1
 
+- stat: path={{ target }}
+  register: target_dir
+
+- name: Get source version
+  ntdr_get_version.py: path={{ source }}
+  register: source_version
+
 - name: Get remote version
-  ntdr_get_version.py: path={{ target }}
+  ntdr_get_version.py: path={{ target }} exists={{ target_dir.stat.exists }}
   register: target_version
 
 - name: Fix remote permsissions
@@ -71,7 +78,21 @@
 - name: Fetch aliases
   synchronize: src={{ target }}/sites/all/drush dest={{ source }}/sites/all mode=pull checksum=yes times=no
 
-- name: Sync up DB
-  shell: "drush -y -r {{ source }} --uri=default sql-sync @self @{{ target_version.stat.version }}"
-  when: with_db is defined
+- name: Dump local DB
+  shell: "drush -y -r {{ source }} --uri=default sql-dump --ordered-dump --structure-tables-key=common --result-file=/tmp/{{  source_version.stat.version }}.sql"
   delegate_to: 127.0.0.1
+
+- copy: src=/tmp/{{  source_version.stat.version }}.sql dest=/tmp/{{  source_version.stat.version }}.sql
+
+- name: Import DB
+  mysql_db:
+    state: import
+    name: "{{ target_version.stat.version }}"
+    login_user: "{{ target_version.stat.version }}"
+    login_password: "{{ target_version.stat.version }}"
+    target: /tmp/{{ source_version.stat.version }}.sql
+
+- name: Run up and updb
+  shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} up
+  shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} updb
+

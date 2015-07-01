@@ -16,7 +16,7 @@
 - stat: path={{ target }}
   register: target_dir
 
-- ntdr_get_version.py: path={{ target }}
+- ntdr_get_version.py: path={{ target }} exists={{ target_dir.stat.exists }}
   register: target_version
 
 # These two should be a single rsync with a switch but I can't get it to work
@@ -49,18 +49,6 @@
     dest: "{{ target }}/sites/default/settings.php"
     regexp: "password' => "
     line: "      'password' => '{{ target_version.stat.version }}',"
-
-- name: Target
-  debug:
-    msg: "{{ target }}"
-
-- name: Shortver
-  debug:
-    msg: "{{ target_version.stat.shortver }}"
-
-- name: Version
-  debug:
-    msg: "{{ target_version.stat.version }}"
 
 - name: Create new alias file
   ntdr_create_drushrc_alias.py:

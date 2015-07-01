@@ -9,23 +9,27 @@ def main():
         argument_spec = dict(
             path = dict(required=True),
             version = dict(default='no', type='bool'),
+            exists = dict(default=False, type='bool'),
         ),
         supports_check_mode = True
     )
 
     path = module.params.get('path')
     path = os.path.expanduser(path)
+    exists = module.params.get('exists')
+    version = module.params.get('version')
 
-    full = os.path.join(path, 'changelog.txt')
-    if os.path.isfile(full):
-        with open(full, 'r') as f:
-            first_line = f.readline()
-        parts = first_line.split();
-        version = parts[1]
-        found = True
-    else:
-        version = os.path.basename(path)
-        found = False
+    if not version:
+        full = os.path.join(path, 'changelog.txt')
+        if os.path.isfile(full):
+            with open(full, 'r') as f:
+                first_line = f.readline()
+            parts = first_line.split();
+            version = parts[1]
+            found = True
+        else:
+            version = os.path.basename(path)
+            found = False
 
     parts = version.split('.')
     count = len(parts)
@@ -44,6 +48,9 @@ def main():
         patch = parts[2]
     else:
         patch = 0
+    
+    if exists:
+        patch = int(patch) + 1
     
     version = str(major) + '.' + str(minor) + '.' + str(patch)
 
