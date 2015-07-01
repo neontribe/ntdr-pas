@@ -80,6 +80,7 @@
 
 - name: Dump local DB
   shell: "drush -y -r {{ source }} --uri=default sql-dump --ordered-dump --structure-tables-key=common --result-file=/tmp/{{  source_version.stat.version }}.sql"
+  when: with_db is defined
   delegate_to: 127.0.0.1
 
 - copy: src=/tmp/{{  source_version.stat.version }}.sql dest=/tmp/{{  source_version.stat.version }}.sql
@@ -91,6 +92,7 @@
     login_user: "{{ target_version.stat.version }}"
     login_password: "{{ target_version.stat.version }}"
     target: /tmp/{{ source_version.stat.version }}.sql
+  when: with_db is defined
 
 - name: Run up and updb
   shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} up
