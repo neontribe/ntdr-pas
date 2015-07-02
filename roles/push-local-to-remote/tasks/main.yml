@@ -17,10 +17,9 @@
   register: target_version
 
 - name: Fix remote permsissions
-  # TODO Make this a module
   shell: sudo ntdrchown -a {{ target }}
   when: target_version.stat.found
-
+      
 - name: Check for remote files
   stat: path={{ target }}/sites/default/files
   register: target_files
@@ -46,17 +45,17 @@
   lineinfile:
     dest: "{{ target }}/sites/default/settings.php"
     regexp: "database' => "
-    line: "      'database' => '{{ target_version.stat.version }}',"
+    line: "      'database' => '{{ target_version.stat.shortver }}',"
 - name: Fix username in settings.php
   lineinfile:
     dest: "{{ target }}/sites/default/settings.php"
     regexp: "username' => "
-    line: "      'username' => '{{ target_version.stat.version }}',"
+    line: "      'username' => '{{ target_version.stat.shortver }}',"
 - name: Fix password in settings.php
   lineinfile:
     dest: "{{ target }}/sites/default/settings.php"
     regexp: "password' => "
-    line: "      'password' => '{{ target_version.stat.version }}',"
+    line: "      'password' => '{{ target_version.stat.shortver }}',"
 
 - name: Create new alias for new version
   # template: src=alias.drushrc.j2 dest={{ target }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php
@@ -67,34 +66,40 @@
     user: "{{ ansible_ssh_user }}"
     host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
 
-- name: DB Clean
-  shell: mysql-dropuser-and-db -u {{ target_version.stat.version }} -m {{ mysql_root_pw }}
-  when: with_db is defined
+- debug:
+    msg: "{{ mysql_root_pw }}"
 
-- name: DB Setup
-  shell: mysql-create-user-and-db -u {{ target_version.stat.version }} -p {{ target_version.stat.version }} -m {{ mysql_root_pw }}
-  when: with_db is defined
+- name: Create db
+  mysql_db: name={{ target_version.stat.shortver }} state=present login_user=root login_password={{ mysql_root_pw }}
+  when: withdb is defined
+  tags: db
+
+- name: Create db user
+  mysql_user: name={{ target_version.stat.shortver }} password={{ target_version.stat.shortver }} priv={{ target_version.stat.shortver }}.*:ALL state=present login_user=root login_password={{ mysql_root_pw }}
+  when: withdb is defined
+  tags: db
 
 - name: Fetch aliases
   synchronize: src={{ target }}/sites/all/drush dest={{ source }}/sites/all mode=pull checksum=yes times=no
 
 - name: Dump local DB
   shell: "drush -y -r {{ source }} --uri=default sql-dump --ordered-dump --structure-tables-key=common --result-file=/tmp/{{  source_version.stat.version }}.sql"
-  when: with_db is defined
+  when: withdb is defined
   delegate_to: 127.0.0.1
 
-- copy: src=/tmp/{{  source_version.stat.version }}.sql dest=/tmp/{{  source_version.stat.version }}.sql
+- name: Upload SQL
+  copy: src=/tmp/{{  source_version.stat.version }}.sql dest=/tmp/{{  source_version.stat.version }}.sql
+  when: withdb is defined
 
 - name: Import DB
   mysql_db:
     state: import
-    name: "{{ target_version.stat.version }}"
-    login_user: "{{ target_version.stat.version }}"
-    login_password: "{{ target_version.stat.version }}"
+    name: "{{ target_version.stat.shortver }}"
+    login_user: "{{ target_version.stat.shortver }}"
+    login_password: "{{ target_version.stat.shortver }}"
     target: /tmp/{{ source_version.stat.version }}.sql
-  when: with_db is defined
+  when: withdb is defined
 
 - name: Run up and updb
   shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} up
   shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} updb
-

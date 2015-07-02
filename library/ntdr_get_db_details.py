@@ -8,7 +8,7 @@ def get_value(text):
     pattern = "(?<=')(.*?)(?=')"
     matches = re.findall(pattern, text)
     value = matches[2]
-    return value.strip("'")
+    return value.strip("'").replace('.', '_')
 
 def main():
     module = AnsibleModule(

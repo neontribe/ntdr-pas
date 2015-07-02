@@ -24,19 +24,19 @@ Freshen a remote site with local files, no DB push/update
 
 Pull a remote site to local, including new DB
 
-    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0"
+    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0 with_db=true"
 
 Pull a remote site to local, No DB
 
-    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0 with_db=true"
+    ansible-playbook pull-full-copy.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0"
 
 Freshen local, files folder and DB
 
-    ansible-playbook freshen-local.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0 with_db=true"
+    ansible-playbook freshen-local.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="source=/var/www/zz_0.0 with_db=true"
 
 Freshen local, files folder, No DB
 
-    ansible-playbook freshen-local.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0"
+    ansible-playbook freshen-local.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="source=/var/www/zz_0.0"
 
 Create a new RC site, minor version bump
 

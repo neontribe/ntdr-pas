@@ -2,13 +2,13 @@
 
 # Find changelog vesion
 
-import sys, os, json, shlex
+import sys, os, json, shlex, re
 
 def main():
     module = AnsibleModule(
         argument_spec = dict(
             path = dict(required=True),
-            version = dict(default='no', type='bool'),
+            version = dict(default=False, type='bool'),
             exists = dict(default=False, type='bool'),
         ),
         supports_check_mode = True
@@ -31,28 +31,44 @@ def main():
             version = os.path.basename(path)
             found = False
 
-    parts = version.split('.')
+    parts = re.split('\.|_', version)
     count = len(parts)
 
     if (count > 0):
-        major = parts[0]
+        brand = parts[0]
+    else:
+        raise
+
+    if (count > 1):
+        major = parts[1]
     else:
         major = 0
 
-    if (count > 1):
-        minor = parts[1]
+    if (count > 2):
+        minor = parts[2]
     else:
         minor = 0
     
-    if (count > 2):
-        patch = parts[2]
+    if (count > 3):
+        patch = parts[3]
     else:
+        patch = 0
+    
+    major = str(major)
+    minor = str(minor)
+    patch = str(patch)
+
+    if not major.isdigit():
+        major = 0
+    if not minor.isdigit():
+        minor = 0
+    if not patch.isdigit():
         patch = 0
     
     if exists:
         patch = int(patch) + 1
     
-    version = str(major) + '.' + str(minor) + '.' + str(patch)
+    version = brand + '_' + str(major) + '_' + str(minor) + '_' + str(patch)
 
     # back to ansible
     d = {
@@ -60,10 +76,12 @@ def main():
         'realpath' : os.path.realpath(path),
         'version'  : version,
         'found'    : found,
-        'shortver' : str(major) + '.' + str(minor),
+        'shortver' : brand + '_' + str(major) + '_' + str(minor),
+        'brand'    : brand,
         'major'    : str(major),
         'minor'    : str(minor),
         'patch'    : str(patch),
+        'parts'    : parts,
     }
 
     module.exit_json(changed=False, stat=d)
