@@ -1,0 +1,16 @@
+---
+- name: Ensure testing
+  file: path={{ testing }} state=directory mode=0755
+
+- name: Set symlinks
+  file: src={{ item.path }} dest={{ item.dest }} state=link
+  with_items:
+    - { path: '{{ latest }}', dest: '/var/www/latest' }
+    - { path: '{{ testing }}', dest: '/var/www/testing' }
+
+
+- name: Update robots on latest
+  copy: src='live.robots.txt' dest='/var/www/latest/robots.txt'
+
+- name: Update robots on testing
+  copy: src='dev.robots.txt' dest='/var/www/testing/robots.txt'
