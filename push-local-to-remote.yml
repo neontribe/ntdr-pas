@@ -2,6 +2,7 @@
 - hosts: all
   vars:
     target: /var/www/testing
+    patch_release: true
   vars_prompt:
     - name: mysql_root_pw
       prompt: "Enter mysql root password for the remote mysql server"

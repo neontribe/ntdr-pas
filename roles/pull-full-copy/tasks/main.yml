@@ -40,8 +40,8 @@
 - name: Create alias file
   ntdr_create_drushrc_alias.py:
     path: "{{ source }}"
-    name: source_version.version
-    dbver: source_version.dbver
+    name: "{{ source_version.stat.version }}"
+    dbver: "{{ source_version.stat.shortver }}"
   when: not remote_alias.stat.exists
   tags: alias
 
@@ -60,40 +60,33 @@
   tags: alias
 
 - name: Full fs sync from source to local
-  shell: drush -y -r {{ local }} rsync @{{ source_version.stat.version }} @self --include-conf --include-vcs --progress --mode=a
-  delegate_to: 127.0.0.1
+  synchronize:
+    mode: pull
+    src:  "{{ source }}/*"
+    dest: "{{ local }}"
   tags: files
 
-- ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php
+- name: Get local DB details
+  ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php
   delegate_to: 127.0.0.1
   register: local_alias
 
-#####
-# Python seems to refuse to allow dots in DB names.  I'd really like to use the ansible scripts but WTF
-#####
-#- name: Create DB
-#  mysql_db: name={{ local_alias.stat.dbname }} state=present login_user=root login_password={{ mysql_root_pw }}
-#  delegate_to: 127.0.0.1
-#- name: Create User
-#  mysql_user: name={{ local_alias.stat.dbuser }} password={{ local_alias.stat.dbpass }} priv={{ local_alias.stat.dbname }}.*:ALL state=present login_user=root login_password={{ mysql_root_pw }}
-#  delegate_to: 127.0.0.1
-
-- name: Drop local DB and user
-  shell: mysql-dropuser-and-db -u {{ local_alias.stat.dbuser }} -m {{ mysql_root_pw }}
+- name: Create db
+  mysql_db: name={{ local_alias.stat.dbname }} state=present login_user=root login_password={{ mysql_root_pw }}
   delegate_to: 127.0.0.1
-  when: with_db is defined
+  when: withdb is defined
   tags: db
 
-- name: Create DB and user
-  shell: mysql-create-user-and-db -u {{ local_alias.stat.dbuser }} -p {{ local_alias.stat.dbpass }} -n {{ local_alias.stat.dbname }} -m {{ mysql_root_pw }}
+- name: Create db user
+  mysql_user: name={{ local_alias.stat.dbuser }} password={{ local_alias.stat.dbpass }} priv={{ local_alias.stat.dbname }}.*:ALL state=present login_user=root login_password={{ mysql_root_pw }}
   delegate_to: 127.0.0.1
-  when: with_db is defined
+  when: withdb is defined
   tags: db
 
 - name: Database sync from source to local
   shell: drush --verbose -y sql-sync --uri=default @{{ source_version.stat.version }} @self chdir={{ local }}
   delegate_to: 127.0.0.1
-  when: with_db is defined
+  when: withdb is defined
   tags: db-sync, freshen
 
 - name: Set robots.txt to no follow

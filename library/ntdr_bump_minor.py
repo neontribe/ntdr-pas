@@ -2,7 +2,7 @@
 
 # Find changelog vesion
 
-import sys, os, json, shlex, time, commands
+import sys, os, json, shlex, time, commands, re
 
 def main():
     module = AnsibleModule(
@@ -33,7 +33,7 @@ def main():
     if not version:
         version = '0.0.0'
 
-    parts = version.split('.');
+    parts = re.split('\.|_', version);
     major = parts[0]
     minor = parts[1]
     patch = parts[2]
