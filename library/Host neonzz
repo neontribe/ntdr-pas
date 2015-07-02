@@ -1,0 +1,12 @@
+Host neonzz
+HostName 192.168.21.26
+User neonzz
+IdentityFile ~/.ssh/73:26:9d:5f:35:d9:d0:78:a0:dd:2d:9f:ce:b7:e7:4a adam@Deep-Thought-2
+
+
+
+Host neonzz
+HostName 192.168.21.26
+User neonzz
+IdentityFile ~/.ssh/73:26:9d:5f:35:d9:d0:78:a0:dd:2d:9f:ce:b7:e7:4a
+

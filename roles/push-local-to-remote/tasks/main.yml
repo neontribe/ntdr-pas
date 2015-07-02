@@ -9,7 +9,7 @@
   ntdr_get_version.py: path={{ target }}
   register: target_version
 
-- name: Fix remote permsissions
+- name: Fix remote permissions
   # TODO Make this a module
   shell: sudo ntdrchown -a {{ target }}
   when: target_version.stat.found
@@ -26,10 +26,18 @@
   file: path={{ source }}/sites/all/drush state=directory mode=0755
   delegate_to: 127.0.0.1
 
-- name: Create change log
-  # TODO Make this a module
-  shell: ntdr_createChangeLog {{ source }} {{ target_version.stat.version }}
+#here
+#- name: Create change log
+#  shell: ntdr_createChangeLog {{ source }} {{ target_version.stat.version }}
+#  delegate_to: 127.0.0.1
+
+- ntdr_create_change_log.py: path={{ source }} version={{ target_version.stat.version }}
+  register: change_log_output
   delegate_to: 127.0.0.1
+
+
+- debug: var=change_log_output.stat.number
+
 
 # Remote actions
 - name: Full fs sync

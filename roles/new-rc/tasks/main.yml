@@ -28,6 +28,7 @@
   shell: rsync -a {{ source_version.stat.realpath }}/ {{ target }}
   when: not target_dir.stat.exists
 
+#here
 - name: Create new change log
   shell: ntdr_createChangeLog {{ target }} {{ source_version.stat.major }}.{{ source_version.stat.minor | int + 1 }}.0
 
@@ -39,11 +40,13 @@
     dest: "{{ target }}/sites/default/settings.php"
     regexp: "database' => "
     line: "      'database' => '{{ target_version.stat.version }}',"
+
 - name: Fix username in settings.php
   lineinfile:
     dest: "{{ target }}/sites/default/settings.php"
     regexp: "username' => "
     line: "      'username' => '{{ target_version.stat.version }}',"
+
 - name: Fix password in settings.php
   lineinfile:
     dest: "{{ target }}/sites/default/settings.php"
