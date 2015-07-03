@@ -4,14 +4,17 @@
 - name: Fix permissions on source
   shell: sudo ntdrchown {{ source }}
 
-- name: Slacken permissions on local
-  shell: sudo ntdrchown -a {{ local }}
-  delegate_to: 127.0.0.1
-
-#- ntdr_slacken_local_permissions.py: path={{ local }}
-#  register: permission_output
+#- name: Slacken permissions on local
+#  shell: sudo ntdrchown -a {{ local }}
 #  delegate_to: 127.0.0.1
-#  become: true
+
+- ntdr_slacken_local_permissions.py: path={{ local }}
+  register: permission_output
+  delegate_to: 127.0.0.1
+  become: true
+  sudo:yes
+
+
 
 #ignore-- just used from printing from the python
 - debug: var=permission_output.stat.status

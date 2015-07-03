@@ -25,8 +25,12 @@ def main():
             with open(full, 'r') as f:
                 first_line = f.readline()
             parts = first_line.split();
-            version = parts[1]
-            found = True
+            if len(parts) == 0:
+                version = os.path.basename(path)
+                found = False
+            else:
+                version = parts[1]
+                found = True
         else:
             version = os.path.basename(path)
             found = False
