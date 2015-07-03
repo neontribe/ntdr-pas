@@ -8,9 +8,13 @@
     - { path: '{{ latest }}', dest: '/var/www/latest' }
     - { path: '{{ testing }}', dest: '/var/www/testing' }
 
-
 - name: Update robots on latest
   copy: src='live.robots.txt' dest='/var/www/latest/robots.txt'
 
 - name: Update robots on testing
   copy: src='dev.robots.txt' dest='/var/www/testing/robots.txt'
+      
+- name: Drush up & updb on new site
+  shell: "drush -r {{ latest }} up"
+  shell: "drush -r {{ latest }} updb"
+

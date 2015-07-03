@@ -1,0 +1,5 @@
+#!bin/bash
+
+USAGE="$0 -s <REMOTE DRUPLA ROOT> -r <REMOTE HOST> -t <LOCAL DRUPAL ROOT>"
+
+ansible-playbook freshen-local.yml -i inventory/cottage-servers --limit $RH --extra-vars="source=$RDR target=$LDR"

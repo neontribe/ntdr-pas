@@ -66,9 +66,6 @@
     user: "{{ ansible_ssh_user }}"
     host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
 
-- debug:
-    msg: "{{ mysql_root_pw }}"
-
 - name: Create db
   mysql_db: name={{ target_version.stat.shortver }} state=present login_user=root login_password={{ mysql_root_pw }}
   when: withdb is defined
