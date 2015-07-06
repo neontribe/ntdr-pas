@@ -25,6 +25,9 @@
   stat: path={{ target }}/sites/default/files
   register: target_files
 
+- name: Create remote target
+  file: path={{ target }} state=directory mode=0775
+
 - name: Sync down files
   synchronize: src={{ target }}/sites/default/files dest={{ source }}/sites/default mode=pull checksum=yes times=no
   when: target_files.stat.exists
@@ -43,7 +46,12 @@
 
 # Remote actions
 - name: Full fs sync
+  synchronize: src={{ source }}/* dest={{ target }} checksum=yes times=no
+  when: target_dir.stat.exists
+
+- name: Full fs sync
   synchronize: src={{ source }} dest={{ target }} checksum=yes times=no
+  when: not target_dir.stat.exists
 
 - name: Fix database in settings.php
   lineinfile:
@@ -69,9 +77,6 @@
     dbver: "{{ target_version.stat.shortver }}"
     user: "{{ ansible_ssh_user }}"
     host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
-
-- debug:
-    msg: "{{ mysql_root_pw }}"
 
 - name: Create db
   mysql_db: name={{ target_version.stat.shortver }} state=present login_user=root login_password={{ mysql_root_pw }}

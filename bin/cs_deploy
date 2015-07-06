@@ -1,0 +1,5 @@
+#!bin/bash
+
+USAGE="$0 -s <LOCAL DRUPLA ROOT> -r <REMOTE HOST> -t <REMOTE DRUPAL ROOT>"
+
+ansible-playbook push-local-to-remote.yml -i inventory/cottage-servers --limit $RH --extra-vars="source=$LDR target=$RDR withdb=true"

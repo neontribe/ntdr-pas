@@ -18,5 +18,9 @@ lb_test ansible_ssh_host=178.62.80.5 ansible_ssh_user=neonlb
 wl_live ansible_ssh_host=178.62.7.133 ansible_ssh_user=neonwl
 wl_test ansible_ssh_host=178.62.98.134 ansible_ssh_user=neonwl
 
+[zz]
+zz_live ansible_ssh_host=192.168.21.26  ansible_ssh_user=neonzz mysql_root_pw=cuffhattieslipper
+zz_test ansible_ssh_host=192.168.21.27  ansible_ssh_user=neonzz mysql_root_pw=cuffhattieslipper
+
 [cottage]
 neoncottage ansible_ssh_host=192.168.21.44

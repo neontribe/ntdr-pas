@@ -1,7 +1,0 @@
----
-
-- hosts: all
-  vars:
-    source: /var/www/latest
-  roles:
-      - freshen-remote

@@ -3,5 +3,6 @@
 - hosts: all
   vars:
     source: /var/www/latest
+    target: /var/www/testing
   roles:
-      - swap-rc-to-live
+      - freshen-remote
