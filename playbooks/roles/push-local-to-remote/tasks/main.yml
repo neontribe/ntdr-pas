@@ -16,38 +16,37 @@
   ntdr_get_version.py: path={{ target }} exists={{ target_dir.stat.exists }}
   register: target_version
 
-- name: Fix remote permsissions
-  shell: sudo ntdrchown -a {{ target }}
-  when: target_version.stat.found
-      
 - name: Check for remote files
   stat: path={{ target }}/sites/default/files
   register: target_files
 
-- name: Create remote target
-  file: path={{ target }} state=directory mode=0775
-
 - name: Sync down files
-  synchronize: src={{ target }}/sites/default/files dest={{ source }}/sites/default mode=pull checksum=yes times=no
+  synchronize: src="{{ target }}/sites/default/files" dest="{{ source }}/sites/default" mode=pull checksum=yes times=no
   when: target_files.stat.exists
 
 - name: Ensure sites/all/drush
   file: path={{ source }}/sites/all/drush state=directory mode=0755
   delegate_to: 127.0.0.1
 
+- name: Fix remote permsissions
+  shell: sudo ntdrchown -a {{ target }}
+  when: target_files.stat.exists
+
 - name: Create change log
   # TODO Make this a module
   shell: ntdr_createChangeLog {{ source }} {{ target_version.stat.version }}
   delegate_to: 127.0.0.1
 
+- debug:
+    msg: "drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }}"
 # Remote actions
-- name: Full fs sync
-  synchronize: src={{ source }}/* dest={{ target }} checksum=yes times=no
-  when: target_dir.stat.exists
+- name: Prep drupal
+  shell: "drush -y dl --destination={{ target| dirname }} --drupal-project-rename={{ target | basename }}"
+  when: not target_files.stat.exists
+  # when: not target_dir.stat.exists
 
 - name: Full fs sync
-  synchronize: src={{ source }} dest={{ target }} checksum=yes times=no
-  when: not target_dir.stat.exists
+  synchronize: src={{ source }}/sites dest={{ target }}
 
 - name: Fix database in settings.php
   lineinfile:
