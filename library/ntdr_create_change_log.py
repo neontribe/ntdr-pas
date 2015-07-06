@@ -33,7 +33,7 @@ a  Auto tag. If used in conjuction with -l then drupal-tag will be called with
 
 class Prepender:
 
-    def __init__(self, fname, mode='w'):
+    def __init__(self, fname, mode='a'):
         self.__write_queue = []
         self.__f = open(fname, mode)
 
@@ -127,7 +127,7 @@ def branches(pathname,options):
 
 def main():
     module = AnsibleModule(
-        argument_spec = dict(
+    argument_spec = dict(
             path = dict(required=True),
             version = dict(required=True),
         ),
@@ -136,43 +136,34 @@ def main():
     path = module.params.get('path')
     version = module.params.get('version')
 
-    touch(path+'changelog2.txt')
-
-    with Prepender('changelog2.txt') as f:
-        f.write('+----- '+version+' -----+\n')
-        f.write(time.strftime("%y-%m-%d_%H-%M\n"))
-        titles = '\n%-25s %-20s %-10s %s\n' %('Name','Branch','Tag','Path')
-        f.write(titles)
-
-    '''
-    newChangelog = open(path+'changelog2.txt','a')
-    newChangelog.write('+----- '+version+' -----+\n')
-    newChangelog.write(time.strftime("%y-%m-%d_%H-%M\n"))
+    touch(path+'/changelog.txt')
+    touch(path+'/testlog2.txt')
+   
+     
+    f = open(path+'/testlog2.txt','a+')
+    f.write('+----- '+version+' -----+\n')
+    f.write(time.strftime("%y-%m-%d_%H-%M\n"))
     titles = '\n%-25s %-20s %-10s %s\n' %('Name','Branch','Tag','Path')
-    newChangelog.write(titles)
-    '''
-
+    f.write(titles)
+    
     branches_info=branches(path,{'l':True})
-    
-
-    '''
     for info in branches_info:
-        infomation = '\n%-25s %-20s %-10s %s\n' %(info['Name'],info['Branch'],info['Tag'],info['Path'])           #newChangelog.write(info['Name']+'        '+info['Branch']+'        '+info['Tag']+'        '+info['Path']+'\n')
-        newChangelog.write(infomation)
-    
-    with open(path+"changelog.txt") as f:
-        lines = f.readlines()
-        lines = [l for l in lines if "ROW" in l]
-        with open(path +"changelog2.txt", "w") as f1:
-            f1.writelines(lines)
-    '''
+        infomation = '\n%-25s %-20s %-10s %s\n' %(info['Name'],info['Branch'],info['Tag'],info['Path'])
+        f.write(infomation)
 
+    f.write('\n')
     
-    
+    f1 = open(path+'/changelog.txt','r')
+    lines = f1.readlines()
+    f.writelines(lines)
+    f1.close()
+    f.close()
+    os.remove(path+'/changelog.txt')
+    os.rename(path+'/testlog2.txt',path+'/changelog.txt')
     d = {
         'path':path,
         'version': version,
-        'number':branches_info
+        'number':path
     }
 
     module.exit_json(changed=False, stat=d)

@@ -33,17 +33,12 @@
   file: path={{ source }}/sites/all/drush state=directory mode=0755
   delegate_to: 127.0.0.1
 
-#here
-#- name: Create change log
-#  shell: ntdr_createChangeLog {{ source }} {{ target_version.stat.version }}
-#  delegate_to: 127.0.0.1
-
 - ntdr_create_change_log.py: path={{ source }} version={{ target_version.stat.version }}
   register: change_log_output
   delegate_to: 127.0.0.1
 
 
-- debug: var=change_log_output.stat.number
+- debug: var=change_log_output.stat.path
 
 
 # Remote actions

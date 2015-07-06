@@ -1,8 +1,4 @@
-4.7.2
-======
-2015-06-23 12:35:25 +0100 Robert Preus-MacLaren  
-
-	* Include javascript booking path version 1.2.0 (HEAD, master)
+nclude javascript booking path version 1.2.0 (HEAD, master)
 
 3.10.8
 ======
@@ -25,4 +21,5 @@
 2015-06-23 16:51:55 +0100 asparaguscat  
 
 	* NEON-786 working on converting orderby tests to waitfor rather than wait
+
 
