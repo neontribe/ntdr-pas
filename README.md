@@ -62,6 +62,14 @@ Create a new RC site, minor version bump
 
 Freshen remote (from live)
 
-    
+    ansible-playbook freshen-remote.yml \
+      -i inventory/cottage-servers-zz \
+      --limit zz_live \
+      --extra-vars="target=/var/www/zz_0.1"
 
 Send live
+
+    ansible-playbook swap-rc-to-live.yml \
+      -i inventory/cottage-servers-zz \
+      --limit zz_live \
+      --extra-vars="latest=/var/www/zz_0.2 testing=/var/www/foo"
