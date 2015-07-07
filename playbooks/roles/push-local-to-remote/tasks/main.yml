@@ -17,7 +17,7 @@
   register: target_version
 
 
-- name: Fix remote permsissions
+- name: Fix remote permissions
   shell: sudo ntdrchown -a {{ target }}
   when: target_version.stat.found
       
