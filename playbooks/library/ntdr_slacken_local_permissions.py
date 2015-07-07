@@ -16,8 +16,9 @@ def main():
     path = module.params.get('path')
     path = os.path.expanduser(path)
 
-    if not os.path.isfile(path+'/sites/default/settings.php'): 
-        module.fail_json(msg="Drupal not found")
+    if not os.path.isfile(path+'/sites/default/settings.php'):
+	failure_message = 'failure but: '+path+'/sites/default/settings.php' 
+        module.fail_json(msg=failure_message)
     else:
         os.chmod(path, 0775)
         os.chmod(path,0664)
