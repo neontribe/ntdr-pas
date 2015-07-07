@@ -17,62 +17,62 @@ Where the DB name is set correctly.
 Create a whole new site on a remote site
 
     ansible-playbook push-local-to-remote.yml \
-      -i inventory/cottage-servers-zz \
-      --limit zz_live \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ with_db=true"
+      -i inventory/cottage-servers \
+      --limit zz_test \
+      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ withdb=true"
 
 Freshen a remote site with local files, no DB push/update
 
     ansible-playbook push-local-to-remote.yml \
-      -i inventory/cottage-servers-zz \
-      --limit zz_live \
+      -i inventory/cottage-servers \
+      --limit zz_test \
       --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
 
 Pull a remote site to local, including new DB
 
     ansible-playbook pull-full-copy.yml \
-      -i inventory/cottage-servers-zz \
-      --limit zz_live \
-      --extra-vars="source=/var/www/zz_0.0 with_db=true"
+      -i inventory/cottage-servers \
+      --limit zz_test \
+      --extra-vars="source=/var/www/zz_0.0 withdb=true"
 
 Pull a remote site to local, No DB
 
     ansible-playbook pull-full-copy.yml \
-      -i inventory/cottage-servers-zz \
-      --limit zz_live \
+      -i inventory/cottage-servers \
+      --limit zz_test \
       --extra-vars="target=/var/www/zz_0.0"
 
 Freshen local, files folder and DB
 
     ansible-playbook freshen-local.yml \
-      -i inventory/cottage-servers-zz \
-      --limit zz_live \
-      --extra-vars="source=/var/www/zz_0.0 with_db=true"
+      -i inventory/cottage-servers \
+      --limit zz_test \
+      --extra-vars="source=/var/www/zz_0.0 withdb=true"
 
 Freshen local, files folder, No DB
 
     ansible-playbook freshen-local.yml \
-      -i inventory/cottage-servers-zz \
-      --limit zz_live \
+      -i inventory/cottage-servers \
+      --limit zz_test \
       --extra-vars="source=/var/www/zz_0.0"
 
 Create a new RC site, minor version bump
 
-    ansible-playbook new-rc.yml \
-      -i inventory/cottage-servers-zz \
-      --limit zz_live \
-      --extra-vars="target=/var/www/zz_0.1
+    ansible-playbook minor-release.yml \
+      -i inventory/cottage-servers \
+      --limit zz_test \
+      --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
 
 Freshen remote (from live)
 
     ansible-playbook freshen-remote.yml \
-      -i inventory/cottage-servers-zz \
-      --limit zz_live \
-      --extra-vars="target=/var/www/zz_0.1"
+      -i inventory/cottage-servers \
+      --limit zz_test \
+      --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
 
 Send live
 
     ansible-playbook swap-rc-to-live.yml \
-      -i inventory/cottage-servers-zz \
-      --limit zz_live \
-      --extra-vars="latest=/var/www/zz_0.2 testing=/var/www/foo"
+      -i inventory/cottage-servers \
+      --limit zz_test \
+      --extra-vars="latest=/var/www/zz_0_2 testing=/var/www/foo"

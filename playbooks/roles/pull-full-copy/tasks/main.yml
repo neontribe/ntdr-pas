@@ -97,5 +97,4 @@
 - name: Re-fix permissions on local
   shell: sudo ntdrchown {{ local }}
   delegate_to: 127.0.0.1
-  when: local_settings.stat.exists
   tags: post-pull
