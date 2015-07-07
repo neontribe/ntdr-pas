@@ -6,4 +6,4 @@
     patch_release: true
   roles:
     - push-local-to-remote
-    - { role: freshen-remote, target: '{{ target }}', source: '{{ latest }}' }
+    - { role: freshen-remote-site, target: '{{ target }}', source: '{{ latest }}' }

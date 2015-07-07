@@ -27,18 +27,18 @@ def main():
                     if len(parts) >= 1:
                         version = parts[1]
                     else:
-                        version = '0.0.0'
+                        version = '0_0_0'
                 lines.append(line)
 
     if not version:
-        version = '0.0.0'
+        version = '0_0_0'
 
     parts = re.split('\.|_', version);
     major = parts[0]
     minor = parts[1]
     patch = parts[2]
     patch = int(patch) + 1
-    newversion = major + '.' + minor + '.' + str(patch)
+    newversion = major + '_' + minor + '_' + str(patch)
     
     changelog = []
     changelog.append('+----- ' + newversion + ' -----+')
