@@ -8,6 +8,7 @@
 - ntdr_slacken_local_permissions.py: path={{ source  }}
   register: slacken_permission_output
   delegate_to: 127.0.0.1  
+  sudo: true
 
 - debug: var=slacken_permission_output.stat.status
 

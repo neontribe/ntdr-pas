@@ -121,7 +121,6 @@ def main():
     touch(path+'/changelog.txt')
     touch(path+'/testlog2.txt')
    
-    ''' 
     f = open(path+'/testlog2.txt','a+')
     f.write('+----- '+version+' -----+\n')
     f.write(time.strftime("%y-%m-%d_%H-%M\n"))
@@ -142,7 +141,6 @@ def main():
     f.close()
     os.remove(path+'/changelog.txt')
     os.rename(path+'/testlog2.txt',path+'/changelog.txt')
-    '''
     d = {
         'path':path,
         'version': version,
