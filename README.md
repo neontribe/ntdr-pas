@@ -16,7 +16,10 @@ Where the DB name is set correctly.
 
 Create a whole new site on a remote site
 
-    ansible-playbook push-local-to-remote.yml -i inventory/cottage-servers-zz --limit zz_live --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ with_db=true"
+    ansible-playbook push-local-to-remote.yml \
+      -i inventory/cottage-servers-zz \
+      --limit zz_live \
+      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ with_db=true"
 
 Freshen a remote site with local files, no DB push/update
 
