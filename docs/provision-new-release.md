@@ -3,28 +3,18 @@ push-local-to-remote.yml
 
 ## Summary
 
-Transfers file and optionaly databse from the current local machine to the remote machine(s).  This can be used to create an inital deployment to a new folder/empty host or to update files on an existing deployment.
+This clones a remote site, on a remote machine.  It duplicates the source site and increments the minor version number, creates a new DB and clones the source DB into it.
+
+It should do the minor bump for you but currently it will take the version from the target dir name.
 
 ## Supported options
 
- 1. source - The folder on the local machine holding the Drupal to sync up.
- 1. target - The location on the remote machine that the Drupal withs/will live
- 1. withdb - If set then the remote database will be replaced with the local database.
- 1. mysql_root_pw - The mysql root password for the remote machine.
+ 1. source - The source site to use
+ 1. target - The new site to clone to.
 
 ## Quick Examples
 
-Create a whole new site on a remote site
-
-    ansible-playbook push-local-to-remote.yml \
+    ansible-playbook provision-new-release.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ withdb=true"
-
-Freshen a remote site with local files, no DB push/update
-
-    ansible-playbook push-local-to-remote.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
-
+      --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"

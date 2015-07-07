@@ -3,7 +3,7 @@ push-local-to-remote.yml
 
 ## Summary
 
-Transfers file and optionaly databse from the current local machine to the remote machine(s).  This can be used to create an inital deployment to a new folder/empty host or to update files on an existing deployment.
+I pull a full copy of a remote site and set it up locally.  Default location is /var/tmp/cottage_VERSION
 
 ## Supported options
 
@@ -14,17 +14,16 @@ Transfers file and optionaly databse from the current local machine to the remot
 
 ## Quick Examples
 
-Create a whole new site on a remote site
+Pull a remote site to local, including new DB
 
-    ansible-playbook push-local-to-remote.yml \
+    ansible-playbook pull-full-copy.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ withdb=true"
+      --extra-vars="source=/var/www/zz_0.0 withdb=true"
 
-Freshen a remote site with local files, no DB push/update
+Pull a remote site to local, No DB
 
-    ansible-playbook push-local-to-remote.yml \
+    ansible-playbook pull-full-copy.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
-
+      --extra-vars="source=/var/www/zz_0.0 taregt=/home/tobias/foo"

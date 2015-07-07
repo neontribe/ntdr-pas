@@ -1,5 +1,5 @@
-push-local-to-remote.yml
-========================
+freshen-local.yml
+=================
 
 ## Summary
 
@@ -10,21 +10,20 @@ Copies down files and optionaly databse from remote site to a local site.  If th
  1. source - The folder on the local machine holding the Drupal to sync up.
  1. target - The location on the remote machine that the Drupal withs/will live
  1. withdb - If set then the remote database will be replaced with the local database.
- 1. mysql_root_pw - The mysql root password for the remote machine.
 
 ## Quick Examples
 
-Create a whole new site on a remote site
+Freshen local, files folder and DB
 
-    ansible-playbook push-local-to-remote.yml \
+    ansible-playbook freshen-local.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ withdb=true"
+      --extra-vars="source=/var/www/zz_0.0 target=/var/www/zz_0_0 withdb=true"
 
-Freshen a remote site with local files, no DB push/update
+Freshen local, files folder, No DB
 
-    ansible-playbook push-local-to-remote.yml \
+    ansible-playbook freshen-local.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
+      --extra-vars="source=/var/www/zz_0.0 target=/var/www/zz_0_0"
 

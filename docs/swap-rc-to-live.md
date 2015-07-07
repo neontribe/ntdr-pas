@@ -1,30 +1,22 @@
-push-local-to-remote.yml
-========================
+swap-rc-to-live
+===============
 
 ## Summary
 
-Transfers file and optionaly databse from the current local machine to the remote machine(s).  This can be used to create an inital deployment to a new folder/empty host or to update files on an existing deployment.
+Sends the current RC site live and creates a new RC site by clonig the new live site
 
 ## Supported options
 
- 1. source - The folder on the local machine holding the Drupal to sync up.
- 1. target - The location on the remote machine that the Drupal withs/will live
- 1. withdb - If set then the remote database will be replaced with the local database.
+ 1. latest - The real dir name of the latest (curent live) site
+ 1. testing - The real dir name of the testing (curent rc) site
+ 1. newrc - The real dir name of the new (currently non-existent) rc site
  1. mysql_root_pw - The mysql root password for the remote machine.
 
 ## Quick Examples
 
-Create a whole new site on a remote site
+Send live
 
-    ansible-playbook push-local-to-remote.yml \
+    ansible-playbook swap-rc-to-live.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ withdb=true"
-
-Freshen a remote site with local files, no DB push/update
-
-    ansible-playbook push-local-to-remote.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
-
+      --extra-vars="latest=/var/www/zz_0_0 testing=/var/www/zz_0_1 newrc=/var/www/zz_0_3"
