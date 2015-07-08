@@ -42,6 +42,8 @@
     path: "{{ source }}"
     name: "{{ source_version.stat.version }}"
     dbver: "{{ source_version.stat.shortver }}"
+    user: "{{ ansible_ssh_user }}"
+    host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
   when: not remote_alias.stat.exists
   tags: alias
 
