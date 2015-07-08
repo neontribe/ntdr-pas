@@ -5,8 +5,8 @@
 - name: Set symlinks
   file: src={{ item.path }} dest={{ item.dest }} state=link
   with_items:
-    - { path: '{{ latest }}', dest: '/var/www/latest' }
-    - { path: '{{ testing }}', dest: '/var/www/testing' }
+    - { path: '{{ testing }}', dest: '/var/www/latest' }
+    - { path: '{{ newrc }}', dest: '/var/www/testing' }
 
 - name: Update robots on latest
   copy: src='live.robots.txt' dest='/var/www/latest/robots.txt'

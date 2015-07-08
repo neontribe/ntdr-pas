@@ -58,7 +58,7 @@ Freshen local, files folder, No DB
 
 Create a new RC site, minor version bump
 
-    ansible-playbook minor-release.yml \
+    ansible-playbook provision-new-release.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
