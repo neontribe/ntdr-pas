@@ -33,7 +33,7 @@ Pull a remote site to local, including new DB
     ansible-playbook pull-full-copy.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
-      --extra-vars="source=/var/www/zz_0.0 withdb=true"
+      --extra-vars="source=/var/www/zz_0.0 local=/var/tmp withdb=true"
 
 Pull a remote site to local, No DB
 
