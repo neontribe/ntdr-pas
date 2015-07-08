@@ -16,7 +16,6 @@
   ntdr_get_version.py: path={{ target }} exists={{ target_dir.stat.exists }}
   register: target_version
 
-
 - name: Fix remote permsissions
   shell: sudo ntdrchown -a {{ target }}
   when: target_version.stat.found
@@ -26,7 +25,7 @@
   register: target_files
 
 - name: Sync down files
-  synchronize: src={{ target }}/sites/default/files dest={{ source }}/sites/default mode=pull checksum=yes times=no
+  synchronize: src="{{ target }}/sites/default/files" dest="{{ source }}/sites/default" mode=pull checksum=yes times=no
   when: target_files.stat.exists
 
 - name: Ensure sites/all/drush
@@ -42,13 +41,14 @@
   register: change_log_output
   delegate_to: 127.0.0.1
 
-
-- debug: var=change_log_output.stat.number
-
-
 # Remote actions
+- name: Prep drupal
+  shell: "drush -y dl --destination={{ target| dirname }} --drupal-project-rename={{ target | basename }}"
+  when: not target_files.stat.exists
+  # when: not target_dir.stat.exists
+
 - name: Full fs sync
-  synchronize: src={{ source }} dest={{ target }} checksum=yes times=no
+  synchronize: src={{ source }}/sites dest={{ target }}
 
 - name: Fix database in settings.php
   lineinfile:
@@ -74,9 +74,6 @@
     dbver: "{{ target_version.stat.shortver }}"
     user: "{{ ansible_ssh_user }}"
     host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
-
-- debug:
-    msg: "{{ mysql_root_pw }}"
 
 - name: Create db
   mysql_db: name={{ target_version.stat.shortver }} state=present login_user=root login_password={{ mysql_root_pw }}

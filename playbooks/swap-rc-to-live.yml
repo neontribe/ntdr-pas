@@ -1,0 +1,8 @@
+---
+
+- hosts: all
+  roles:
+      - { role: set-read-only, target: '{{ latest }}', ro: true }
+      - { role: freshen-remote-site, target: '{{ testing }}', source: '{{ latest }}' }
+      - { role: provision-new-release, source: '{{ testing }}', target: '{{ newrc }}' }
+      - swap-rc-to-live
