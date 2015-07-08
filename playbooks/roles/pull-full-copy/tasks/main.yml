@@ -19,11 +19,12 @@
 - stat: path={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php
   register: remote_alias
   tags: always
-
+#here
 - name: Fix permissions on source
   shell: sudo ntdrchown {{ source }}
   tags: pre-permissions, freshen
 
+#here
 - name: If local exists fix permissions on local
   shell: sudo ntdrchown -a {{ local }}
   delegate_to: 127.0.0.1
@@ -94,6 +95,7 @@
   delegate_to: 127.0.0.1
   tags: post-pull, robots
 
+#here
 - name: Re-fix permissions on local
   shell: sudo ntdrchown {{ local }}
   delegate_to: 127.0.0.1

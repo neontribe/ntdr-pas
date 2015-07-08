@@ -1,10 +1,21 @@
 ---
+
+
 - name: Fix permissions on source
   shell: sudo ntdrchown {{ source }}
 
 - name: Slacken permissions on local
   shell: sudo ntdrchown -a {{ local }}
   delegate_to: 127.0.0.1
+
+#- ntdr_slacken_local_permissions.py: path={{ local }}
+#  register: permission_output
+#  delegate_to: 127.0.0.1
+#  become: true
+
+#ignore-- just used from printing from the python
+- debug: var=permission_output.stat.status
+
 
 - name: Sync down latest sites/default/files
   synchronize: src={{ source }}/sites/default/files dest={{ local }}/sites/default mode=pull checksum=yes times=no
@@ -26,4 +37,6 @@
 - name: Sync DB
   shell: drush -r {{ local }} -y sql-sync @{{ source_version.stat.version }} @self
   delegate_to: 127.0.0.1
+
   when: withdb is defined
+
