@@ -33,7 +33,7 @@ Pull a remote site to local, including new DB
     ansible-playbook pull-full-copy.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
-      --extra-vars="source=/var/www/zz_0.0 withdb=true"
+      --extra-vars="source=/var/www/zz_0.0 local=/var/tmp withdb=true"
 
 Pull a remote site to local, No DB
 
@@ -58,7 +58,7 @@ Freshen local, files folder, No DB
 
 Create a new RC site, minor version bump
 
-    ansible-playbook minor-release.yml \
+    ansible-playbook provision-new-release.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"

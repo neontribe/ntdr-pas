@@ -43,6 +43,8 @@
     path: "{{ source }}"
     name: "{{ source_version.stat.version }}"
     dbver: "{{ source_version.stat.shortver }}"
+    user: "{{ ansible_ssh_user }}"
+    host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
   when: not remote_alias.stat.exists
   tags: alias
 
@@ -91,7 +93,7 @@
   tags: db-sync, freshen
 
 - name: Set robots.txt to no follow
-  copy: src=robots.nofollow.conf dest={{ local }}/.htaccess mode=0775 backup=yes
+  copy: src=robots.nofollow.conf dest={{ local }}/robots.txt mode=0775 backup=yes
   when: devsite is defined
   delegate_to: 127.0.0.1
   tags: post-pull, robots
