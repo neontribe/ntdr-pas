@@ -69,27 +69,49 @@
   tags: files
 
 - name: Get local DB details
-  ntdr_get_db_details.py: path={{ local }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php
+  ntdr_get_db_details.py: path={{ local }}/sites/default/settings.php autofix=true
   delegate_to: 127.0.0.1
-  register: local_alias
+  register: local_db
+  tags: db
 
 - name: Create db
-  mysql_db: name={{ local_alias.stat.dbname }} state=present login_user=root login_password={{ mysql_root_pw }}
+  mysql_db: name={{ local_db.stat.dbname }} state=present login_user=root login_password={{ mysql_root_pw }}
   delegate_to: 127.0.0.1
   when: withdb is defined
   tags: db
 
 - name: Create db user
-  mysql_user: name={{ local_alias.stat.dbuser }} password={{ local_alias.stat.dbpass }} priv={{ local_alias.stat.dbname }}.*:ALL state=present login_user=root login_password={{ mysql_root_pw }}
+  mysql_user: name={{ local_db.stat.dbuser }} password={{ local_db.stat.dbpass }} priv={{ local_db.stat.dbname }}.*:ALL state=present login_user=root login_password={{ mysql_root_pw }}
   delegate_to: 127.0.0.1
   when: withdb is defined
   tags: db
 
-- name: Database sync from source to local
-  shell: drush --verbose -y sql-sync --uri=default @{{ source_version.stat.version }} @self chdir={{ local }}
-  delegate_to: 127.0.0.1
+- name: Dump DB on remote
+  shell: drush --verbose -y sql-dump --uri=default -r {{ source }} --ordered-dump --result-file=/tmp/{{ source_version.stat.version }}.sql --structure-tables-key=common
   when: withdb is defined
   tags: db-sync, freshen
+
+- name: Copy sql down
+  fetch:
+    src: /tmp/{{ source_version.stat.version }}.sql
+    dest: /tmp/{{ source_version.stat.version }}.sql
+    flat: yes
+
+- name: Load into local
+  delegate_to: 127.0.0.1
+  mysql_db:
+    state: import
+    name:  "{{ local_db.stat.dbname }}"
+    target: /tmp/{{ source_version.stat.version }}.sql
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+
+- name: Clean up remote SQL
+  shell: rm /tmp/{{ source_version.stat.version }}.sql
+
+#- name: Clean up local SQL
+#  delegate_to: 127.0.0.1
+#  shell: rm /tmp/{{ source_version.stat.version }}.sql
 
 - name: Set robots.txt to no follow
   copy: src=robots.nofollow.conf dest={{ local }}/robots.txt mode=0775 backup=yes
