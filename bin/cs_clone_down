@@ -1,0 +1,5 @@
+#!bin/bash
+
+USAGE="$0 -s <REMOTE DRUPAL ROOT> -r <REMOTE HOST> -t <LOCAL DRUPAL ROOT>"
+
+ansible-playbook pull-full-copy.yml -i inventory/cottage-servers --limit $RH --extra-vars="source=$RDR target=$LDR withdb=true"

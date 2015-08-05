@@ -1,0 +1,12 @@
+---
+- name: Get read only
+  shell: "drush -r {{ target }} --uri=default en -y readonlymode"
+
+- name: Set read only on
+  shell: "drush -r {{ target }} --uri=default vset site_readonly 1"
+  when: ro is defined
+
+- name: Set read only off
+  shell: "drush -r {{ target }} --uri=default vset site_readonly 0"
+  when: rw is defined
+

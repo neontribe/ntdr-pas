@@ -1,0 +1,7 @@
+---
+- hosts: all
+  vars:
+    target: /var/www/latest
+  roles:
+      - set-read-only
+

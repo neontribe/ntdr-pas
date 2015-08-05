@@ -1,0 +1,126 @@
+---
+# local = the local drupal root
+# source = the remote drupal root
+
+- stat: path={{ local }}/sites/default/settings.php
+  delegate_to: 127.0.0.1
+  register: local_settings
+  tags: local_permissions, alias
+
+- stat: path={{ local }}
+  delegate_to: 127.0.0.1
+  register: local_site
+  tags: files
+
+- ntdr_get_version.py: path={{ source }}
+  register: source_version
+  tags: always
+
+- stat: path={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php
+  register: remote_alias
+  tags: always
+#here
+- name: Fix permissions on source
+  shell: sudo ntdrchown {{ source }}
+  tags: pre-permissions, freshen
+
+#here
+- name: If local exists fix permissions on local
+  shell: sudo ntdrchown -a {{ local }}
+  delegate_to: 127.0.0.1
+  when: local_settings.stat.exists
+  tags: pre-permissions, freshen
+
+- name: Fetch fresh drupal
+  shell: drush dl --destination={{ local | dirname }} --drupal-project-rename={{ local | basename }}
+  delegate_to: 127.0.0.1
+  when: not local_site.stat.exists
+  tags: files
+
+- name: Create alias file
+  ntdr_create_drushrc_alias.py:
+    path: "{{ source }}"
+    name: "{{ source_version.stat.version }}"
+    dbver: "{{ source_version.stat.shortver }}"
+    user: "{{ ansible_ssh_user }}"
+    host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
+  when: not remote_alias.stat.exists
+  tags: alias
+
+- name: Create sites/all/drush
+  file: path={{ local }}/sites/all/drush state=directory mode=0755
+  delegate_to: 127.0.0.1
+
+- name: Fetch alias to local site
+  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php dest={{ local }}/sites/all/drush/ flat=yes
+  when: local_settings.stat.exists
+  tags: alias
+
+- name: Fetch alias to ~/.drush
+  fetch: src={{ source }}/sites/all/drush/{{ source_version.stat.version }}.alias.drushrc.php dest=~/.drush/ flat=yes
+  when: not local_settings.stat.exists
+  tags: alias
+
+- name: Full fs sync from source to local
+  synchronize:
+    mode: pull
+    src:  "{{ source }}/*"
+    dest: "{{ local }}"
+  tags: files
+
+- name: Get local DB details
+  ntdr_get_db_details.py: path={{ local }}/sites/default/settings.php autofix=true
+  delegate_to: 127.0.0.1
+  register: local_db
+  tags: db
+
+- name: Create db
+  mysql_db: name={{ local_db.stat.dbname }} state=present login_user=root login_password={{ mysql_root_pw }}
+  delegate_to: 127.0.0.1
+  when: withdb is defined
+  tags: db
+
+- name: Create db user
+  mysql_user: name={{ local_db.stat.dbuser }} password={{ local_db.stat.dbpass }} priv={{ local_db.stat.dbname }}.*:ALL state=present login_user=root login_password={{ mysql_root_pw }}
+  delegate_to: 127.0.0.1
+  when: withdb is defined
+  tags: db
+
+- name: Dump DB on remote
+  shell: drush --verbose -y sql-dump --uri=default -r {{ source }} --ordered-dump --result-file=/tmp/{{ source_version.stat.version }}.sql --structure-tables-key=common
+  when: withdb is defined
+  tags: db-sync, freshen
+
+- name: Copy sql down
+  fetch:
+    src: /tmp/{{ source_version.stat.version }}.sql
+    dest: /tmp/{{ source_version.stat.version }}.sql
+    flat: yes
+
+- name: Load into local
+  delegate_to: 127.0.0.1
+  mysql_db:
+    state: import
+    name:  "{{ local_db.stat.dbname }}"
+    target: /tmp/{{ source_version.stat.version }}.sql
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+
+- name: Clean up remote SQL
+  shell: rm /tmp/{{ source_version.stat.version }}.sql
+
+#- name: Clean up local SQL
+#  delegate_to: 127.0.0.1
+#  shell: rm /tmp/{{ source_version.stat.version }}.sql
+
+- name: Set robots.txt to no follow
+  copy: src=robots.nofollow.conf dest={{ local }}/robots.txt mode=0775 backup=yes
+  when: devsite is defined
+  delegate_to: 127.0.0.1
+  tags: post-pull, robots
+
+#here
+- name: Re-fix permissions on local
+  shell: sudo ntdrchown {{ local }}
+  delegate_to: 127.0.0.1
+  tags: post-pull

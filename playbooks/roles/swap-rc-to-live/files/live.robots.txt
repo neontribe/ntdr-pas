@@ -1,0 +1,64 @@
+#
+# robots.txt
+#
+# https://www.fbmholidays.co.uk at 2015-01-26
+#
+User-agent: *
+Crawl-delay: 10
+# Directories
+Disallow: /includes/
+Disallow: /misc/
+Disallow: /modules/
+Disallow: /profiles/
+Disallow: /scripts/
+Disallow: /themes/
+# Files
+Disallow: /CHANGELOG.txt
+Disallow: /cron.php
+Disallow: /INSTALL.mysql.txt
+Disallow: /INSTALL.pgsql.txt
+Disallow: /INSTALL.sqlite.txt
+Disallow: /install.php
+Disallow: /INSTALL.txt
+Disallow: /LICENSE.txt
+Disallow: /MAINTAINERS.txt
+Disallow: /update.php
+Disallow: /UPGRADE.txt
+Disallow: /xmlrpc.php
+# Paths (clean URLs)
+Disallow: /admin/
+Disallow: /comment/reply/
+Disallow: /filter/tips/
+Disallow: /node/add/
+Disallow: /search/
+Disallow: /user/register/
+Disallow: /user/password/
+Disallow: /user/login/
+Disallow: /user/logout/
+Disallow: /property/*/calendars
+Allow: /properties$
+Allow: /properties/*
+Disallow: /properties/*?scrollTo=booking
+Disallow: /properties*
+Disallow: /properties/map?*
+Disallow: /tabs_search/search/*
+
+# Paths (no clean URLs)
+Disallow: /?q=admin/
+Disallow: /?q=comment/reply/
+Disallow: /?q=filter/tips/
+Disallow: /?q=node/add/
+Disallow: /?q=search/
+Disallow: /?q=user/password/
+Disallow: /?q=user/register/
+Disallow: /?q=user/login/
+Disallow: /?q=user/logout/
+Disallow: /?q=property/*/calendars
+Allow: /?q=properties$
+Allow: /?q=properites/*
+Disallow: /?q=properties*
+Disallow: /?q=properties/*?scrollTo=booking
+Disallow: /?q=/properties/map?*
+Disallow: /?q=/tabs_search/search/*
+
+
