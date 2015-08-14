@@ -14,63 +14,63 @@ Where the DB name is set correctly.
 
 ## Quick Examples
 
-Create a whole new site on a remote site
+1.Create a whole new site on a remote site
 
     ansible-playbook push-local-to-remote.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ withdb=true"
 
-Freshen a remote site with local files, no DB push/update
+2.Freshen a remote site with local files, no DB push/update
 
     ansible-playbook push-local-to-remote.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
 
-Pull a remote site to local, including new DB
+3.Pull a remote site to local, including new DB
 
     ansible-playbook pull-full-copy.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="source=/var/www/zz_0.0 local=/var/tmp withdb=true"
 
-Pull a remote site to local, No DB
+4.Pull a remote site to local, No DB
 
     ansible-playbook pull-full-copy.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0.0"
 
-Freshen local, files folder and DB
+5.Freshen local, files folder and DB
 
     ansible-playbook freshen-local.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="source=/var/www/zz_0.0 withdb=true"
 
-Freshen local, files folder, No DB
+6.Freshen local, files folder, No DB
 
     ansible-playbook freshen-local.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="source=/var/www/zz_0.0"
 
-Create a new RC site, minor version bump
+7.Create a new RC site, minor version bump
 
     ansible-playbook provision-new-release.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
 
-Freshen remote (from live)
+8.Freshen remote (from live)
 
     ansible-playbook freshen-remote.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
 
-Send live
+9.Send live
 
     ansible-playbook swap-rc-to-live.yml \
       -i inventory/cottage-servers \
