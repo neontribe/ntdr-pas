@@ -14,63 +14,80 @@ Where the DB name is set correctly.
 
 ## Quick Examples
 
-1.Create a whole new site on a remote site
+Pull a remote site to local, including new DB
+
+    ansible-playbook pull-full-copy.yml \
+        -i inventory/cottage-servers-live \
+        --limit=ch_live \
+        --extra-vars="source=/var/www/latest local=/var/tmp/ch withdb=true mysql_root_pw=password"
+
+Pull a remote site to local, No DB
+
+    ansible-playbook pull-full-copy.yml \
+        -i inventory/cottage-servers-live \
+        --limit=ch_live \
+        --extra-vars="source=/var/www/latest target=/var/tmp/ch mysql_root_pw=password"
+
+
+
+
+Create a whole new site on a remote site
 
     ansible-playbook push-local-to-remote.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ withdb=true"
 
-2.Freshen a remote site with local files, no DB push/update
+Freshen a remote site with local files, no DB push/update
 
     ansible-playbook push-local-to-remote.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
 
-3.Pull a remote site to local, including new DB
+Pull a remote site to local, including new DB
 
     ansible-playbook pull-full-copy.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="source=/var/www/zz_0.0 local=/var/tmp withdb=true"
 
-4.Pull a remote site to local, No DB
+Pull a remote site to local, No DB
 
     ansible-playbook pull-full-copy.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0.0"
 
-5.Freshen local, files folder and DB
+Freshen local, files folder and DB
 
     ansible-playbook freshen-local.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="source=/var/www/zz_0.0 withdb=true"
 
-6.Freshen local, files folder, No DB
+Freshen local, files folder, No DB
 
     ansible-playbook freshen-local.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="source=/var/www/zz_0.0"
 
-7.Create a new RC site, minor version bump
+Create a new RC site, minor version bump
 
     ansible-playbook provision-new-release.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
 
-8.Freshen remote (from live)
+Freshen remote (from live)
 
     ansible-playbook freshen-remote.yml \
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
 
-9.Send live
+Send live
 
     ansible-playbook swap-rc-to-live.yml \
       -i inventory/cottage-servers \

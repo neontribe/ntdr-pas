@@ -71,6 +71,7 @@
 - name: Get local DB details
   ntdr_get_db_details.py: path={{ local }}/sites/default/settings.php autofix=true
   delegate_to: 127.0.0.1
+  when: withdb is defined
   register: local_db
   tags: db
 
@@ -96,6 +97,7 @@
     src: /tmp/{{ source_version.stat.version }}.sql
     dest: /tmp/{{ source_version.stat.version }}.sql
     flat: yes
+  when: withdb is defined
 
 - name: Load into local
   delegate_to: 127.0.0.1
@@ -105,9 +107,11 @@
     target: /tmp/{{ source_version.stat.version }}.sql
     login_user: root
     login_password: "{{ mysql_root_pw }}"
+  when: withdb is defined
 
 - name: Clean up remote SQL
   shell: rm /tmp/{{ source_version.stat.version }}.sql
+  when: withdb is defined
 
 #- name: Clean up local SQL
 #  delegate_to: 127.0.0.1
