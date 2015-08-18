@@ -2,6 +2,7 @@
 # local = the local drupal root
 # source = the remote drupal root
 
+
 - stat: path={{ local }}/sites/default/settings.php
   delegate_to: 127.0.0.1
   register: local_settings

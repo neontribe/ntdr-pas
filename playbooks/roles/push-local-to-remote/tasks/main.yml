@@ -1,9 +1,16 @@
 ---
 # Local actions
-- name: Fix local permissions
+#- name: Fix local permissions
   # TODO Make this a module
-  shell: sudo ntdrchown -a {{ source }}
-  delegate_to: 127.0.0.1
+  #shell: sudo ntdrchown -a {{ source }}
+  #delegate_to: 127.0.0.1
+
+- ntdr_slacken_local_permissions.py: path={{ source  }}
+  register: slacken_permission_output
+  delegate_to: 127.0.0.1  
+  sudo: true
+
+- debug: var=slacken_permission_output.stat.status
 
 - stat: path={{ target }}
   register: target_dir
@@ -40,6 +47,15 @@
 - ntdr_create_change_log.py: path={{ source }} version={{ target_version.stat.version }}
   register: change_log_output
   delegate_to: 127.0.0.1
+
+- debug: var=change_log_output.stat.path
+
+- name: Fix remote permissions
+  shell: sudo ntdrchown -a {{ target }}
+  when: target_files.stat.exists
+
+- debug:
+    msg: "drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }}"
 
 # Remote actions
 - name: Prep drupal

@@ -23,7 +23,7 @@ def main():
         os.chmod(path,0664)
         #os.chown(path, uid, gid)
         d = {
-            'test':"successful",
+            'status':"successful",
         }
 
         module.exit_json(changed=False, stat=d)

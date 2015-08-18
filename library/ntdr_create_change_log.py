@@ -23,10 +23,33 @@ l  Show latest tag. If colours are enabled then tag that have different
    content to the current branch are coloured red.
 b branch
       If specified and the remote branch exists then a the branch is checked out
-      and pulled. Existing changes will be stashed, and then applied.
+      and pulled. Existing chang
+      es will be stashed, and then applied.
 a  Auto tag. If used in conjuction with -l then drupal-tag will be called with
    a patch level bump.
 '''
+
+
+
+class Prepender:
+
+    def __init__(self, fname, mode='a'):
+        self.__write_queue = []
+        self.__f = open(fname, mode)
+
+    def write(self, s):
+        self.__write_queue.insert(0, s)
+
+    def close(self):
+        self.__exit__(None, None, None)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        if self.__write_queue: 
+            self.__f.writelines(self.__write_queue)
+        self.__f.close()
 
 
 def branches(pathname,options):
@@ -104,7 +127,7 @@ def branches(pathname,options):
 
 def main():
     module = AnsibleModule(
-        argument_spec = dict(
+    argument_spec = dict(
             path = dict(required=True),
             version = dict(required=True),
         ),
@@ -113,32 +136,34 @@ def main():
     path = module.params.get('path')
     version = module.params.get('version')
 
-
-    touch(path+'changelog2.txt')
-    newChangelog = open(path+'changelog2.txt','a')
-    newChangelog.write('+----- '+version+' -----+\n')
-    newChangelog.write(time.strftime("%y-%m-%d_%H-%M\n"))
+    touch(path+'/changelog.txt')
+    touch(path+'/testlog2.txt')
+   
+     
+    f = open(path+'/testlog2.txt','a+')
+    f.write('+----- '+version+' -----+\n')
+    f.write(time.strftime("%y-%m-%d_%H-%M\n"))
     titles = '\n%-25s %-20s %-10s %s\n' %('Name','Branch','Tag','Path')
-    newChangelog.write(titles)
-
-
+    f.write(titles)
+    
     branches_info=branches(path,{'l':True})
-    
     for info in branches_info:
-        infomation = '\n%-25s %-20s %-10s %s\n' %(info['Name'],info['Branch'],info['Tag'],info['Path'])           #newChangelog.write(info['Name']+'        '+info['Branch']+'        '+info['Tag']+'        '+info['Path']+'\n')
-        newChangelog.write(infomation)
+        infomation = '\n%-25s %-20s %-10s %s\n' %(info['Name'],info['Branch'],info['Tag'],info['Path'])
+        f.write(infomation)
 
-    with open(path+"changelog.txt") as f:
-        lines = f.readlines()
-        lines = [l for l in lines if "ROW" in l]
-        with open(path +"changelog2.txt", "w") as f1:
-            f1.writelines(lines)
+    f.write('\n')
     
-    
+    f1 = open(path+'/changelog.txt','r')
+    lines = f1.readlines()
+    f.writelines(lines)
+    f1.close()
+    f.close()
+    os.remove(path+'/changelog.txt')
+    os.rename(path+'/testlog2.txt',path+'/changelog.txt')
     d = {
         'path':path,
         'version': version,
-        'number':branches_info
+        'number':path
     }
 
     module.exit_json(changed=False, stat=d)
