@@ -28,15 +28,16 @@ Pull a remote site to local, No DB
         --limit=ch_live \
         --extra-vars="source=/var/www/latest target=/var/tmp/ch mysql_root_pw=password"
 
-
-
-
 Create a whole new site on a remote site
 
     ansible-playbook push-local-to-remote.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ withdb=true"
+        --ask-sudo-pass \
+        -i inventory/cottage-servers \
+        --limit=cottage \
+        --extra-vars="source=/var/www/html/Cottaging/sites/br target=/var/www/sites/testing/br/openmap withdb=true mysql_root_pw=password"
+
+
+
 
 Freshen a remote site with local files, no DB push/update
 
