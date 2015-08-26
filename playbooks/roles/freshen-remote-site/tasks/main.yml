@@ -17,6 +17,8 @@
 
 - name: Fix permission on source
   shell: sudo ntdrchown -a {{ source }}
+  become: yes
+  become_method: sudo
 
 - name: Fix permission on target
   shell: sudo ntdrchown -a {{ target }}

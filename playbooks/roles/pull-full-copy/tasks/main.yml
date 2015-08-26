@@ -25,12 +25,16 @@
   shell: sudo ntdrchown {{ source }}
   tags: pre-permissions, freshen
 
+
 #here
 - name: If local exists fix permissions on local
   shell: sudo ntdrchown -a {{ local }}
   delegate_to: 127.0.0.1
   when: local_settings.stat.exists
   tags: pre-permissions, freshen
+  become: yes
+  become_method: sudo
+
 
 - name: Fetch fresh drupal
   shell: drush dl --destination={{ local | dirname }} --drupal-project-rename={{ local | basename }}
@@ -129,3 +133,6 @@
   shell: sudo ntdrchown {{ local }}
   delegate_to: 127.0.0.1
   tags: post-pull
+  become: yes
+  become_method: sudo
+

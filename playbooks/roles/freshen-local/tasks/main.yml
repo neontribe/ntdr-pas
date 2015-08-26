@@ -6,7 +6,7 @@
 #  shell: sudo ntdrchown -a {{ local }}
 #  delegate_to: 127.0.0.1
 
-- ntdr_slacken_local_permissions.py: path={{ local }}
+-ntdr_slacken_local_permissions.py: path={{ local }}
   register: permission_output
   delegate_to: 127.0.0.1
   sudo: true
@@ -24,6 +24,8 @@
 - name: Fix permissions on local
   shell: sudo ntdrchown {{ local }}
   delegate_to: 127.0.0.1
+  become: yes
+  become_method: sudo
 
 - ntdr_get_version.py: path={{ source }}
   register: source_version

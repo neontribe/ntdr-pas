@@ -31,6 +31,8 @@
 # Fix source permissions
 - name: Fix source permsissions
   shell: sudo ntdrchown -a {{ source }}
+  become: yes
+  become_method: sudo
 
 # Fix target permissions
 - name: Fix target permsissions
