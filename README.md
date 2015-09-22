@@ -14,22 +14,24 @@ Where the DB name is set correctly.
 
 ## Quick Examples
 
-Pull a remote site to local, including new DB
+Pull a remote site to local, including new DB, there is an optional partameter mysql_root_pw=XXXXXXX that will prvent the command asking for a mysql root password.
 
     ansible-playbook pull-full-copy.yml \
         -i inventory/cottage-servers-live \
-        --limit=ch_live \
-        --extra-vars="source=/var/www/latest local=/var/tmp/ch withdb=true mysql_root_pw=password"
+    --limit=br_live \
+    --extra-vars="source=/var/www/latest local=/home/tobias/workspace/Cottaging/sites/br withdb=true" \
+    -v
+
 
 Pull a remote site to local, No DB
 
     ansible-playbook pull-full-copy.yml \
         -i inventory/cottage-servers-live \
-        --limit=ch_live \
-        --extra-vars="source=/var/www/latest target=/var/tmp/ch mysql_root_pw=password"
+    --limit=br_live \
+    --extra-vars="source=/var/www/latest local=/home/tobias/workspace/Cottaging/sites/br  \
+    -v
 
-
-
+<del>
 
 Create a whole new site on a remote site
 
@@ -93,3 +95,5 @@ Send live
       -i inventory/cottage-servers \
       --limit zz_test \
       --extra-vars="latest=/var/www/zz_0_2 testing=/var/www/foo"
+
+</del>

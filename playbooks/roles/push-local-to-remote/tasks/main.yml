@@ -5,12 +5,20 @@
   #shell: sudo ntdrchown -a {{ source }}
   #delegate_to: 127.0.0.1
 
-- ntdr_slacken_local_permissions.py: path={{ source  }}
-  register: slacken_permission_output
-  delegate_to: 127.0.0.1  
-  sudo: true
+- name: Install dependant packages
+  sudo: yes
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - git
+    - python-git
+    - python-mysql.connector
 
-- debug: var=slacken_permission_output.stat.status
+#- ntdr_slacken_local_permissions.py: path={{ source  }}
+#  register: slacken_permission_output
+#  delegate_to: 127.0.0.1  
+#  sudo: yes
+
+# - debug: var=slacken_permission_output.stat.status
 
 - stat: path={{ target }}
   register: target_dir
@@ -58,6 +66,10 @@
     msg: "drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }}"
 
 # Remote actions
+- name: Fix root permissions
+  sudo: yes
+  file: path={{ target | dirname }} state=directory mode=0755 owner={{ ansible_ssh_user }}
+  
 - name: Prep drupal
   shell: "drush -y dl --destination={{ target| dirname }} --drupal-project-rename={{ target | basename }}"
   when: not target_files.stat.exists
