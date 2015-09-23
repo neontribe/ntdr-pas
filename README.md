@@ -14,22 +14,35 @@ Where the DB name is set correctly.
 
 ## Quick Examples
 
-Pull a remote site to local, including new DB, there is an optional partameter mysql_root_pw=XXXXXXX that will prvent the command asking for a mysql root password.
+### Pull functions
 
-    ansible-playbook pull-full-copy.yml \
-        -i inventory/cottage-servers-live \
-    --limit=br_live \
-    --extra-vars="source=/var/www/latest local=/home/tobias/workspace/Cottaging/sites/br withdb=true" \
-    -v
+Pull a remote site to local.
 
+#### Extra vars
 
-Pull a remote site to local, No DB
+  * source - The location of the site on the remote fiule system; **default**: /var/www/latest
+  * local - The location of the local site; **default**: /var/tmp/cottage + ansible_hostname
+  * devsite - If set to true robots.txt is set to no follow; **default**: true
+  * mysql_root_pw - The local mysql root passwd; **default**: Ansible will prompt for this
 
-    ansible-playbook pull-full-copy.yml \
-        -i inventory/cottage-servers-live \
-    --limit=br_live \
-    --extra-vars="source=/var/www/latest local=/home/tobias/workspace/Cottaging/sites/br  \
-    -v
+#### Tags
+
+  * fullsync - Full files sync, whole of drupal
+  * db - Full files sync, whole of drupal
+  * filesync - Sync the sites/default/files folder down
+
+#### Examples
+
+Pull a whole new copy to my home workspace
+
+    ansible-playbook pull.yml -i inventory/cottage-servers-live --limit=br_live --extra-vars="local=/$HOME/workspace/br"
+
+Sync just the files folder down
+
+    ansible-playbook pull.yml -i inventory/cottage-servers-live --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync"
+
+Sync files and db down
+    ansible-playbook pull.yml -i inventory/cottage-servers-live --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync,db"
 
 <del>
 

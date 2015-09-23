@@ -1,0 +1,184 @@
+---
+# local = the local drupal root
+# source = the remote drupal root
+
+# Gather details
+
+- stat: path={{ local }}/sites/default/settings.php
+  delegate_to: 127.0.0.1
+  register: local_settings
+  tags: always
+
+- stat: path={{ local }}
+  delegate_to: 127.0.0.1
+  register: local_site
+  tags: always
+
+- name: Get local DB details
+  ntdr_get_db_details.py: path={{ local }}/sites/default/settings.php autofix=true
+  delegate_to: 127.0.0.1
+  when: local_settings.stat.exists
+  register: local_db
+  tags:
+    - db
+    - fullsync
+
+- ntdr_get_version.py: path={{ source }}
+  register: source_version
+  tags: always
+
+# Fix permissions
+
+- name: Fix permissions on source
+  shell: sudo ntdrchown {{ source }}
+  tags: always
+
+- name: If local exists fix permissions on local
+  shell: sudo ntdrchown -a {{ local }}
+  delegate_to: 127.0.0.1
+  when: local_settings.stat.exists
+  tags:
+    - filesync
+    - fullsync
+
+# File sync
+
+- name: Fetch fresh drupal
+  shell: drush dl --destination={{ local | dirname }} --drupal-project-rename={{ local | basename }}
+  delegate_to: 127.0.0.1
+  when: not local_site.stat.exists
+  tags: fullsync
+
+- name: Full fs sync from source to local
+  synchronize:
+    mode: pull
+    src:  "{{ source }}/*"
+    dest: "{{ local }}"
+  tags: fullsync
+
+- name: Files folder sync from source to local
+  synchronize:
+    mode: pull
+    src:  "{{ source }}/sites/default/files"
+    dest: "{{ local }}/sites/default"
+  tags: filesync
+
+# Sync DB
+
+- name: Copy sql down
+  fetch:
+    src: /tmp/{{ source_version.stat.version }}.sql
+    dest: /tmp/{{ source_version.stat.version }}.sql
+    flat: yes
+  tags:
+    - db
+    - fullsync
+
+- name: Create db using existing local settings file
+  mysql_db:
+    name: "{{ local_db.stat.dbname }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+  when: local_settings.stat.exists
+  delegate_to: 127.0.0.1
+  tags:
+    - db
+    - fullsync
+
+- name: Create db user using existing local settings file
+  mysql_user:
+    name: "{{ local_db.stat.dbuser }}"
+    password: "{{ local_db.stat.dbpass }}"
+    priv: "{{ local_db.stat.dbname }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+  when: local_settings.stat.exists
+  delegate_to: 127.0.0.1
+  tags:
+    - db
+    - fullsync
+
+- name: Create db using settings created from remote version
+  mysql_db:
+    name: "{{ source_version.stat.shortver }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+  when: not local_settings.stat.exists
+  delegate_to: 127.0.0.1
+  tags:
+    - db
+    - fullsync
+
+- name: Create db user using settings created from remote version
+  mysql_user:
+    name: "{{ source_version.stat.shortver }}"
+    password: "{{ source_version.stat.shortver }}"
+    priv: "{{ source_version.stat.shortver }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+  when: not local_settings.stat.exists
+  delegate_to: 127.0.0.1
+  tags:
+    - db
+    - fullsync
+
+- name: Dump DB on remote
+  shell: drush --verbose -y sql-dump --uri=default -r {{ source }} --ordered-dump --result-file=/tmp/{{ source_version.stat.version }}.sql --structure-tables-key=common
+  tags:
+    - db
+    - fullsync
+
+- name: Load into local using existing local settings file
+  delegate_to: 127.0.0.1
+  mysql_db:
+    state: import
+    name:  "{{ local_db.stat.dbname }}"
+    target: /tmp/{{ source_version.stat.version }}.sql
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+  when: local_settings.stat.exists
+  tags:
+    - db
+    - fullsync
+
+- name: Load into local using settings created from remote version
+  delegate_to: 127.0.0.1
+  mysql_db:
+    state: import
+    name:  "{{ source_version.stat.shortver }}"
+    target: /tmp/{{ source_version.stat.version }}.sql
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+  when: not local_settings.stat.exists
+  tags:
+    - db
+    - fullsync
+
+- name: Clean up remote SQL
+  shell: rm /tmp/{{ source_version.stat.version }}.sql
+  tags:
+    - db
+    - fullsync
+
+- name: Clean up local SQL
+  delegate_to: 127.0.0.1
+  shell: rm /tmp/{{ source_version.stat.version }}.sql
+  tags:
+    - db
+    - fullsync
+
+- name: Set robots.txt to no follow
+  copy: src=robots.nofollow.conf dest={{ local }}/robots.txt mode=0775 backup=yes
+  when: devsite is defined
+  delegate_to: 127.0.0.1
+  tags: always
+
+#here
+- name: Re-fix permissions on local
+  shell: sudo ntdrchown {{ local }}
+  delegate_to: 127.0.0.1
+  tags: always
