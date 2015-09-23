@@ -65,6 +65,12 @@
 
 # Sync DB
 
+- name: Dump DB on remote
+  shell: drush --verbose -y sql-dump --uri=default -r {{ source }} --ordered-dump --result-file=/tmp/{{ source_version.stat.version }}.sql --structure-tables-key=common
+  tags:
+    - db
+    - fullsync
+
 - name: Copy sql down
   fetch:
     src: /tmp/{{ source_version.stat.version }}.sql
@@ -122,12 +128,6 @@
     login_password: "{{ mysql_root_pw }}"
   when: not local_settings.stat.exists
   delegate_to: 127.0.0.1
-  tags:
-    - db
-    - fullsync
-
-- name: Dump DB on remote
-  shell: drush --verbose -y sql-dump --uri=default -r {{ source }} --ordered-dump --result-file=/tmp/{{ source_version.stat.version }}.sql --structure-tables-key=common
   tags:
     - db
     - fullsync
