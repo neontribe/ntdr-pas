@@ -44,69 +44,32 @@ Sync just the files folder down
 Sync files and db down
     ansible-playbook pull.yml -i inventory/cottage-servers-live --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync,db"
 
-<del>
+### Pull functions
 
-Create a whole new site on a remote site
+Pull a remote site to local.
 
-    ansible-playbook push-local-to-remote.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/ withdb=true"
+#### Extra vars
 
-Freshen a remote site with local files, no DB push/update
+  * local - The location of the site on the remote fiule system; **default**: /var/www/latest
+  * target - The location of the local site; **default**: /var/tmp/cottage + ansible_hostname
+  * mysql_root_pw - The local mysql root passwd; **default**: Ansible will prompt for this
 
-    ansible-playbook push-local-to-remote.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
+#### Tags
 
-Pull a remote site to local, including new DB
+  * modules - Sync sites/all foilders
+  * files - Sync the sites/default/files folder
+  * db - Sync up the DB
 
-    ansible-playbook pull-full-copy.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="source=/var/www/zz_0.0 local=/var/tmp withdb=true"
+#### Examples
 
-Pull a remote site to local, No DB
+Full push/new provision
 
-    ansible-playbook pull-full-copy.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0"
+    ansible-playbook push.yml -i inventory/kvm --ask-sudo-pass --limit=kvm --extra-vars="local=/$HOME/workspace/br"
 
-Freshen local, files folder and DB
+Push modules & themes, no DB
 
-    ansible-playbook freshen-local.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="source=/var/www/zz_0.0 withdb=true"
+    ansible-playbook push.yml -i inventory/kvm --ask-sudo-pass --limit=kvm --extra-vars="local=/$HOME/workspace/br" --tags=files,modules
+    
+Push just the DB
 
-Freshen local, files folder, No DB
-
-    ansible-playbook freshen-local.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="source=/var/www/zz_0.0"
-
-Create a new RC site, minor version bump
-
-    ansible-playbook provision-new-release.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
-
-Freshen remote (from live)
-
-    ansible-playbook freshen-remote.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
-
-Send live
-
-    ansible-playbook swap-rc-to-live.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="latest=/var/www/zz_0_2 testing=/var/www/foo"
-
-</del>
+    ansible-playbook push.yml -i inventory/kvm --ask-sudo-pass --limit=kvm --extra-vars="local=/$HOME/workspace/br" --tags=db

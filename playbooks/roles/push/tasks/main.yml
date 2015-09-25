@@ -1,9 +1,5 @@
 ---
-# Local actions
-#- name: Fix local permissions
-  # TODO Make this a module
-  #shell: sudo ntdrchown -a {{ source }}
-  #delegate_to: 127.0.0.1
+# Options are push modules + themes, files, DB
 
 - name: Install dependant packages
   sudo: yes
@@ -12,118 +8,149 @@
     - git
     - python-git
     - python-mysql.connector
+  tags: always
 
-#- ntdr_slacken_local_permissions.py: path={{ source  }}
-#  register: slacken_permission_output
-#  delegate_to: 127.0.0.1  
-#  sudo: yes
+# Gather information
 
-# - debug: var=slacken_permission_output.stat.status
-
-- stat: path={{ target }}
+- name: Does the site exist
+  stat: path={{ target }}
   register: target_dir
-
-- name: Get source version
-  ntdr_get_version.py: path={{ source }}
-  register: source_version
+  tags: always
 
 - name: Get remote version
   ntdr_get_version.py: path={{ target }} exists={{ target_dir.stat.exists }}
   register: target_version
+  tags: always
 
-- name: Fix remote permsissions
-  shell: sudo ntdrchown -a {{ target }}
-  when: target_version.stat.found
-      
-- name: Check for remote files
-  stat: path={{ target }}/sites/default/files
-  register: target_files
+# Prepare remote site
 
-- name: Sync down files
-  synchronize: src="{{ target }}/sites/default/files" dest="{{ source }}/sites/default" mode=pull checksum=yes times=no
-  when: target_files.stat.exists
+- name: Install empty drupal if the site doesn't exist
+  shell: drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }}
+  when: not target_dir.stat.exists
+  tags:
+    - modules
+    - files
 
-- name: Ensure sites/all/drush
-  file: path={{ source }}/sites/all/drush state=directory mode=0755
-  delegate_to: 127.0.0.1
-
-#here
-#- name: Create change log
-#  shell: ntdr_createChangeLog {{ source }} {{ target_version.stat.version }}
-#  delegate_to: 127.0.0.1
-
-- ntdr_create_change_log.py: path={{ source }} version={{ target_version.stat.version }}
-  register: change_log_output
-  delegate_to: 127.0.0.1
-
-- debug: var=change_log_output.stat.path
-
-- name: Fix remote permissions
-  shell: sudo ntdrchown -a {{ target }}
-  when: target_files.stat.exists
-
-- debug:
-    msg: "drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }}"
-
-# Remote actions
-- name: Fix root permissions
-  sudo: yes
-  file: path={{ target | dirname }} state=directory mode=0755 owner={{ ansible_ssh_user }}
-  
-- name: Prep drupal
-  shell: "drush -y dl --destination={{ target| dirname }} --drupal-project-rename={{ target | basename }}"
-  when: not target_files.stat.exists
+- name: Re-check target dir
+  stat: path={{ target }}
+  register: target_dir
+  tags:
+    - modules
+    - files
   # when: not target_dir.stat.exists
 
-- name: Full fs sync
-  synchronize: src={{ source }}/sites dest={{ target }}
+- name: Fix permissions
+  file: path={{ target }} owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" group=33 recurse=yes #state=directory
+  sudo: yes
+  tags:
+    - modules
+    - files
+
+# - debug: var=target_dir.stat
+# - debug: var=target_version.stat
+
+# Full push
+
+- name: Module/theme sync
+  synchronize:
+      src: "{{ local }}/sites/all"
+      dest: "{{ target }}/sites"
+      checksum: yes
+      times: no
+      owner: no
+      recursive: yes
+      mode: push
+      rsync_opts: --no-motd,--exclude=.git,--exclude=20*,--exclude=casper*
+  tags: modules
+
+- name: File sync
+  synchronize:
+      src: "{{ local }}/sites/default/files"
+      dest: "{{ target }}/sites/default"
+      checksum: yes
+      times: no
+      owner: no
+      recursive: yes
+      mode: push
+      rsync_opts: --no-motd,--exclude=.git,--exclude=20*,--exclude=casper*
+  tags: files
+
+# Fix settings
+- name: Check settings file
+  stat: path={{ target }}/sites/default/settings.php
+  tags:
+    - modules
+    - files
+
+- name: Install new settings file
+  template: src=settings.php.tpl dest={{ target }}/sites/default/settings.php
+  tags:
+    - modules
+    - files
 
 - name: Fix database in settings.php
   lineinfile:
     dest: "{{ target }}/sites/default/settings.php"
     regexp: "database' => "
     line: "      'database' => '{{ target_version.stat.shortver }}',"
+  tags:
+    - modules
+    - files
 - name: Fix username in settings.php
   lineinfile:
     dest: "{{ target }}/sites/default/settings.php"
     regexp: "username' => "
     line: "      'username' => '{{ target_version.stat.shortver }}',"
+  tags:
+    - modules
+    - files
 - name: Fix password in settings.php
   lineinfile:
     dest: "{{ target }}/sites/default/settings.php"
     regexp: "password' => "
     line: "      'password' => '{{ target_version.stat.shortver }}',"
+  tags:
+    - modules
+    - files
 
 - name: Create new alias for new version
-  # template: src=alias.drushrc.j2 dest={{ target }}/sites/all/drush/{{ target_version.stat.version }}.alias.drushrc.php
   ntdr_create_drushrc_alias.py:
     path: "{{ target }}"
     name: "{{ target_version.stat.version }}"
     dbver: "{{ target_version.stat.shortver }}"
     user: "{{ ansible_ssh_user }}"
     host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
+  tags: always
 
+- name: Re-Fix permissions
+  file: path={{ target }} owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" group=33 recurse=yes #state=directory
+  sudo: yes
+  tags:
+    - modules
+    - files
+
+# db push
 - name: Create db
   mysql_db: name={{ target_version.stat.shortver }} state=present login_user=root login_password={{ mysql_root_pw }}
-  when: withdb is defined
   tags: db
 
 - name: Create db user
   mysql_user: name={{ target_version.stat.shortver }} password={{ target_version.stat.shortver }} priv={{ target_version.stat.shortver }}.*:ALL state=present login_user=root login_password={{ mysql_root_pw }}
-  when: withdb is defined
   tags: db
 
-- name: Fetch aliases
-  synchronize: src={{ target }}/sites/all/drush dest={{ source }}/sites/all mode=pull checksum=yes times=no
-
 - name: Dump local DB
-  shell: "drush -y -r {{ source }} --uri=default sql-dump --ordered-dump --structure-tables-key=common --result-file=/tmp/{{  source_version.stat.version }}.sql"
-  when: withdb is defined
+  shell: "drush -y -r {{ local }} --uri=default sql-dump --ordered-dump --structure-tables-key=common --result-file=/tmp/{{ target_version.stat.version }}.sql"
+  tags: db
   delegate_to: 127.0.0.1
 
+- ntdr_create_change_log.py:
+    path: "{{ target }}"
+    version: "{{ target_version.stat.version }}"
+  register: change_log_output
+
 - name: Upload SQL
-  copy: src=/tmp/{{  source_version.stat.version }}.sql dest=/tmp/{{  source_version.stat.version }}.sql
-  when: withdb is defined
+  copy: src=/tmp/{{ target_version.stat.version }}.sql dest=/tmp/{{ target_version.stat.version }}.sql
+  tags: db
 
 - name: Import DB
   mysql_db:
@@ -131,9 +158,27 @@
     name: "{{ target_version.stat.shortver }}"
     login_user: "{{ target_version.stat.shortver }}"
     login_password: "{{ target_version.stat.shortver }}"
-    target: /tmp/{{ source_version.stat.version }}.sql
-  when: withdb is defined
+    target: /tmp/{{ target_version.stat.version }}.sql
+  tags: db
 
 - name: Run up and updb
   shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} up
   shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} updb
+
+# clean up and post actions
+- name: Clean up remote SQL
+  shell: rm /tmp/{{ target_version.stat.version }}.sql
+  tags: db
+
+- name: Clean up local SQL
+  delegate_to: 127.0.0.1
+  shell: rm /tmp/{{ target_version.stat.version }}.sql
+  tags: db
+
+- name: Set robots.txt to no follow
+  copy: src=robots.nofollow.conf dest={{ local }}/robots.txt mode=0775 backup=yes
+  when: devsite is defined
+  delegate_to: 127.0.0.1
+  tags: always
+
+# - name: If the change log did exist roll it up a minor
