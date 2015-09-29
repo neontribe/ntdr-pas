@@ -66,6 +66,8 @@ Full push/new provision
 
     ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=neoncottage --extra-vars="local=/$HOME/workspace/Cottaging/sites/br target=/var/www/sites/testing/br/BR-571"
 
+    ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=fb_test --extra-vars="local=/$HOME/workspace/Cottaging/fb target=/var/www/fb_1_7_0"
+
 Push modules & themes, no DB
 
     ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=neoncottage --extra-vars="local=/$HOME/workspace/Cottaging/sites/br target=/var/www/sites/testing/br/BR-571" --tags="modules"
