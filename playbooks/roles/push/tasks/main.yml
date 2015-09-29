@@ -8,6 +8,7 @@
     - git
     - python-git
     - python-mysql.connector
+    - python-mysqldb
   tags: always
 
 # Gather information

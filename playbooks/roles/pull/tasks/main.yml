@@ -145,6 +145,31 @@
     - db
     - fullsync
 
+- name: Fix database in settings.php
+  lineinfile:
+    dest: "{{ target }}/sites/default/settings.php"
+    regexp: "database' => "
+    line: "      'database' => '{{ target_version.stat.shortver }}',"
+  tags:
+    - modules
+    - files
+- name: Fix username in settings.php
+  lineinfile:
+    dest: "{{ target }}/sites/default/settings.php"
+    regexp: "username' => "
+    line: "      'username' => '{{ target_version.stat.shortver }}',"
+  tags:
+    - modules
+    - files
+- name: Fix password in settings.php
+  lineinfile:
+    dest: "{{ target }}/sites/default/settings.php"
+    regexp: "password' => "
+    line: "      'password' => '{{ target_version.stat.shortver }}',"
+  tags:
+    - modules
+    - files
+
 - name: Load into local using settings created from remote version
   delegate_to: 127.0.0.1
   mysql_db:
