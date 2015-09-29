@@ -44,9 +44,9 @@ Sync just the files folder down
 Sync files and db down
     ansible-playbook pull.yml -i inventory/cottage-servers-live --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync,db"
 
-### Pull functions
+### Push functions
 
-Pull a remote site to local.
+Push a site to a remotye server
 
 #### Extra vars
 
@@ -64,12 +64,12 @@ Pull a remote site to local.
 
 Full push/new provision
 
-    ansible-playbook push.yml -i inventory/kvm --ask-sudo-pass --limit=kvm --extra-vars="local=/$HOME/workspace/br"
+    ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=neoncottage --extra-vars="local=/$HOME/workspace/Cottaging/sites/br target=/var/www/sites/testing/br/BR-571"
 
 Push modules & themes, no DB
 
-    ansible-playbook push.yml -i inventory/kvm --ask-sudo-pass --limit=kvm --extra-vars="local=/$HOME/workspace/br" --tags=files,modules
+    ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=neoncottage --extra-vars="local=/$HOME/workspace/Cottaging/sites/br target=/var/www/sites/testing/br/BR-571" --tags="modules"
     
 Push just the DB
 
-    ansible-playbook push.yml -i inventory/kvm --ask-sudo-pass --limit=kvm --extra-vars="local=/$HOME/workspace/br" --tags=db
+    ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=neoncottage --extra-vars="local=/$HOME/workspace/Cottaging/sites/br target=/var/www/sites/testing/br/BR-571" --tags="db"
