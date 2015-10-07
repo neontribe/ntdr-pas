@@ -1,8 +1,0 @@
----
-
-- hosts: all
-  vars:
-    source: /var/www/latest
-    target: /var/www/testing
-  roles:
-      - freshen-remote-site

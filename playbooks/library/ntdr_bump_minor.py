@@ -31,6 +31,11 @@ def main():
                 lines.append(line)
 
     if not version:
+        # Get it from the dir
+        rp = os.path.realpath(path)
+        version = os.path.basename(rp)
+
+    if len(re.split('\.|_', version)) < 3:
         version = '0_0_0'
 
     parts = re.split('\.|_', version);
@@ -40,27 +45,28 @@ def main():
     patch = int(patch) + 1
     newversion = major + '_' + minor + '_' + str(patch)
     
-    changelog = []
-    changelog.append('+----- ' + newversion + ' -----+')
-    changelog.append(time.strftime("%Y-%m-%d_%H-%M-%S"))
+    if os.path.isfile(full):
+        changelog = []
+        changelog.append('+----- ' + newversion + ' -----+')
+        changelog.append(time.strftime("%Y-%m-%d_%H-%M-%S"))
 
-    branches = ''
-    cmd = 'branches -p ' + path
-    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-    while True:
-        out = proc.stdout.read(1)
-        if out == '' and proc.poll() != None:
-            break
-        if out != '':
-            branches += out
+        branches = ''
+        cmd = 'branches -p ' + path
+        proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+        while True:
+            out = proc.stdout.read(1)
+            if out == '' and proc.poll() != None:
+                break
+            if out != '':
+                branches += out
 
-    changelog.append(branches)
-    changelog.append('')
-    changelog += lines
+        changelog.append(branches)
+        changelog.append('')
+        changelog += lines
 
-    outfile = open(full, 'w')
-    outfile.write("\n".join(changelog))
-    outfile.close()
+        outfile = open(full, 'w')
+        outfile.write("\n".join(changelog))
+        outfile.close()
 
     # back to ansible
     d = {

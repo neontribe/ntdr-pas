@@ -1,0 +1,237 @@
+---
+- name: Check source is a drupal
+  shell: drush -r {{ source }} status | grep "Drupal bootstrap" # chdir=/var/www/{{ item }}"
+  register: source_drush
+  tags: always
+
+- name: Check target is a drupal
+  shell: drush -r {{ target }} status | grep "Drupal bootstrap" # chdir=/var/www/{{ item }}"
+  register: target_drush
+  tags:
+      - freshen
+      - freshendb
+      - freshenfiles
+      - sendlive
+
+# Put source into read only
+- name: Install readonly into source
+  shell: "drush -r {{ source }} --uri=default en -y readonlymode"
+  tags:
+      - setro
+      - freshen
+      - freshendb
+      - freshenfiles
+      - sendlive
+
+- name: Turn readonly on in source
+  shell: "drush -r {{ source }} --uri=default vset site_readonly 1"
+  tags:
+      - setro
+      - freshen
+      - freshendb
+      - freshenfiles
+      - sendlive
+
+# Put target into read only
+- name: Install readonly into target
+  shell: "drush -r {{ target }} --uri=default en -y readonlymode"
+  tags:
+      - setrw
+      - freshen
+      - freshendb
+      - freshenfiles
+      - sendlive
+
+- name: Turn readonly on in target
+  shell: "drush -r {{ target }} --uri=default vset site_readonly 1"
+  tags:
+      - freshen
+      - freshendb
+      - freshenfiles
+      - sendlive
+
+# Copy DB
+- name: Dump DB on source
+  shell: drush -r {{ source }} sql-dump --ordered-dump --structure-tables-key=common --result-file=/tmp/source.sql
+  tags:
+      - freshen
+      - freshendb
+      - sendlive
+
+- name: Import DB into target
+  shell: drush -r {{ target }} sqlc < /tmp/source.sql
+  tags:
+      - freshen
+      - freshendb
+      - sendlive
+
+- name: Fix source permissions
+  shell: ntdrchown {{ source }}
+  sudo: yes
+  tags:
+      - fixperms
+      - freshen
+      - freshenfiles
+      - sendlive
+
+- name: Fix target permissions
+  shell: ntdrchown {{ target }}
+  sudo: yes
+  tags:
+      - freshen
+      - freshenfiles
+      - sendlive
+
+- name: Rsync source files to target files
+  shell: rsync -rlD --exclude=settings.php {{ source }}/sites {{ target }}
+  tags:
+      - freshen
+      - freshenfiles
+      - sendlive
+
+- name: Put target into read write
+  shell: "drush -r {{ target }} --uri=default vset site_readonly 0"
+  tags:
+      - freshen
+      - freshendb
+      - freshenfiles
+      - sendlive
+      - setrw
+
+# Switch links
+- name: Check source is a symlink
+  stat:  path={{ source }}
+  register: source_link
+  tags:
+      - sendlive
+
+- name: Check testing is a symlink
+  stat:  path={{ target }}
+  register: target_link
+  tags:
+      - sendlive
+
+- name: Get target realpath
+  stat:  path={{ target | realpath }}
+  register: target_realpath
+  tags:
+      - sendlive
+
+- fail: msg="Not swapping symlinks as source is not a symlink"
+  when: source_link.stat.islnk is not defined
+  tags:
+      - sendlive
+
+- fail: msg="Not swapping symlinks as target is not a symlink"
+  when: target_link.stat.islnk is not defined
+  tags:
+      - sendlive
+
+- name: Remove latest link
+  file: path={{ source }} state=absent
+  tags:
+      - sendlive
+
+- name: Created new latest link
+  file: src={{ target_realpath.stat.lnk_source }} dest={{ source }} state=link
+  tags:
+      - sendlive
+
+# Define new version
+- ntdr_bump_minor: path={{ target }}
+  register: ntbm
+  tags:
+      - sendlive
+
+- name: Remove testing link
+  file: path={{ target }} state=absent
+  tags:
+      - sendlive
+
+- name: Download new drupal
+  shell: drush dl --destination={{ target | dirname }} --drupal-project-rename={{ ntbm.stat.newversion }}
+  tags:
+      - sendlive
+
+# Copy source files to new drupal
+- name: Rsync source files to new target files
+  shell: rsync -rlD {{ source }}/sites {{ target | dirname }}/{{ ntbm.stat.newversion }}
+  tags:
+      - sendlive
+
+# Update settings file
+- name: Fix database in settings.php
+  lineinfile:
+    dest: "{{ target | dirname }}/{{ ntbm.stat.newversion }}/sites/default/settings.php"
+    regexp: "database' => "
+    line: "      'database' => '{{ ntbm.stat.newversion }}',"
+  tags:
+      - sendlive
+
+  tags:
+- name: Fix username in settings.php
+  lineinfile:
+    dest: "{{ target | dirname }}/{{ ntbm.stat.newversion }}/sites/default/settings.php"
+    regexp: "username' => "
+    line: "      'username' => '{{ ntbm.stat.newversion }}',"
+  tags:
+      - sendlive
+
+- name: Fix password in settings.php
+  lineinfile:
+    dest: "{{ target | dirname }}/{{ ntbm.stat.newversion }}/sites/default/settings.php"
+    regexp: "password' => "
+    line: "      'password' => '{{ ntbm.stat.newversion }}',"
+  tags:
+      - sendlive
+
+
+# Create DB for new drupal
+- name: Create db using existing local settings file
+  mysql_db:
+    name: "{{ ntbm.stat.newversion }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+  tags:
+    - sendlive
+
+- name: Create db user using existing local settings file
+  mysql_user:
+    name: "{{ ntbm.stat.newversion }}"
+    password: "{{ ntbm.stat.newversion }}"
+    priv: "{{ ntbm.stat.newversion }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+  tags:
+    - sendlive
+
+# Import DB into new drupal
+- name: Load into local using settings created from remote version
+  mysql_db:
+    state: import
+    name:  "{{ ntbm.stat.newversion }}"
+    target: /tmp/source.sql
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+  tags:
+    - sendlive
+
+# Fix new positions
+- name: Fix target permissions
+  shell: ntdrchown {{ target | dirname }}/{{ ntbm.stat.newversion }}
+  sudo: yes
+  tags:
+      - sendlive
+
+# Set new drupal rw
+- name: Put target into read write
+  shell: "drush -r {{ target | dirname }}/{{ ntbm.stat.newversion }} --uri=default vset site_readonly 0"
+  tags:
+      - sendlive
+
+- name: Create testing symlink
+  file: src={{ target | dirname }}/{{ ntbm.stat.newversion }} dest={{ target }} state=link
+  tags:
+      - sendlive
