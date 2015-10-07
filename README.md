@@ -75,3 +75,26 @@ Push modules & themes, no DB
 Push just the DB
 
     ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=neoncottage --extra-vars="local=/$HOME/workspace/Cottaging/sites/br target=/var/www/sites/testing/br/BR-571" --tags="db"
+
+### Remote functions
+
+#### Extra vars
+
+  * local - The location of the site on the remote fiule system; **default**: /var/www/latest
+  * target - The location of the local site; **default**: /var/tmp/cottage + ansible_hostname
+  * mysql_root_pw - The local mysql root passwd; **default**: Ansible will prompt for this
+
+#### Tags
+
+  * fixperms - Correct permissions on the source path
+  * freshen - Full freshen, module, themes, files and DB from source to target
+  * freshendb - Copy DB from source to target
+  * freshenmodules - Copy sites/all from source to target
+  * freshenfiles - Copy sites/default/files from source to target
+  * sendlive - DB & file sync + cheangelog update and symlink swap
+  * setro - Put source site into ro
+  * setrw - Put target site into rw
+
+#### Examples
+
+    ansible-playbook remote.yml -i inventory/cottage-servers --ask-sudo-pass --limit=fb_test

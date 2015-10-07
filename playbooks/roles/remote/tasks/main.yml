@@ -82,12 +82,21 @@
       - freshenfiles
       - sendlive
 
-- name: Rsync source files to target files
+- name: Rsync source sites to target files
   shell: rsync -rlD --exclude=settings.php {{ source }}/sites {{ target }}
   tags:
       - freshen
+
+- name: Rsync source default/files to target files
+  shell: rsync -rlD {{ source }}/sites/default/files {{ target }}/sites/default
+  tags:
       - freshenfiles
       - sendlive
+
+- name: Rsync source sites/all to target sites
+  shell: rsync -rlD {{ source }}/sites/all {{ target }}/sites/
+  tags:
+      - freshenmodules
 
 - name: Put target into read write
   shell: "drush -r {{ target }} --uri=default vset site_readonly 0"
