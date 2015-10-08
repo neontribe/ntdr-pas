@@ -80,6 +80,24 @@
     - db
     - fullsync
 
+- name: Create settings.php
+  template: src=settings.php.tpl dest={{ local }}/sites/default/settings.php
+  delegate_to: 127.0.0.1
+  when: not local_settings.stat.exists
+  tags:
+    - db
+    - fullsync
+
+- name: Get local DB details
+  ntdr_get_db_details.py: path={{ local }}/sites/default/settings.php autofix=true
+  delegate_to: 127.0.0.1
+  when: local_settings.stat.exists
+  register: local_db
+  when: not local_settings.stat.exists
+  tags:
+    - db
+    - fullsync
+
 - name: Create db using existing local settings file
   mysql_db:
     name: "{{ local_db.stat.dbname }}"
@@ -118,72 +136,9 @@
     - db
     - fullsync
 
-- name: Create db user using settings created from remote version
-  mysql_user:
-    name: "{{ source_version.stat.latest.shortver }}"
-    password: "{{ source_version.stat.latest.shortver }}"
-    priv: "{{ source_version.stat.latest.shortver }}.*:ALL"
-    state: present
-    login_user: root
-    login_password: "{{ mysql_root_pw }}"
-  when: not local_settings.stat.exists
+- name: Import DB
+  shell: drush -r {{ {{ local }} sqlc < /tmp/{{ source_version.stat.latest.version }}.sql
   delegate_to: 127.0.0.1
-  tags:
-    - db
-    - fullsync
-
-- name: Load into local using existing local settings file
-  delegate_to: 127.0.0.1
-  mysql_db:
-    state: import
-    name:  "{{ local_db.stat.dbname }}"
-    target: /tmp/{{ source_version.stat.latest.version }}.sql
-    login_user: root
-    login_password: "{{ mysql_root_pw }}"
-  when: local_settings.stat.exists
-  tags:
-    - db
-    - fullsync
-
-- name: Fix database in settings.php
-  lineinfile:
-    dest: "{{ local }}/sites/default/settings.php"
-    regexp: "database' => "
-    line: "      'database' => '{{ source_version.stat.latest.shortver }}',"
-  when: not local_settings.stat.exists
-  tags:
-    - modules
-    - files
-
-- name: Fix username in settings.php
-  lineinfile:
-    dest: "{{ local }}/sites/default/settings.php"
-    regexp: "username' => "
-    line: "      'username' => '{{ source_version.stat.latest.shortver }}',"
-  tags:
-    - modules
-    - files
-  when: not local_settings.stat.exists
-
-- name: Fix password in settings.php
-  lineinfile:
-    dest: "{{ local }}/sites/default/settings.php"
-    regexp: "password' => "
-    line: "      'password' => '{{ source_version.stat.latest.shortver }}',"
-  when: not local_settings.stat.exists
-  tags:
-    - modules
-    - files
-
-- name: Load into local using settings created from remote version
-  delegate_to: 127.0.0.1
-  mysql_db:
-    state: import
-    name:  "{{ source_version.stat.latest.shortver }}"
-    target: /tmp/{{ source_version.stat.latest.version }}.sql
-    login_user: root
-    login_password: "{{ mysql_root_pw }}"
-  when: not local_settings.stat.exists
   tags:
     - db
     - fullsync
