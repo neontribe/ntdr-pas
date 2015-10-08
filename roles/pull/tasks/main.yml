@@ -137,7 +137,7 @@
     - fullsync
 
 - name: Import DB
-  shell: drush -r {{ {{ local }} sqlc < /tmp/{{ source_version.stat.latest.version }}.sql
+  shell: drush -r {{ local }} sqlc < /tmp/{{ source_version.stat.latest.version }}.sql
   delegate_to: 127.0.0.1
   tags:
     - db
