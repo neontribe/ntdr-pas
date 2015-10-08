@@ -149,23 +149,28 @@
   lineinfile:
     dest: "{{ local }}/sites/default/settings.php"
     regexp: "database' => "
-    line: "      'database' => '{{ source_version.stat.shortver }}',"
+    line: "      'database' => '{{ source_version.stat.latest.shortver }}',"
+  when: not local_settings.stat.exists
   tags:
     - modules
     - files
+
 - name: Fix username in settings.php
   lineinfile:
     dest: "{{ local }}/sites/default/settings.php"
     regexp: "username' => "
-    line: "      'username' => '{{ source_version.stat.shortver }}',"
+    line: "      'username' => '{{ source_version.stat.latest.shortver }}',"
   tags:
     - modules
     - files
+  when: not local_settings.stat.exists
+
 - name: Fix password in settings.php
   lineinfile:
     dest: "{{ local }}/sites/default/settings.php"
     regexp: "password' => "
-    line: "      'password' => '{{ source_version.stat.shortver }}',"
+    line: "      'password' => '{{ source_version.stat.latest.shortver }}',"
+  when: not local_settings.stat.exists
   tags:
     - modules
     - files
@@ -174,7 +179,7 @@
   delegate_to: 127.0.0.1
   mysql_db:
     state: import
-    name:  "{{ source_version.stat.shortver }}"
+    name:  "{{ source_version.stat.latest.shortver }}"
     target: /tmp/{{ source_version.stat.latest.version }}.sql
     login_user: root
     login_password: "{{ mysql_root_pw }}"
