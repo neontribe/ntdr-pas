@@ -104,7 +104,6 @@
     state: present
     login_user: root
     login_password: "{{ mysql_root_pw }}"
-  when: local_settings.stat.exists
   delegate_to: 127.0.0.1
   tags:
     - db
@@ -118,19 +117,6 @@
     state: present
     login_user: root
     login_password: "{{ mysql_root_pw }}"
-  when: local_settings.stat.exists
-  delegate_to: 127.0.0.1
-  tags:
-    - db
-    - fullsync
-
-- name: Create db using settings created from remote version
-  mysql_db:
-    name: "{{ source_version.stat.latest.shortver }}"
-    state: present
-    login_user: root
-    login_password: "{{ mysql_root_pw }}"
-  when: not local_settings.stat.exists
   delegate_to: 127.0.0.1
   tags:
     - db
