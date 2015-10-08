@@ -108,7 +108,7 @@
 
 - name: Create db using settings created from remote version
   mysql_db:
-    name: "{{ source_version.stat.shortver }}"
+    name: "{{ source_version.stat.latest.shortver }}"
     state: present
     login_user: root
     login_password: "{{ mysql_root_pw }}"
@@ -120,9 +120,9 @@
 
 - name: Create db user using settings created from remote version
   mysql_user:
-    name: "{{ source_version.stat.shortver }}"
-    password: "{{ source_version.stat.shortver }}"
-    priv: "{{ source_version.stat.shortver }}.*:ALL"
+    name: "{{ source_version.stat.latest.shortver }}"
+    password: "{{ source_version.stat.latest.shortver }}"
+    priv: "{{ source_version.stat.latest.shortver }}.*:ALL"
     state: present
     login_user: root
     login_password: "{{ mysql_root_pw }}"
