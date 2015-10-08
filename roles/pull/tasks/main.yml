@@ -65,16 +65,21 @@
 
 # Sync DB
 
+- debug: var=source_version
+  tags:
+    - db
+    - fullsync
+
 - name: Dump DB on remote
-  shell: drush --verbose -y sql-dump --uri=default -r {{ source }} --ordered-dump --result-file=/tmp/{{ source_version.stat.version }}.sql --structure-tables-key=common
+  shell: drush --verbose -y sql-dump --uri=default -r {{ source }} --ordered-dump --result-file=/tmp/{{ source_version.stat.latest.version }}.sql --structure-tables-key=common
   tags:
     - db
     - fullsync
 
 - name: Copy sql down
   fetch:
-    src: /tmp/{{ source_version.stat.version }}.sql
-    dest: /tmp/{{ source_version.stat.version }}.sql
+    src: /tmp/{{ source_version.stat.latest.version }}.sql
+    dest: /tmp/{{ source_version.stat.latest.version }}.sql
     flat: yes
   tags:
     - db
@@ -137,7 +142,7 @@
   mysql_db:
     state: import
     name:  "{{ local_db.stat.dbname }}"
-    target: /tmp/{{ source_version.stat.version }}.sql
+    target: /tmp/{{ source_version.stat.latest.version }}.sql
     login_user: root
     login_password: "{{ mysql_root_pw }}"
   when: local_settings.stat.exists
@@ -175,7 +180,7 @@
   mysql_db:
     state: import
     name:  "{{ source_version.stat.shortver }}"
-    target: /tmp/{{ source_version.stat.version }}.sql
+    target: /tmp/{{ source_version.stat.latest.version }}.sql
     login_user: root
     login_password: "{{ mysql_root_pw }}"
   when: not local_settings.stat.exists
@@ -184,14 +189,14 @@
     - fullsync
 
 - name: Clean up remote SQL
-  shell: rm /tmp/{{ source_version.stat.version }}.sql
+  shell: rm /tmp/{{ source_version.stat.latest.version }}.sql
   tags:
     - db
     - fullsync
 
 - name: Clean up local SQL
   delegate_to: 127.0.0.1
-  shell: rm /tmp/{{ source_version.stat.version }}.sql
+  shell: rm /tmp/{{ source_version.stat.latest.version }}.sql
   tags:
     - db
     - fullsync

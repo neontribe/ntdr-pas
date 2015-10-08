@@ -1,7 +1,0 @@
-#!/bin/bash
-
-USAGE="$0 [user>@<host] [-r web-root] [latest|rc]"
-
-source $CWD/colours
-
-

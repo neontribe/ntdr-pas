@@ -177,7 +177,6 @@
   tags:
       - sendlive
 
-  tags:
 - name: Fix username in settings.php
   lineinfile:
     dest: "{{ target | dirname }}/{{ ntbm.stat.newversion }}/sites/default/settings.php"

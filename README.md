@@ -28,7 +28,7 @@ Pull a remote site to local.
 #### Tags
 
   * fullsync - Full files sync, whole of drupal
-  * db - Full files sync, whole of drupal
+  * db - Sync the data base, it's advisable to pull files as well.
   * filesync - Sync the sites/default/files folder down
 
 #### Examples
@@ -97,4 +97,10 @@ Push just the DB
 
 #### Examples
 
-    ansible-playbook remote.yml -i inventory/cottage-servers --ask-sudo-pass --limit=fb_test
+Release testing to latest, including a files and DB refresh and a minor version bump
+
+    ansible-playbook remote.yml -i inventory/cottage-servers --ask-sudo-pass --limit=fb_test --tags=sendlive
+
+Update files and DB in testing from latest.
+
+    ansible-playbook remote.yml -i inventory/cottage-servers --ask-sudo-pass --limit=fb_test --tags='freshendb,freshenfiles'

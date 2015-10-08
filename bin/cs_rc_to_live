@@ -1,5 +1,0 @@
-#!bin/bash
-
-USAGE="$0 -s <RC DRUPAL ROOT> -r <REMOTE HOST> -l <LATEST DRUPAL ROOT> -t <NEW RC ROOT>"
-
-ansible-playbook swap-rc-to-live.yml --limit $RH --extra-vars="latest=$LDR testing=$RDR newrc=$NCR"

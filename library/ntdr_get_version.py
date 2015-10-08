@@ -43,7 +43,7 @@ def main():
                     version = parts[1]
                     found = True
             else:
-                version = os.path.basename(path)
+                version = os.path.basename(os.path.realpath(path))
                 found = False
 
         parts = re.split('\.|_', version)
