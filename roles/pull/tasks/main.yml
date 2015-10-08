@@ -65,11 +65,6 @@
 
 # Sync DB
 
-- debug: var=source_version
-  tags:
-    - db
-    - fullsync
-
 - name: Dump DB on remote
   shell: drush --verbose -y sql-dump --uri=default -r {{ source }} --ordered-dump --result-file=/tmp/{{ source_version.stat.latest.version }}.sql --structure-tables-key=common
   tags:
@@ -154,7 +149,7 @@
   lineinfile:
     dest: "{{ local }}/sites/default/settings.php"
     regexp: "database' => "
-    line: "      'database' => '{{ target_version.stat.shortver }}',"
+    line: "      'database' => '{{ source_version.stat.shortver }}',"
   tags:
     - modules
     - files
@@ -162,7 +157,7 @@
   lineinfile:
     dest: "{{ local }}/sites/default/settings.php"
     regexp: "username' => "
-    line: "      'username' => '{{ target_version.stat.shortver }}',"
+    line: "      'username' => '{{ source_version.stat.shortver }}',"
   tags:
     - modules
     - files
@@ -170,7 +165,7 @@
   lineinfile:
     dest: "{{ local }}/sites/default/settings.php"
     regexp: "password' => "
-    line: "      'password' => '{{ target_version.stat.shortver }}',"
+    line: "      'password' => '{{ source_version.stat.shortver }}',"
   tags:
     - modules
     - files
