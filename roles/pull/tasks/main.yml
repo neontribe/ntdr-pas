@@ -91,7 +91,6 @@
 - name: Get local DB details
   ntdr_get_db_details.py: path={{ local }}/sites/default/settings.php autofix=true
   delegate_to: 127.0.0.1
-  when: local_settings.stat.exists
   register: local_db
   tags:
     - db
