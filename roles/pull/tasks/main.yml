@@ -93,7 +93,6 @@
   delegate_to: 127.0.0.1
   when: local_settings.stat.exists
   register: local_db
-  when: not local_settings.stat.exists
   tags:
     - db
     - fullsync
