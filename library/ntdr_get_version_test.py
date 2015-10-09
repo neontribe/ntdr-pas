@@ -4,9 +4,6 @@
 
 import sys, os, json, shlex, re
 
-import logging
-logging.basicConfig(filename='/tmp/debug.log',level=logging.DEBUG)
-
 def main():
     module = AnsibleModule(
         argument_spec = dict(
@@ -21,10 +18,6 @@ def main():
     path = os.path.expanduser(path)
     exists = module.params.get('exists')
     version = module.params.get('version')
-
-    logging.debug('Path: ' + path)
-    logging.debug('Exists: ' + str(exists))
-    logging.debug('Version: ' + str(version))
 
     if not version:
         full = os.path.join(path, 'changelog.txt')

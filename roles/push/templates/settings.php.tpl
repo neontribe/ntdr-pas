@@ -5,9 +5,9 @@ $databases = array (
   array (
     'default' => 
     array (
-      'database' => '{{ target_version.stat.shortver }}',
-      'username' => '{{ target_version.stat.shortver }}',
-      'password' => '{{ target_version.stat.shortver }}',
+      'database' => '{{ target_version.stat.latest.shortver }}',
+      'username' => '{{ target_version.stat.latest.shortver }}',
+      'password' => '{{ target_version.stat.latest.shortver }}',
       'host' => 'localhost',
       'port' => '',
       'driver' => 'mysql',

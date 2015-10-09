@@ -144,17 +144,17 @@
   tags: db
 
 - name: Dump local DB
-  shell: "drush -y -r {{ local }} --uri=default sql-dump --ordered-dump --structure-tables-key=common --result-file=/tmp/{{ target_version.stat.version }}.sql"
+  shell: "drush -y -r {{ local }} --uri=default sql-dump --ordered-dump --structure-tables-key=common --result-file=/tmp/{{ target_version.stat.latest.version }}.sql"
   tags: db
   delegate_to: 127.0.0.1
 
 - ntdr_create_change_log.py:
     path: "{{ target }}"
-    version: "{{ target_version.stat.version }}"
+    version: "{{ target_version.stat.latest.version }}"
   register: change_log_output
 
 - name: Upload SQL
-  copy: src=/tmp/{{ target_version.stat.version }}.sql dest=/tmp/{{ target_version.stat.version }}.sql
+  copy: src=/tmp/{{ target_version.stat.latest.version }}.sql dest=/tmp/{{ target_version.stat.latest.version }}.sql
   tags: db
 
 - name: Import DB
@@ -163,7 +163,7 @@
     name: "{{ target_version.stat.latest.shortver }}"
     login_user: "{{ target_version.stat.latest.shortver }}"
     login_password: "{{ target_version.stat.latest.shortver }}"
-    target: /tmp/{{ target_version.stat.version }}.sql
+    target: /tmp/{{ target_version.stat.latest.version }}.sql
   tags: db
 
 - name: Run up and updb
@@ -172,18 +172,17 @@
 
 # clean up and post actions
 - name: Clean up remote SQL
-  shell: rm /tmp/{{ target_version.stat.version }}.sql
+  shell: rm /tmp/{{ target_version.stat.latest.version }}.sql
   tags: db
 
 - name: Clean up local SQL
   delegate_to: 127.0.0.1
-  shell: rm /tmp/{{ target_version.stat.version }}.sql
+  shell: rm /tmp/{{ target_version.stat.latest.version }}.sql
   tags: db
 
 - name: Set robots.txt to no follow
   copy: src=robots.nofollow.conf dest={{ local }}/robots.txt mode=0775 backup=yes
   when: devsite is defined
-  delegate_to: 127.0.0.1
   tags: always
 
 # - name: If the change log did exist roll it up a minor

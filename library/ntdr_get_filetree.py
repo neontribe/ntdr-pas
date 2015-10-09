@@ -4,11 +4,6 @@
 
 import sys, os, json, shlex, re, glob
 
-import logging
-logging.basicConfig(filename='/tmp/debug.log',level=logging.DEBUG)
-
-
-
 def recursive_file_to_json(file_path_list, version, json):
     if len(file_path_list) >0:
         if file_path_list[0] in json:
