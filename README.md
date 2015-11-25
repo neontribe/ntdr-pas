@@ -4,6 +4,14 @@
 
     mkdir ~/.drush
 
+Ansible should ab at verion 1.8 or higher, 14.04 ships with 1.5.4:
+
+    $ sudo apt-get install software-properties-common
+    $ echo deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main | sudo tee --append /etc/apt/sources.list.d/ansible-ubuntu-ansible-utopic.list
+    $ echo deb-src http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main | sudo tee --append /etc/apt/sources.list.d/ansible-ubuntu-ansible-utopic.list
+    $ sudo apt-get update
+    $ sudo apt-get install ansible
+
 ## Cleaning up ZZ
 
 If you have been testing against the ZZ site(s) and you want to reset them:
