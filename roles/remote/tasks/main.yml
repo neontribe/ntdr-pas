@@ -12,6 +12,7 @@
       - freshendb
       - freshenfiles
       - sendlive
+      - setrw
 
 # Install read only module
 - name: Install readonly into source
@@ -66,7 +67,6 @@
       - freshendb
       - freshenfiles
       - sendlive
-      - setrw
 
 
 - name: Import DB into target
@@ -75,6 +75,15 @@
       - freshen
       - freshendb
       - sendlive
+
+- name: Restore read write on target
+  shell: "drush -r {{ target }} --uri=default vset site_readonly 0"
+  tags:
+      - freshen
+      - freshendb
+      - freshenfiles
+      - sendlive
+      - setrw
 
 - name: Fix source permissions
   shell: ntdrchown {{ source }}
@@ -254,3 +263,7 @@
   file: src={{ target | dirname }}/{{ ntbm.stat.newversion }} dest={{ target }} state=link
   tags:
       - sendlive
+
+- name: Flush caches on target
+  shell: "drush -r {{ target }} --uri=default cc all"
+  tags: always
