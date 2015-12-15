@@ -16,7 +16,7 @@ Ansible should ab at verion 1.8 or higher, 14.04 ships with 1.5.4:
 
 If you have been testing against the ZZ site(s) and you want to reset them:
 
-    mysql-dropuser-and-db -u zz_0.0.2 -m b191wkm && sudo rm -rf /var/www/*
+    mysql-dropuser-and-db -u zz_0.0.2 -m **password** && sudo rm -rf /var/www/*
 
 Where the DB name is set correctly.
 
