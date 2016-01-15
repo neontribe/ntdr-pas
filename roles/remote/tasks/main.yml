@@ -172,6 +172,12 @@
   tags:
       - sendlive
 
+- name: Backup existing robots.txt
+  shell: "cp {{ target }}/robots.txt {{ target }}/robots.`date +"%Y%m%d"`.`txt"
+
+- name: Install live robots.txt
+  shell: cp {{ target }}/sites/all/themes/nt*theme/robots.txt {{ target }}/robots.txt
+
 - name: Remove testing link
   file: path={{ target }} state=absent
   tags:

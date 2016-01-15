@@ -8,7 +8,7 @@ ch_test ansible_ssh_host=178.62.81.46 ansible_ssh_user=neonch
 fb_test ansible_ssh_host=178.62.81.44 ansible_ssh_user=neonfb
 
 [lb]
-lb_test ansible_ssh_host=178.62.80.5 ansible_ssh_user=neonlb
+lb_test ansible_ssh_host=46.101.89.189 ansible_ssh_user=neonlb
 
 [wl]
 wl_test ansible_ssh_host=178.62.98.134 ansible_ssh_user=neonwl

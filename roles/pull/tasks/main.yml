@@ -54,6 +54,8 @@
     mode: pull
     src:  "{{ source }}/*"
     dest: "{{ local }}"
+    rsync_opts:
+      - "--exclude=sites/all"
   tags: fullsync
 
 - name: Files folder sync from source to local
