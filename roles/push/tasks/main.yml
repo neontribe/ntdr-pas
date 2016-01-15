@@ -178,6 +178,7 @@
 - name: Clean up local SQL
   delegate_to: 127.0.0.1
   shell: rm /tmp/{{ target_version.stat.latest.version }}.sql
+  ignore_errors: yes
   tags: db
 
 - name: Set robots.txt to no follow
