@@ -182,7 +182,12 @@
   tags: db
 
 - name: Set robots.txt to no follow
-  copy: src=robots.nofollow.conf dest={{ local }}/robots.txt mode=0775 backup=yes
+  copy: src=robots.nofollow.conf dest={{ local }}/robots.txt mode=0664 backup=yes
+  when: devsite is defined
+  tags: always
+
+- name: Install changelog.php
+  copy: src=changelog.php dest={{ local }}/changelog.php mode=0664 backup=yes
   when: devsite is defined
   tags: always
 
