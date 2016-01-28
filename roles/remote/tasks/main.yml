@@ -173,7 +173,7 @@
       - sendlive
 
 - name: Backup existing robots.txt
-  shell: 'cp {{ target }}/robots.txt {{ target }}/robots.`date +"%Y%m%d"`.`txt'
+  shell: 'cp {{ target }}/robots.txt {{ target }}/robots.`date +"%Y%m%d"`.txt'
   tags:
       - sendlive
 
