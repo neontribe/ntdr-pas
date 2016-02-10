@@ -23,7 +23,18 @@
   register: target_version
   tags: always
 
+- name: Register remote user
+  shell: whoami
+  register: remote_user
+
+- debug: msg={{ remote_user }}
+
 # Prepare remote site
+- name: Ensure target dir is writable
+  file: path={{ target | dirname }} owner={{ remote_user.stdout }} group=www-data mode=0775
+  sudo: yes
+  when: not target_dir.stat.exists
+  tags: always
 
 - name: Install empty drupal if the site doesn't exist
   shell: drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }}
