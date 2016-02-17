@@ -87,7 +87,7 @@
 
 - name: Fix source permissions
   shell: ntdrchown {{ source }}
-  sudo: yes
+  become: yes
   tags:
       - fixperms
       - freshen
@@ -96,7 +96,7 @@
 
 - name: Fix target permissions
   shell: ntdrchown {{ target }}
-  sudo: yes
+  become: yes
   tags:
       - freshen
       - freshenfiles
@@ -259,7 +259,7 @@
 # Fix new positions
 - name: Fix target permissions
   shell: ntdrchown {{ target | dirname }}/{{ ntbm.stat.newversion }}
-  sudo: yes
+  become: yes
   tags:
       - sendlive
 
