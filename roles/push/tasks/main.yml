@@ -47,9 +47,6 @@
     - files
   # when: not target_dir.stat.exists
 
-- debug: var=mysql_root_pw
-  tags: always
-
 - name: Fix permissions
   shell: ntdrchown -u {{ ansible_ssh_user }}:www-data {{ target }}
   become: yes
@@ -155,6 +152,20 @@
     path: "{{ target }}"
     version: "{{ target_version.stat.latest.version }}"
   register: change_log_output
+  tags:
+      - modules
+      - changelog
+
+- copy: src=changelog.php dest={{ target }}/changelog.php owner={{ ansible_ssh_user }} mode=0600
+  tags:
+      - modules
+      - changelog
+
+- name: Update changelog for child modules
+  shell: php {{ target }}/changelog.php
+  tags:
+      - modules
+      - changelog
 
 - name: Upload SQL
   copy: src=/tmp/{{ target_version.stat.latest.version }}.sql dest=/tmp/{{ target_version.stat.latest.version }}.sql
