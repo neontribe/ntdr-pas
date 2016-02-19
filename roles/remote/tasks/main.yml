@@ -245,6 +245,9 @@
   tags:
     - sendlive
 
+- name: Robot, no follow
+  copy: src=robots.nofollow.conf dest={{ target | dirname }}/{{ ntbm.stat.newversion }}
+
 # Import DB into new drupal
 - name: Load into local using settings created from remote version
   mysql_db:
