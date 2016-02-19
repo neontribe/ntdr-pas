@@ -35,7 +35,7 @@ if (!file_exists($lock)) {
   exec('rm *.lock');
   array_shift($lines);
   array_shift($lines);
-  $fh = fopen(__DIR__ . '/.' . 'changelog.txt', 'w');
+  $fh = fopen(__DIR__ . '/' . 'changelog.txt', 'w');
   foreach ($new as $line) {
     fwrite($fh, $line . "\n");
   }
