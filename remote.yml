@@ -5,4 +5,4 @@
     target: /var/www/testing
   roles:
       - remote
-      - { role: push, , tags: ["changelog"] }
+      - { role: push, tags: ["changelog"] }

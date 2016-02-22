@@ -25,8 +25,6 @@
   shell: whoami
   register: remote_user
 
-- debug: msg={{ remote_user }}
-
 # Prepare remote site
 - name: Ensure target dir is writable
   file: path={{ target | dirname }} owner={{ remote_user.stdout }} group=www-data mode=0775
@@ -48,11 +46,12 @@
   # when: not target_dir.stat.exists
 
 - name: Fix permissions
-  shell: ntdrchown -u {{ ansible_ssh_user }}:www-data {{ target }}
+  file: path={{ target }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
   become: yes
   tags:
     - modules
     - files
+      # - fixperms Yhis is covered later in this file, see Re-Fix permissions
 
 # Full push
 - name: Module/theme sync
@@ -127,12 +126,29 @@
     host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
   tags: always
 
-- name: Fix permissions
+- name: Re-Fix permissions
   shell: ntdrchown -u {{ ansible_ssh_user }}:www-data {{ target }}
   become: yes
   tags:
     - modules
     - files
+
+- name: Re-Fix files permissions
+  file: path={{ target }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
+  become: yes
+  tags:
+    - modules
+    - files
+    - fixperms
+
+- name: Check files folder
+  file: path={{ target }}/sites/default/files state=directory owner=www-data group=www-data mode="u=rwX,g=rwX,o=rX" recurse=yes
+  become: yes
+  tags:
+    - modules
+    - files
+    - fixperms
+
 
 # db push
 - name: Create db
@@ -180,9 +196,10 @@
     target: /tmp/{{ target_version.stat.latest.version }}.sql
   tags: db
 
-- name: Run up and updb
+- name: Run up, updb & cache clear
   shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} up
   shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} updb
+  shell: drush -r {{ target }} --uri=default chdir={{ target }} cc all
   tags: always
 
 # clean up and post actions

@@ -43,14 +43,14 @@ Pull a remote site to local.
 
 Pull a whole new copy to my home workspace
 
-    ansible-playbook pull.yml -i inventory/cottage-servers-live --limit=br_live --extra-vars="local=/$HOME/workspace/br"
+    ansible-playbook pull.yml -i inventory/cottage-servers --ask-vault-pass --limit=br_live --extra-vars="local=/$HOME/workspace/br"
 
 Sync just the files folder down
 
-    ansible-playbook pull.yml -i inventory/cottage-servers-live --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync"
+    ansible-playbook pull.yml -i inventory/cottage-servers --ask-vault-pass --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync"
 
 Sync files and db down
-    ansible-playbook pull.yml -i inventory/cottage-servers-live --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync,db"
+    ansible-playbook pull.yml -i inventory/cottage-servers --ask-vault-pass --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync,db"
 
 ### Push functions
 
@@ -72,17 +72,19 @@ Push a site to a remotye server
 
 Full push/new provision
 
-    ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=neoncottage --extra-vars="local=/$HOME/workspace/Cottaging/sites/br target=/var/www/sites/testing/br/BR-571"
+    ansible-playbook push.yml -i inventory/ansible --ask-vault-pass --limit=ansible --extra-vars="local=/$HOME/workspace/Cottaging/sites/zz target=/var/www/zz"
 
-    ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=fb_test --extra-vars="local=/$HOME/workspace/Cottaging/fb target=/var/www/fb_1_7_0"
+Same thing but use a vault passwd file stored in your homespace
+
+    ansible-playbook push.yml -i inventory/ansible --vault-password-file ~/.vault_pass.txt --limit=ansible --extra-vars="local=/$HOME/workspace/Cottaging/sites/zz target=/var/www/zz"
 
 Push modules & themes, no DB
 
-    ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=neoncottage --extra-vars="local=/$HOME/workspace/Cottaging/sites/br target=/var/www/sites/testing/br/BR-571" --tags="modules"
-    
+    ansible-playbook push.yml -i inventory/ansible --ask-vault-pass --limit=ansible --extra-vars="local=/$HOME/workspace/Cottaging/sites/zz target=/var/www/zz" --tags="modules"
+
 Push just the DB
 
-    ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=neoncottage --extra-vars="local=/$HOME/workspace/Cottaging/sites/br target=/var/www/sites/testing/br/BR-571" --tags="db"
+    ansible-playbook push.yml -i inventory/ansible --ask-vault-pass --limit=ansible --extra-vars="local=/$HOME/workspace/Cottaging/sites/zz target=/var/www/zz" --tags="db"
 
 ### Remote functions
 

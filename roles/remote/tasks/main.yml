@@ -124,7 +124,6 @@
   tags:
       - sendlive
 
-
 - name: Put target into read write
   shell: "drush -r {{ target }} --uri=default vset site_readonly 0"
   tags:
