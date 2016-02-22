@@ -1,8 +1,6 @@
 ---
-# Options are push modules + themes, files, DB
-
 - name: Install dependant packages
-  sudo: yes
+  become: yes
   apt: pkg={{ item }} state=latest
   with_items:
     - git
@@ -23,7 +21,18 @@
   register: target_version
   tags: always
 
+- name: Register remote user
+  shell: whoami
+  register: remote_user
+
+- debug: msg={{ remote_user }}
+
 # Prepare remote site
+- name: Ensure target dir is writable
+  file: path={{ target | dirname }} owner={{ remote_user.stdout }} group=www-data mode=0775
+  become: yes
+  when: not target_dir.stat.exists
+  tags: always
 
 - name: Install empty drupal if the site doesn't exist
   shell: drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }}
@@ -39,17 +48,13 @@
   # when: not target_dir.stat.exists
 
 - name: Fix permissions
-  file: path={{ target }} owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" group=33 recurse=yes #state=directory
-  sudo: yes
+  shell: ntdrchown -u {{ ansible_ssh_user }}:www-data {{ target }}
+  become: yes
   tags:
     - modules
     - files
 
-# - debug: var=target_dir.stat
-# - debug: var=target_version.stat
-
 # Full push
-
 - name: Module/theme sync
   synchronize:
       src: "{{ local }}/sites/all"
@@ -84,11 +89,6 @@
   template: src=settings.php.tpl dest={{ target }}/sites/default/settings.php
   when: not new_settings.stat.exists
   tags: always
-
-#- debug: var=target_version
-#  tags:
-#    - modules
-#    - files
 
 - name: Fix database in settings.php
   lineinfile:
@@ -127,9 +127,9 @@
     host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
   tags: always
 
-- name: Re-Fix permissions
-  file: path={{ target }} owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" group=33 recurse=yes #state=directory
-  sudo: yes
+- name: Fix permissions
+  shell: ntdrchown -u {{ ansible_ssh_user }}:www-data {{ target }}
+  become: yes
   tags:
     - modules
     - files
@@ -152,6 +152,20 @@
     path: "{{ target }}"
     version: "{{ target_version.stat.latest.version }}"
   register: change_log_output
+  tags:
+      - modules
+      - changelog
+
+- copy: src=changelog.php dest={{ target }}/changelog.php owner={{ ansible_ssh_user }} mode=0600
+  tags:
+      - modules
+      - changelog
+
+- name: Update changelog for child modules
+  shell: php {{ target }}/changelog.php
+  tags:
+      - modules
+      - changelog
 
 - name: Upload SQL
   copy: src=/tmp/{{ target_version.stat.latest.version }}.sql dest=/tmp/{{ target_version.stat.latest.version }}.sql

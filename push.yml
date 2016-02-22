@@ -1,12 +1,14 @@
 ---
 - hosts: all
+  become_method: sudo
+  become_user: root
   vars:
     target: /var/www/testing
     patch_release: true
-  vars_prompt:
-    - name: mysql_root_pw
-      prompt: "Enter mysql root password for the remote mysql server"
-      private: true
-      when: mysql_root_pw is not defined
+  #vars_prompt:
+  #- name: mysql_root_pw
+  #prompt: "Enter mysql root password for the remote mysql server"
+  #private: true
+  #when: mysql_root_pw is not defined
   roles:
     - push

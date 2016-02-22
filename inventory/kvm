@@ -1,2 +1,2 @@
 [kvm]
-kvm ansible_ssh_host=192.168.122.89 ansible_ssh_user=neontribe mysql_root_pw=b191wkm
+kvm ansible_ssh_host=192.168.122.89 ansible_ssh_user=neontribe

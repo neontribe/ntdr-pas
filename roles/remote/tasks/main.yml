@@ -87,7 +87,7 @@
 
 - name: Fix source permissions
   shell: ntdrchown {{ source }}
-  sudo: yes
+  become: yes
   tags:
       - fixperms
       - freshen
@@ -96,7 +96,7 @@
 
 - name: Fix target permissions
   shell: ntdrchown {{ target }}
-  sudo: yes
+  become: yes
   tags:
       - freshen
       - freshenfiles
@@ -256,6 +256,9 @@
   tags:
     - sendlive
 
+- name: Robot, no follow
+  copy: src=robots.nofollow.conf dest={{ target | dirname }}/{{ ntbm.stat.newversion }}
+
 # Import DB into new drupal
 - name: Load into local using settings created from remote version
   mysql_db:
@@ -270,7 +273,7 @@
 # Fix new positions
 - name: Fix target permissions
   shell: ntdrchown {{ target | dirname }}/{{ ntbm.stat.newversion }}
-  sudo: yes
+  become: yes
   tags:
       - sendlive
 
