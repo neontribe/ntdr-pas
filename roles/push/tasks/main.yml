@@ -169,6 +169,7 @@
 - name: Run up and updb
   shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} up
   shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} updb
+  tags: always
 
 # clean up and post actions
 - name: Clean up remote SQL

@@ -118,6 +118,13 @@
   tags:
       - freshenmodules
 
+# UpDb on new latest site to run update hooks
+- name: Run up and updb
+  shell: drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} updb
+  tags:
+      - sendlive
+
+
 - name: Put target into read write
   shell: "drush -r {{ target }} --uri=default vset site_readonly 0"
   tags:
@@ -165,6 +172,10 @@
   file: src={{ target_realpath.stat.lnk_source }} dest={{ source }} state=link
   tags:
       - sendlive
+
+- name: Flush caches on new live
+  shell: "drush -r {{ target_realpath.stat.lnk_source }} --uri=default cc all"
+  tags: always
 
 # Define new version
 - ntdr_bump_minor: path={{ target }}
@@ -277,3 +288,9 @@
 - name: Flush caches on target
   shell: "drush -r {{ target }} --uri=default cc all"
   tags: always
+
+- name: Run up and updb on new site
+  shell: "drush --verbose -y -r {{ target | dirname }}/{{ ntbm.stat.newversion }} --uri=default chdir={{ target }} up"
+  shell: "drush --verbose -y -r {{ target | dirname }}/{{ ntbm.stat.newversion }} --uri=default chdir={{ target }} updb"
+  tags: always
+
