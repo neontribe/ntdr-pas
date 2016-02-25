@@ -33,7 +33,7 @@
   tags: always
 
 - name: Install empty drupal if the site doesn't exist
-  shell: drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }}
+  shell: drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }} drupal-7.x
   when: not target_dir.stat.exists
   tags: always
 
