@@ -4,10 +4,12 @@
     source: /var/www/latest
     target: /var/www/testing
   roles:
-      # - { role: dumpdb, target={{ source }}
-      # - { role: importdb, target={{ target }}
-      # - { role: fixpermissions, target={{ source }}
-      # - { role: fixpermissions, target={{ target }}
+      - { role: checkisdrupal, target: "{{ source }}" }
+      - { role: checkisdrupal, target: "{{ target }}" }
+      - { role: dumpdb, target: "{{ source }}" }
+      - { role: importdb, target: "{{ target }}" }
+      - { role: fixpermissions, target: "{{ source }}" }
+      - { role: fixpermissions, target: "{{ target }}" }
       # - { role: sendlive, source={{ source }}, target={{ target }}
       # - { role: updb, target={{ target }}
       # - { role: changelog, target={{ target }}, bump=minor
