@@ -1,0 +1,18 @@
+---
+- hosts: all
+  vars:
+    source: /var/www/latest
+    target: /var/www/testing
+  roles:
+      # - { role: dumpdb, target={{ source }}
+      # - { role: importdb, target={{ target }}
+      # - { role: fixpermissions, target={{ source }}
+      # - { role: fixpermissions, target={{ target }}
+      # - { role: sendlive, source={{ source }}, target={{ target }}
+      # - { role: updb, target={{ target }}
+      # - { role: changelog, target={{ target }}, bump=minor
+      # - { role: robots, target={{ target }}, state=live
+      # - { role: ccall, target={{ target }}
+      # - { role: smoketest, target={{ target }}
+      # - { role: swaplinks, target={{ target }}, link=latest
+      # - { role: newdrupal, from={{ target }}, bump=minor
