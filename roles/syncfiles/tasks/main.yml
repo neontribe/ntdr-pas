@@ -1,0 +1,20 @@
+---
+- name: Sync files folder
+# This seems to take a VERY long time
+#  synchronize:
+#    src: "{{ source }}/sites/default/files"
+#    dest: "{{ target }}/sites/default/"
+#    rsync_opts:
+#      - "-rlD"
+#  delegate_to: "{{ inventory_hostname }}"
+  shell: rsync -rlD {{ source }}/sites/default/files {{ target }}/sites/default/
+
+- name: Sync htaccess
+# This seems to take a VERY long time
+#  synchronize:
+#    src: "{{ source }}/.htaccess"
+#    dest: "{{ target }}/"
+#    rsync_opts:
+#        - "-rlD"
+#  delegate_to: "{{ inventory_hostname }}"
+  shell: rsync -rlD {{ source }}/.htaccess {{ target }}/

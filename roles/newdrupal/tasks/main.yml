@@ -1,0 +1,18 @@
+---
+- name: Major version bump
+  ntbumpversion: current="{{ target | basename }}" bump="major"
+  register: newversion
+  when: bump == "major"
+
+- name: Minor version bump
+  ntbumpversion: current="{{ target | basename }}" bump="minor"
+  register: newversion
+  when: bump == "minor" or bump is undefined
+
+- name: Patch version bump
+  ntbumpversion: current="{{ target | basename }}" bump="patch"
+  register: newversion
+  when: bump == "patch"
+
+- debug: var=newversion
+

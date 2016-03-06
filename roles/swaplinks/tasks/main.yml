@@ -1,0 +1,14 @@
+---
+- name: Stat {{ link }}
+  stat: path="{{ link }}"
+  register: link_folder
+
+- name: Stat {{ target }} directory
+  stat: path="{{ target }}"
+  register: target_folder
+
+- name: Remove current {{ link }} link
+  when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_folder.stat.isdir is defined and target_folder.stat.isdir
+
+- name: Link {{ target }} to {{ latest }}
+  when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_folder.stat.isdir is defined and target_folder.stat.isdir

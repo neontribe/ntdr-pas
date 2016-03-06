@@ -1,0 +1,15 @@
+---
+- name: Backup existing robots.txt
+  shell: 'cp {{ target }}/robots.txt {{ target }}/robots.`date +"%Y%m%d"`.txt'
+  tags:
+      - always
+
+- name: Install live robots.txt
+  shell: cp {{ target }}/sites/all/themes/nt*theme/robots.txt {{ target }}/robots.txt
+  tags:
+      - live
+
+- name: Install nofollow robots.txt
+  copy: robots.nofollow.txt {{ target }}/robots.txt
+  tags:
+      - nofollow
