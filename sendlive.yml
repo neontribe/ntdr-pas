@@ -28,3 +28,4 @@
       - { role: robots,         target: "{{ newdrupal }}", tags: [ 'nofollow' ] }
       - { role: ccall,          target: "{{ newdrupal }}" }
       - { role: smoketest,      target: "{{ newdrupal }}" }
+      - { role: swaplinks,      target: "{{ newdrupal }}", link: /var/www/testing }

@@ -6,10 +6,11 @@
 
 - name: Install live robots.txt
   shell: cp {{ target }}/sites/all/themes/nt*theme/robots.txt {{ target }}/robots.txt
+  ignore_errors: yes
   tags:
       - live
 
 - name: Install nofollow robots.txt
-  copy: robots.nofollow.txt {{ target }}/robots.txt
+  copy: src=robots.nofollow.txt dest={{ target }}/robots.txt
   tags:
       - nofollow

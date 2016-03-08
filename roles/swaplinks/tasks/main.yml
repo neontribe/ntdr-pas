@@ -7,6 +7,8 @@
   stat: path="{{ target }}"
   register: target_folder
 
+  # if target_foler is a link get the link src
+
 - name: Remove current {{ link }} link
   file: path="{{ link }}" state=absent
   when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_folder.stat.isdir is defined and target_folder.stat.isdir

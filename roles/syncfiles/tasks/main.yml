@@ -7,4 +7,5 @@
 #    rsync_opts:
 #      - "-rlD"
 #  delegate_to: "{{ inventory_hostname }}"
-  shell: rsync -rlD {{ source }}/sites/default/files {{ target }}/sites/default/
+  shell: rsync -rlD --exclude='files/tabs-imagecache' --progress --log-file=/tmp/sync.log {{ source }}/sites/default/files {{ target }}/sites/default/
+  become: yes
