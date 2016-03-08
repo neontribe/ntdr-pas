@@ -1,0 +1,3 @@
+---
+- name: Sync sites/all/themes
+  shell: rsync -rlD {{ source }}/sites/all/themes {{ target }}/sites/all

@@ -1,18 +1,77 @@
 ---
-- name: Major version bump
-  ntbumpversion: current="{{ target | basename }}" bump="major"
+- name: Stat {{ target }}
+  stat: path="{{ target }}"
+  register: target_dir
+
+# Get the 'real path' of the target
+- name: Set real path of {{ target }}
+  set_fact:
+    target_realpath: "{{ target_dir.stat.path }}"
+  when: target_dir.stat.islnk is defined and target_dir.stat.islnk == False
+
+- name: Resolve symlink target of {{ target }}
+  set_fact:
+    target_realpath: "{{ target_dir.stat.lnk_source }}"
+  when: target_dir.stat.islnk is defined and target_dir.stat.islnk
+
+- name: Version bump
+  ntbumpversion: current="{{ target_realpath | basename }}" bump="{{ bump }}"
   register: newversion
-  when: bump == "major"
 
-- name: Minor version bump
-  ntbumpversion: current="{{ target | basename }}" bump="minor"
-  register: newversion
-  when: bump == "minor" or bump is undefined
+# Download a new drupal
+- name: Check new drupal folder
+  stat: path={{ target | dirname }}/{{ newversion.stat.newversion }}
+  register: newdrupalpath
 
-- name: Patch version bump
-  ntbumpversion: current="{{ target | basename }}" bump="patch"
-  register: newversion
-  when: bump == "patch"
+- name: Download new drupal
+  shell: drush dl --destination={{ target | dirname }} --drupal-project-rename={{ newversion.stat.newversion }} drupal-7.x
+  when: not newdrupalpath.stat.exists
 
-- debug: var=newversion
+# Fix settings
+- name: Check settings file
+  stat: path={{ newdrupalpath.stat.path }}/sites/default/settings.php
+  register: new_settings
 
+- name: Install new settings file
+  template: src=settings.php.tpl dest={{ newdrupalpath.stat.path }}/sites/default/settings.php
+  when: not new_settings.stat.exists
+
+# Update settings file
+- name: Fix database in settings.php
+  lineinfile:
+    dest: "{{ newdrupalpath.stat.path }}/sites/default/settings.php"
+    regexp: "database' => "
+    line: "      'database' => '{{ newversion.stat.newversion }}',"
+
+- name: Fix username in settings.php
+  lineinfile:
+    dest: "{{ newdrupalpath.stat.path }}/sites/default/settings.php"
+    regexp: "username' => "
+    line: "      'username' => '{{ newversion.stat.newversion }}',"
+
+- name: Fix password in settings.php
+  lineinfile:
+    dest: "{{ newdrupalpath.stat.path }}/sites/default/settings.php"
+    regexp: "password' => "
+    line: "      'password' => '{{ newversion.stat.newversion }}',"
+
+# Create DB for new drupal
+- name: Create db using existing local settings file
+  mysql_db:
+    name: "{{ newversion.stat.newversion }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+
+- name: Create db user using existing local settings file
+  mysql_user:
+    name: "{{ newversion.stat.newversion }}"
+    password: "{{ newversion.stat.newversion }}"
+    priv: "{{ newversion.stat.newversion }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+
+- name: Set fact for new drupal path {{ newdrupalpath.stat.path }}
+  set_fact:
+    newdrupal: "{{ newdrupalpath.stat.path }}"

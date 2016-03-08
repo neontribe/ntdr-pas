@@ -18,9 +18,26 @@ def main():
     includepatch = module.params.get('includepatch')
 
     parts = re.split('\.|_', current);
-    major = parts[0]
-    minor = parts[1]
-    patch = parts[2]
+
+    try:
+      brand = parts[0]
+    except IndexError:
+      brand = 'xx'
+
+    try:
+      major = parts[1]
+    except IndexError:
+      major = 0
+
+    try:
+      minor = parts[2]
+    except IndexError:
+      minor = 0
+
+    try:
+      patch = parts[3]
+    except IndexError:
+      patch = 0
 
     if bump == 'major':
         major = int(major) + 1
@@ -30,13 +47,14 @@ def main():
         minor = int(minor) + 1
 
     if (includepatch):
-        newversion = str(major) + '_' + str(minor) + '_' + str(patch)
+        newversion = brand + '_' + str(major) + '_' + str(minor) + '_' + str(patch)
     else:
-        newversion = str(major) + '_' + str(minor)
+        newversion = brand + '_' + str(major) + '_' + str(minor)
 
     # back to ansible
     d = {
-        'version'   : version,
+        'parts'   : parts,
+        'version'   : current,
         'newversion': newversion
     }
 

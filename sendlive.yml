@@ -16,13 +16,15 @@
       - { role: ccall,          target: "{{ target }}" }
       - { role: smoketest,      target: "{{ target }}" }
       - { role: swaplinks,      target: "{{ target }}", link: /var/www/latest }
-      # - { role: newdrupal, from={{ target }}, bump=minor
-      # - { role: importdb, target: "{{ newdrupal }}" }
-      # - { role: fixpermissions, target: "{{ newdrupal }}" }
-      # - { role: syncfiles, source: "{{ target }}", target: "{{ newdrupal }}" }
-      # - { role: syncfiles, source: "{{ target }}", target: "{{ newdrupal }}" }
-      # - { role: changelog, target={{ newdrupal }}, bump=minor
-      # - { role: updb, target: "{{ newdrupal }}" }
-      # - { role: robots, target: "{{ newdrupal }}", tags: [ 'nofollow' ] }
-      # - { role: ccall, target={{ newdrupal }} }
-      # - { role: smoketest, target={{ newdrupal }}
+      - { role: newdrupal,      from:   "{{ target }}", bump: minor }
+      - { role: importdb,       target: "{{ newdrupal }}" }
+      - { role: fixpermissions, target: "{{ newdrupal }}" }
+      - { role: syncfiles,      source: "{{ target }}", target: "{{ newdrupal }}" }
+      - { role: syncmodules,    source: "{{ target }}", target: "{{ newdrupal }}" }
+      - { role: syncthemes,     source: "{{ target }}", target: "{{ newdrupal }}" }
+      - { role: synchtaccess,   source: "{{ target }}", target: "{{ newdrupal }}" }
+      - { role: changelog,      target: "{{ newdrupal }}" }
+      - { role: updb,           target: "{{ newdrupal }}" }
+      - { role: robots,         target: "{{ newdrupal }}", tags: [ 'nofollow' ] }
+      - { role: ccall,          target: "{{ newdrupal }}" }
+      - { role: smoketest,      target: "{{ newdrupal }}" }
