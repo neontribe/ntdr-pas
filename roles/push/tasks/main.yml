@@ -33,7 +33,7 @@
   tags: always
 
 - name: Install empty drupal if the site doesn't exist
-  shell: drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }}
+  shell: drush -y dl --destination={{ target | dirname }} --drupal-project-rename={{ target | basename }} drupal-7.x
   when: not target_dir.stat.exists
   tags: always
 
@@ -45,9 +45,19 @@
     - files
   # when: not target_dir.stat.exists
 
-- name: Fix permissions
+- name: Fix permissions on target as a directory
   file: path={{ target }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
   become: yes
+  when: target_dir.stat.islnk is defined and target_dir.stat.islnk == False
+  tags:
+    - modules
+    - files
+      # - fixperms Yhis is covered later in this file, see Re-Fix permissions
+
+- name: Fix permissions on target as a link
+  file: path={{ target_dir.stat.lnk_source }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
+  become: yes
+  when: target_dir.stat.islnk is defined and target_dir.stat.islnk
   tags:
     - modules
     - files
@@ -126,16 +136,20 @@
     host: "{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}"
   tags: always
 
-- name: Re-Fix permissions
-  shell: ntdrchown -u {{ ansible_ssh_user }}:www-data {{ target }}
+- name: Fix permissions on target as a directory
+  file: path={{ target }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
   become: yes
+  when: target_dir.stat.islnk is defined and target_dir.stat.islnk == False
   tags:
     - modules
     - files
+    - fixperms
+      # - fixperms Yhis is covered later in this file, see Re-Fix permissions
 
-- name: Re-Fix files permissions
-  file: path={{ target }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
+- name: Fix permissions on target as a link
+  file: path={{ target_dir.stat.lnk_source }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
   become: yes
+  when: target_dir.stat.islnk is defined and target_dir.stat.islnk
   tags:
     - modules
     - files
@@ -148,7 +162,6 @@
     - modules
     - files
     - fixperms
-
 
 # db push
 - name: Create db

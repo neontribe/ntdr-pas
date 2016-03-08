@@ -174,7 +174,7 @@
 
 - name: Flush caches on new live
   shell: "drush -r {{ target_realpath.stat.lnk_source }} --uri=default cc all"
-  tags: always
+  tags: sendlive
 
 # Define new version
 - ntdr_bump_minor: path={{ target }}
@@ -291,8 +291,15 @@
   shell: "drush -r {{ target }} --uri=default cc all"
   tags: always
 
-- name: Run up and updb on new site
-  shell: "drush --verbose -y -r {{ target | dirname }}/{{ ntbm.stat.newversion }} --uri=default chdir={{ target }} up"
-  shell: "drush --verbose -y -r {{ target | dirname }}/{{ ntbm.stat.newversion }} --uri=default chdir={{ target }} updb"
-  tags: always
+- name: Run up on new site
+  shell: "drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} up"
+  tags:
+      - up
+      - sendlive
+
+- name: Run updb on new site
+  shell: "drush --verbose -y -r {{ target }} --uri=default chdir={{ target }} updb"
+  tags:
+      - updb
+      - sendlive
 
