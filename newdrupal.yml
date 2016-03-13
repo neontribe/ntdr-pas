@@ -2,6 +2,19 @@
 - hosts: all
   vars:
     source: /var/www/latest
-    target: /var/www/testing
+    from: /var/www/latest
+    bump: minor
   roles:
-    - { role: newdrupal, from: "{{ target }}", bump: minor }
+    - { role: dumpdb,         target: "{{ source }}" }
+    - { role: newdrupal,      target: "{{ source }}" }
+    - { role: importdb,       target: "{{ newdrupal }}" }
+    - { role: fixpermissions, target: "{{ newdrupal }}" }
+    - { role: syncfiles,      source: "{{ source }}", target: "{{ newdrupal }}" }
+    - { role: syncmodules,    source: "{{ source }}", target: "{{ newdrupal }}" }
+    - { role: syncthemes,     source: "{{ source }}", target: "{{ newdrupal }}" }
+    - { role: synchtaccess,   source: "{{ source }}", target: "{{ newdrupal }}" }
+    # This won't work until neontabs has beed pushed up. Run it by hand
+    # - { role: changelog,      target: "{{ newdrupal }}" }
+    - { role: updb,           target: "{{ newdrupal }}" }
+    - { role: robots,         target: "{{ newdrupal }}", tags: [ 'nofollow' ] }
+    - { role: ccall,          target: "{{ newdrupal }}" }

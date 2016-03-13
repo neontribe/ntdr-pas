@@ -1,7 +1,4 @@
 ---
-- name: Install changlog.php
-  copy: src=changelog.php dest={{ target }}/changelog.php owner={{ ansible_ssh_user }} mode=0600
-
 - name: Update changelog for child modules
-  shell: php {{ target }}/changelog.php
+  shell: drush -r {{ target }} --uri=default ntuc
 
