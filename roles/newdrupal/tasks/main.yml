@@ -27,6 +27,10 @@
   shell: drush dl --destination={{ target | dirname }} --drupal-project-rename={{ newversion.stat.newversion }} drupal-7.x
   when: not newdrupalpath.stat.exists
 
+- name: Re-register new drupal folder after download
+  stat: path={{ target | dirname }}/{{ newversion.stat.newversion }}
+  register: newdrupalpath
+
 # Fix settings
 - name: Check settings file
   stat: path={{ newdrupalpath.stat.path }}/sites/default/settings.php

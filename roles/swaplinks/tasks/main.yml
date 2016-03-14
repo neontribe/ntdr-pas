@@ -1,6 +1,6 @@
 ---
-- debug: var=link
-- debug: var=target
+#- debug: var=link
+#- debug: var=target
 
 - name: "Stat link directory ({{ link }})"
   stat: path="{{ link }}"
