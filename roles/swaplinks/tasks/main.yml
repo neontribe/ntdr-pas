@@ -1,18 +1,27 @@
 ---
-- name: Stat {{ link }}
+- debug: var=link
+- debug: var=target
+
+- name: "Stat link directory ({{ link }})"
   stat: path="{{ link }}"
   register: link_folder
 
-- name: Stat {{ target }} directory
+- name: "Stat target directory {{ target }}"
   stat: path="{{ target }}"
   register: target_folder
 
-  # if target_foler is a link get the link src
+- name: "if {{ target_folder }} is a link get it's real path"
+  set_fact: target_real_folder={{ target_folder.stat.lnk_source }}
+  when: target_folder.stat.islnk is defined and target_folder.stat.islnk
+
+- name: "if {{ target_folder }} is a real folder register the directory"
+  set_fact: target_real_folder={{ target }}
+  when: target_folder.stat.isdir
 
 - name: Remove current {{ link }} link
   file: path="{{ link }}" state=absent
-  when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_folder.stat.isdir is defined and target_folder.stat.isdir
+  when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_real_folder is defined and target_real_folder
 
 - name: Link {{ target }} to {{ link }}
-  file: src={{ target }} dest={{ link }} state=link
-  when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_folder.stat.isdir is defined and target_folder.stat.isdir
+  file: src={{ target_real_folder }} dest={{ link }} state=link
+  when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_real_folder is defined and target_real_folder
