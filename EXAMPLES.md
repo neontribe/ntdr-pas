@@ -1,6 +1,8 @@
-Lyme Bay
-========
-
 Push theme and modules
+======================
 
-    ansible-playbook push.yml -i inventory/cottage-servers --ask-sudo-pass --limit=lb_live --extra-vars="local=/var/www/sites/latest/lb target=/var/www/lb_1.3.1" --tags=modules
+## To all hosts
+    ansible-playbook --vault-password-file ~/.vault_pass.txt push.yml -i inventory/cottage-servers --tags=modules
+
+## To Country hideaways testing and live
+    ansible-playbook --vault-password-file ~/.vault_pass.txt push.yml -i inventory/cottage-servers --limit=ch --tags=modules

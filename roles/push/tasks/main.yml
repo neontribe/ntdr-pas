@@ -24,6 +24,9 @@
 - name: Register remote user
   shell: whoami
   register: remote_user
+  tags: always
+
+- debug: var=remote_user
 
 # Prepare remote site
 - name: Ensure target dir is writable
