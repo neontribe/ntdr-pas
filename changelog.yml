@@ -1,0 +1,6 @@
+---
+- hosts: all
+  vars:
+    target: /var/www/testing
+  roles:
+      - changelog

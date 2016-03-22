@@ -1,0 +1,3 @@
+---
+- name: Sync sites/all/modules
+  shell: rsync -rlD {{ source }}/sites/all/modules {{ target }}/sites/all

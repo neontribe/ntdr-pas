@@ -1,0 +1,6 @@
+---
+- name: Update changelog for child modules
+  shell: drush -r {{ target }} --uri=default ntuc
+  # For now ignore errors, once modules have been pushed this won't be needed.
+  ignore_errors: yes
+
