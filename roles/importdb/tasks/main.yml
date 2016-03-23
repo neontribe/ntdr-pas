@@ -1,0 +1,3 @@
+---
+- name: Import DB into {{ target }}
+  shell: drush -r {{ target }} sqlc < /tmp/source.sql

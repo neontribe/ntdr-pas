@@ -1,0 +1,3 @@
+---
+- name: Sync htaccess
+  shell: rsync -rlD {{ source }}/.htaccess {{ target }}/
