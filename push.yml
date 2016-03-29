@@ -5,10 +5,22 @@
   vars:
     target: /var/www/testing
     patch_release: true
-  #vars_prompt:
-  #- name: mysql_root_pw
-  #prompt: "Enter mysql root password for the remote mysql server"
-  #private: true
-  #when: mysql_root_pw is not defined
   roles:
-    - push
+    # check the source is a drupal
+    # fix permissions on source
+
+    # get real dir of target and register it as tpath
+    # check tpath is a drupal
+    # fix permissions on tpath
+
+    # FILES
+    # Rsync files when files tag is set
+
+    # DB - when db tag is set
+    # back up remote db
+    # dump local db
+    # import db
+
+    # MODULE & THEME - when modules flag is set
+    # Checkout modules to match latest tags
+    # Rsync sites/all (exclude .git)
