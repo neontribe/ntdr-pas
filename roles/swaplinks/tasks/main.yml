@@ -25,3 +25,7 @@
 - name: Link {{ target }} to {{ link }}
   file: src={{ target_real_folder }} dest={{ link }} state=link
   when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_real_folder is defined and target_real_folder
+
+- name: Ensure new testing is not in read only
+  shell: "drush -r {{ target }} --uri=default vset site_readonly 0"
+

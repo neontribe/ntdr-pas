@@ -5,7 +5,7 @@
       - always
 
 - name: Install live robots.txt
-  shell: cp {{ target }}/sites/all/themes/nt*theme/robots.txt {{ target }}/robots.txt
+  shell: cp {{ target }}/sites/all/themes/nt*/robots.txt {{ target }}/robots.txt
   ignore_errors: yes
   tags:
       - live
