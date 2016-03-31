@@ -1,3 +1,6 @@
 ---
 - name: Sync sites/all/modules
   shell: rsync -rlD {{ source }}/sites/all/modules {{ target }}/sites/all
+
+- name: Sync sites/all/modules
+  shell: rsync -rlD {{ source }}/sites/all/libraries {{ target }}/sites/all
