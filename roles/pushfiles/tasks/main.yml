@@ -1,0 +1,23 @@
+---
+- name: Sync files onto remote site
+  synchronize:
+    src: "{{ source }}"
+    dest: "{{ target }}"
+    rsync_opts:
+      - "-rlD"
+      - "--log-file=/tmp/sync.log"
+      - "--exclude='files/tabs-imagecache'"
+      - "--exclude='.git'"
+  when: deletemissing is undefined
+
+- name: Sync files onto remote site and delete old files
+  synchronize:
+    src: "{{ source }}"
+    dest: "{{ target }}"
+    delete: yes
+    rsync_opts:
+      - "-rlD"
+      - "--log-file=/tmp/sync.log"
+      - "--exclude='files/tabs-imagecache'"
+      - "--exclude='.git'"
+  when: deletemissing is defined

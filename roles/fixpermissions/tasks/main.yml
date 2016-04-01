@@ -20,4 +20,4 @@
 - name: Fix permissions on {{ target }}/sites/default/files folder
   file: path={{ files_folder.stat.path }} state=directory owner=www-data mode="u=rwX,g=rwX,o=rX" recurse=yes
   become: yes
-  when: files_folder.stat.isdir is defined and files_folder.stat.isdir
+  when: files_folder.stat.isdir is defined and files_folder.stat.isdir and ownall is undefined

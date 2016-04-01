@@ -6,21 +6,32 @@
     target: /var/www/testing
     patch_release: true
   roles:
-    # check the source is a drupal
-    # fix permissions on source
+    # check the source is a drupal + fix permissions on source
+    # These don't work because of privilege escalation
+    # - { role: checkisdrupal,  target: "{{ local }}", delegate_to: 127.0.0.1 }
+    # - { role: fixpermissions, target: "{{ local }}", delegate_to: 127.0.0.1 }
 
     # get real dir of target and register it as tpath
-    # check tpath is a drupal
-    # fix permissions on tpath
+    # check tpath is a drupal + fix permissions on tpath
+    - { role: checkisdrupal,  target: "{{ target }}" }
+    - { role: fixpermissions, target: "{{ target }}", ownall: 'yes'  }
 
-    # FILES
-    # Rsync files when files tag is set
+    # FILES - when files flag is set ( syncfiles='yes' )
+    - { role: pushfiles, source: "{{ local }}/sites/default/files", target: "{{ target }}/sites/default", when: includefiles is defined }
+    - { role: fixpermissions, target: "{{ target }}" }
 
     # DB - when db tag is set
     # back up remote db
+    - { role: dumpdb,         target: "{{ target }}", when: includedb is defined }
     # dump local db
+    - { role: dumpdb,         target: "{{ local }}", delegate_to: 127.0.0.1, when: includedb is defined }
+    - { role: pushfiles, source: "/tmp/source.sql", target: "/tmp/source.sql", when: includedb is defined }
     # import db
+    - { role: importdb,       target: "{{ target }}", when: includedb is defined }
 
-    # MODULE & THEME - when modules flag is set
-    # Checkout modules to match latest tags
-    # Rsync sites/all (exclude .git)
+    # MODULE & THEME - unless no modules flag is set
+    # Rsync sites/all (exclude .git, delete missing)
+    - { role: pushfiles, source: "{{ local }}/sites/all", target: "{{ target }}/sites", deletemissing: 'yes', when: skipdb is undefined }
+
+    # Always
+    # Role up changelog minor
