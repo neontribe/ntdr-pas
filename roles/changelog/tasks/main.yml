@@ -1,6 +1,23 @@
 ---
+- name: "Stat from directory {{ from }}"
+  stat: path="{{ from }}"
+  register: from_folder
+  when: from is defined
+
+- name: "if {{ from_folder }} is a link get it's real path"
+  set_fact: from_real_folder={{ from_folder.stat.lnk_source }}
+  when: from is defined and from_folder.stat.islnk is defined and from_folder.stat.islnk
+
+- name: "if {{ from_folder }} is a real folder register the directory"
+  set_fact: from_real_folder={{ from }}
+  when: from is defined and from_folder.stat.isdir
+
+- name: Import change log
+  shell: cp {{ from_real_folder }}/changelog.json {{ target }}/changelog.json
+  when: from is defined and from is defined
+
 - name: Update changelog for child modules
-  shell: drush -r {{ target }} --uri=default ntrc patch
+  shell: drush -r {{ target }} --uri=default ntrc {{ bump }}
   # For now ignore errors, once modules have been pushed this won't be needed.
   ignore_errors: yes
 

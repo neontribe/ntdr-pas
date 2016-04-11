@@ -23,7 +23,7 @@
       - { role: syncmodules,    source: "{{ target }}", target: "{{ newdrupal }}" }
       - { role: syncthemes,     source: "{{ target }}", target: "{{ newdrupal }}" }
       - { role: synchtaccess,   source: "{{ target }}", target: "{{ newdrupal }}" }
-      - { role: changelog,      target: "{{ newdrupal }}" }
+      - { role: changelog,      target: "{{ newdrupal }}", bump: minor, from: "{{ source }}" }
       - { role: updb,           target: "{{ newdrupal }}" }
       - { role: robots,         target: "{{ newdrupal }}", tags: [ 'nofollow' ] }
       - { role: ccall,          target: "{{ newdrupal }}" }
