@@ -33,16 +33,7 @@ Pull a remote site to local.
 
 #### Examples
 
-Pull a whole new copy to my home workspace
-
-    ansible-playbook pull.yml -i inventory/cottage-servers --ask-vault-pass --limit=br_live --extra-vars="local=/$HOME/workspace/br"
-
-Sync just the files folder down
-
-    ansible-playbook pull.yml -i inventory/cottage-servers --ask-vault-pass --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync"
-
-Sync files and db down
-    ansible-playbook pull.yml -i inventory/cottage-servers --ask-vault-pass --limit=br_live --extra-vars="source=/var/www/latest local=/$HOME/workspace/br" --tags="filesync,db"
+    See the EXAMPLES.md in this folder.
 
 ### Push functions
 
@@ -53,30 +44,12 @@ Push a site to a remotye server
   * local - The location of the site on the remote fiule system; **default**: /var/www/latest
   * target - The location of the local site; **default**: /var/tmp/cottage + ansible_hostname
   * mysql_root_pw - The local mysql root passwd; **default**: Ansible will prompt for this
-
-#### Tags
-
-  * modules - Sync sites/all foilders
-  * files - Sync the sites/default/files folder
-  * db - Sync up the DB
+  * includefiles - If set to yes it will push sites/default/files
+  * includedb -If set to yes it will push the local DB
 
 #### Examples
 
-Full push/new provision
-
-    ansible-playbook push.yml -i inventory/ansible --ask-vault-pass --limit=ansible --extra-vars="local=/$HOME/workspace/Cottaging/sites/zz target=/var/www/zz"
-
-Same thing but use a vault passwd file stored in your homespace
-
-    ansible-playbook push.yml -i inventory/ansible --vault-password-file ~/.vault_pass.txt --limit=ansible --extra-vars="local=/$HOME/workspace/Cottaging/sites/zz target=/var/www/zz"
-
-Push modules & themes, no DB
-
-    ansible-playbook push.yml -i inventory/ansible --ask-vault-pass --limit=ansible --extra-vars="local=/$HOME/workspace/Cottaging/sites/zz target=/var/www/zz" --tags="modules"
-
-Push just the DB
-
-    ansible-playbook push.yml -i inventory/ansible --ask-vault-pass --limit=ansible --extra-vars="local=/$HOME/workspace/Cottaging/sites/zz target=/var/www/zz" --tags="db"
+    See the EXAMPLES.md in this folder.
 
 ### Remote functions
 

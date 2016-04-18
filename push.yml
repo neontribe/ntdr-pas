@@ -37,4 +37,4 @@
     # Fix permissions
     - { role: fixpermissions, target: "{{ target }}" }
     # Role up changelog minor
-    - { role: changelog, bump: 'patch' }
+    # - { role: changelog, bump: 'patch' }
