@@ -1,3 +1,9 @@
 ---
 - name: Flush caches on {{ target }}
   shell: "drush -r {{ target }} --uri=default cc all"
+
+#- name: Compass compile of neontabs theme
+#  shell: "compass compile {{ target }}/sites/all/themes/neontabs"
+
+#- name: Compass compile of site theme
+#  shell: "compass compile {{ target }}/sites/all/themes/nt*"

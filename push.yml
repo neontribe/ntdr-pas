@@ -38,5 +38,6 @@
     - { role: fixpermissions, target: "{{ target }}" }
     - { role: set-read-only,  target: "{{ target }}", rw: "yes" }
     - { role: updb,           target: "{{ target }}" }
+    - { role: ccall,          target: "{{ target }}" }
     # Role up changelog minor
     # - { role: changelog, bump: 'patch' }
