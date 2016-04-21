@@ -22,12 +22,12 @@
 
     # DB - when db tag is set
     # back up remote db
-    - { role: dumpdb,         target: "{{ target }}", when: includedb is defined and includedb == 'yes'  }
+    - { role: dumpdb,    target: "{{ target }}", when: includedb is defined and includedb == 'yes'  }
     # dump local db
-    - { role: dumpdb,         target: "{{ local }}", delegate_to: 127.0.0.1, when: includedb is defined and includedb == 'yes'  }
+    - { role: dumpdb,    target: "{{ local }}", delegate_to: 127.0.0.1, when: includedb is defined and includedb == 'yes'  }
     - { role: pushfiles, source: "/tmp/source.sql", target: "/tmp/source.sql", when: includedb is defined and includedb == 'yes'  }
     # import db
-    - { role: importdb,       target: "{{ target }}", when: includedb is defined and includedb == 'yes'  }
+    - { role: importdb,  target: "{{ target }}", when: includedb is defined and includedb == 'yes'  }
 
     # MODULE & THEME - unless no modules flag is set
     # Rsync sites/all (exclude .git, delete missing)
@@ -36,5 +36,7 @@
     # Always
     # Fix permissions
     - { role: fixpermissions, target: "{{ target }}" }
+    - { role: set-read-only,  target: "{{ target }}", rw: "yes" }
+    - { role: updb,           target: "{{ target }}" }
     # Role up changelog minor
     # - { role: changelog, bump: 'patch' }

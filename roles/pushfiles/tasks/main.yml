@@ -8,6 +8,7 @@
       - "--log-file=/tmp/sync.log"
       - "--exclude='files/tabs-imagecache'"
       - "--exclude='.git'"
+      - "--exclude='.sass-cache'"
   when: deletemissing is undefined
 
 - name: Sync files onto remote site and delete old files
@@ -20,4 +21,5 @@
       - "--log-file=/tmp/sync.log"
       - "--exclude='files/tabs-imagecache'"
       - "--exclude='.git'"
+      - "--exclude='.sass-cache'"
   when: deletemissing is defined
