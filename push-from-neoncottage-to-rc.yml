@@ -3,6 +3,7 @@
   become_method: sudo
   become_user: root
   vars:
+    source: /var/www/latest
     target: /var/www/testing
     patch_release: true
   roles:
@@ -20,14 +21,19 @@
     - { role: pushfiles, source: "{{ local }}/sites/default/files", target: "{{ target }}/sites/default", when: includefiles is defined and includefiles == 'yes' }
     - { role: fixpermissions, target: "{{ target }}" }
 
-    # DB - when db tag is set
+    # Sync from latest
+    - { role: syncfiles, source: "{{ source }}", target: "{{ target }}", when: includefiles is not defined }
+
+    # DB - when db tag is set ------------------------
     # back up remote db
     - { role: dumpdb,    target: "{{ target }}", when: includedb is defined and includedb == 'yes'  }
     # dump local db
     - { role: dumpdb,    target: "{{ local }}", delegate_to: 127.0.0.1, when: includedb is defined and includedb == 'yes'  }
     - { role: pushfiles, source: "/tmp/source.sql", target: "/tmp/source.sql", when: includedb is defined and includedb == 'yes'  }
+    # DB - when db tag is not set import the live DB
+    - { role: dumpdb,    target: "{{ source }}", when: includedb is not defined }
     # import db
-    - { role: importdb,  target: "{{ target }}", when: includedb is defined and includedb == 'yes'  }
+    - { role: importdb,  target: "{{ target }}" }
 
     # MODULE & THEME - unless no modules flag is set
     # Rsync sites/all (exclude .git, delete missing)
