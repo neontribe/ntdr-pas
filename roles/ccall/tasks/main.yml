@@ -5,5 +5,5 @@
 #- name: Compass compile of neontabs theme
 #  shell: "compass compile {{ target }}/sites/all/themes/neontabs"
 
-#- name: Compass compile of site theme
-#  shell: "compass compile {{ target }}/sites/all/themes/nt*"
+- name: Compass compile of site theme
+  shell: "compass compile {{ target }}/{{ theme_folder }}"
