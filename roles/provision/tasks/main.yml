@@ -1,0 +1,73 @@
+---
+# Gathering deployment data
+
+- name: Check deploy directory
+  file:
+    path: "{{ var_www }}/"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode:  0755
+    state: directory
+  register: var_www
+
+- name: Get latest version
+  ntdr_sort_versions_dir:
+    path: /var/www
+    brandcode: "{{ brandcode }}"
+  register: latest_version
+  when: latest_version is not defined
+
+- name: Check for local sql
+  local_action: stat path={{ sql_file }}
+  register: local_sql
+  when: sql_file is defined
+
+- name: Upload local sql "{{ sql_file }}"
+  copy: src={{ sql_file }} dest=/tmp/{{ sql_file | basename }}
+  when: sql_file is defined
+
+- name: Upload make file
+  copy: src={{ brandcode }}.make dest=/tmp/{{ brandcode }}.make
+
+- name: Bump minor version number
+  ntbumpversion:
+    current: "{{ latest_version.stat.max_version }}"
+    bump:  minor
+    includepatch: false
+  register: new_version
+
+- name: Declare new directory
+  set_fact: target={{ var_www.path }}/{{ new_version.stat.short_version }}
+
+# Do the make and create db/settings
+- name: Drush make
+  shell: drush -b -q make /tmp/{{ brandcode }}.make {{ target }}
+
+- set_fact: db_user={{ new_version.stat.short_version }}
+- set_fact: db_name={{ new_version.stat.short_version }}
+- set_fact: db_pass={{ new_version.stat.short_version }}
+
+- name: Create new settings file
+  template: src=settings.php.tpl dest={{ target }}/sites/default/settings.php
+
+- name: Create db using existing local settings file
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+
+- name: Create db user using existing local settings file
+  mysql_user:
+    name: "{{ db_name }}"
+    password: "{{ db_pass }}"
+    priv: "{{ db_name }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_pw }}"
+
+# If we have a source value copy the files
+- name: Copy files folder
+  shell: rsync -a {{ source }}/sites/default/files {{ target }}/sites/default
+  become: yes
+
