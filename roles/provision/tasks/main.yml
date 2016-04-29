@@ -39,9 +39,11 @@
 - name: Declare new directory
   set_fact: target={{ var_www.path }}/{{ new_version.stat.short_version }}
 
+- debug: msg="drush -b -q make /tmp/{{ brandcode }}.make {{ target }}"
+
 # Do the make and create db/settings
 - name: Drush make
-  shell: drush -b -q make /tmp/{{ brandcode }}.make {{ target }}
+  shell: drush --nocolor -q make /tmp/{{ brandcode }}.make {{ target }}
 
 - set_fact: db_user={{ new_version.stat.short_version }}
 - set_fact: db_name={{ new_version.stat.short_version }}
@@ -70,4 +72,5 @@
 - name: Copy files folder
   shell: rsync -a {{ source }}/sites/default/files {{ target }}/sites/default
   become: yes
+  when: source is defined
 
