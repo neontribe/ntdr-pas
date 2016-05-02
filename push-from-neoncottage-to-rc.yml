@@ -46,4 +46,4 @@
     - { role: updb,           target: "{{ target }}" }
     - { role: ccall,          target: "{{ target }}" }
     # Role up changelog minor
-    # - { role: changelog, bump: 'patch' }
+    - { role: changelog, bump: 'patch' }
