@@ -76,19 +76,19 @@ projects[xmlsitemap][version] = "2.2"
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = "4.11.1"
+projects[neontabs][download][tag] = "neontabs_0_12_1"
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
 projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
-projects[nt_tabs][download][tag] = "4.11.10"
+projects[nt_tabs][download][tag] = "nt_tabs_4_11_11"
 projects[nt_tabs][subdir] = "custom"
 
 projects[ntfb_modules][type] = "module"
 projects[ntfb_modules][download][type] = "git"
 projects[ntfb_modules][download][url] = "git@bitbucket.org:neontabs/ntfb_modules.git"
-projects[ntfb_modules][download][tag] = "2.3.7"
+projects[ntfb_modules][download][tag] = "ntfb_modules_0_4_7"
 projects[ntfb_modules][subdir] = "custom"
 
 ; Themes
