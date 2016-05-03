@@ -7,11 +7,6 @@
     target: /var/www/testing
     patch_release: true
   roles:
-    # check the source is a drupal + fix permissions on source
-    # These don't work because of privilege escalation
-    # - { role: checkisdrupal,  target: "{{ local }}", delegate_to: 127.0.0.1 }
-    # - { role: fixpermissions, target: "{{ local }}", delegate_to: 127.0.0.1 }
-
     # get real dir of target and register it as tpath
     # check tpath is a drupal + fix permissions on tpath
     - { role: checkisdrupal,  target: "{{ target }}" }
@@ -44,6 +39,7 @@
     - { role: fixpermissions, target: "{{ target }}" }
     - { role: set-read-only,  target: "{{ target }}", rw: "yes" }
     - { role: updb,           target: "{{ target }}" }
+    - { role: robots,         target: "{{ target }}", tags: [ 'nofollow' ] }
     - { role: ccall,          target: "{{ target }}" }
     # Role up changelog minor
-    # - { role: changelog, bump: 'patch' }
+    - { role: changelog, bump: 'patch' }

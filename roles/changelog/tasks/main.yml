@@ -12,9 +12,13 @@
   set_fact: from_real_folder={{ from }}
   when: from is defined and from_folder.stat.isdir
 
+- name: Create changelog src file
+  set_fact: changelog=from_real_folder={{ from }}/changelog.json
+  when: from_real_folder is defined
+
 - name: Import change log
-  shell: cp {{ from_real_folder }}/changelog.json {{ target }}/changelog.json
-  when: from is defined and from is defined
+  shell: cp {{ changelog }} {{ target }}/changelog.json
+  when: changelog is defined
 
 - name: Update changelog for child modules
   shell: drush -r {{ target }} --uri=default ntrc {{ bump }}
