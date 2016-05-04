@@ -12,27 +12,16 @@
     - { role: checkisdrupal,  target: "{{ target }}" }
     - { role: fixpermissions, target: "{{ target }}", ownall: 'yes' }
 
-    # FILES - when files flag is set ( syncfiles='yes' )
-    - { role: pushfiles, source: "{{ local }}/sites/default/files", target: "{{ target }}/sites/default", when: includefiles is defined and includefiles == 'yes' }
-    - { role: fixpermissions, target: "{{ target }}" }
+    # Sync files
+    - { role: syncfiles, source: "{{ source }}", target: "{{ target }}" }
 
-    # Sync from latest
-    - { role: syncfiles, source: "{{ source }}", target: "{{ target }}", when: includefiles is not defined }
-
-    # DB - when db tag is set ------------------------
-    # back up remote db
-    - { role: dumpdb,    target: "{{ target }}", when: includedb is defined and includedb == 'yes'  }
-    # dump local db
-    - { role: dumpdb,    target: "{{ local }}", delegate_to: 127.0.0.1, when: includedb is defined and includedb == 'yes'  }
-    - { role: pushfiles, source: "/tmp/source.sql", target: "/tmp/source.sql", when: includedb is defined and includedb == 'yes'  }
-    # DB - when db tag is not set import the live DB
-    - { role: dumpdb,    target: "{{ source }}", when: includedb is not defined }
-    # import db
+    # DB - Import the live DB
+    - { role: dumpdb,    target: "{{ source }}" }
     - { role: importdb,  target: "{{ target }}" }
 
-    # MODULE & THEME - unless no modules flag is set
+    # MODULE & THEME
     # Rsync sites/all (exclude .git, delete missing)
-    - { role: pushfiles, source: "{{ local }}/sites/all", target: "{{ target }}/sites", deletemissing: 'yes', when: skipdb is undefined }
+    - { role: pushfiles, source: "{{ local }}/sites/all", target: "{{ target }}/sites", deletemissing: 'yes' }
 
     # Always
     # Fix permissions
