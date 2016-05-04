@@ -26,8 +26,9 @@
   copy: src={{ sql_file }} dest=/tmp/{{ sql_file | basename }}
   when: sql_file is defined
 
-- name: Upload make file
+- name: Copy make file to tmp
   copy: src={{ brandcode }}.make dest=/tmp/{{ brandcode }}.make
+  delegate_to: localhost
 
 - name: Bump minor version number
   ntbumpversion:
@@ -39,11 +40,10 @@
 - name: Declare new directory
   set_fact: target={{ var_www.path }}/{{ new_version.stat.short_version }}
 
-- debug: msg="drush -b -q make /tmp/{{ brandcode }}.make {{ target }}"
-
 # Do the make and create db/settings
 - name: Drush make
   shell: drush --nocolor -q make /tmp/{{ brandcode }}.make {{ target }}
+  # ntdr_drush_make: path="{{ target }}" makefile="/tmp/{{ brandcode }}.make"
 
 - set_fact: db_user={{ new_version.stat.short_version }}
 - set_fact: db_name={{ new_version.stat.short_version }}
@@ -73,4 +73,3 @@
   shell: rsync -a {{ source }}/sites/default/files {{ target }}/sites/default
   become: yes
   when: source is defined
-
