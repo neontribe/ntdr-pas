@@ -5,17 +5,17 @@
     target: /var/www/testing
   roles:
       - { role: checkisdrupal,  target: "{{ source }}" }
-      - { role: checkisdrupal,  target: "{{ target }}" }
+      - { role: checkisdrupal }
       - { role: dumpdb,         target: "{{ source }}" }
-      - { role: importdb,       target: "{{ target }}" }
+      - { role: importdb }
       - { role: fixpermissions, target: "{{ source }}" }
-      - { role: fixpermissions, target: "{{ target }}" }
-      - { role: syncfiles,      source: "{{ source }}", target: "{{ target }}" }
-      - { role: updb,           target: "{{ target }}" }
-      - { role: robots,         target: "{{ target }}", tags: [ 'live' ] }
-      - { role: ccall,          target: "{{ target }}" }
-      - { role: smoketest,      target: "{{ target }}" }
-      - { role: swaplinks,      target: "{{ target }}", link: /var/www/latest }
+      - { role: fixpermissions }
+      - { role: syncfiles }
+      - { role: updb }
+      - { role: robots, tags: [ 'live' ] }
+      - { role: ccall }
+      - { role: smoketest }
+      - { role: swaplinks, link: /var/www/latest }
       #
       # THESE ARE NOW HANDLED BY: provision-from-remote.yml
       #

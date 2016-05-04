@@ -9,26 +9,24 @@
   roles:
     # get real dir of target and register it as tpath
     # check tpath is a drupal + fix permissions on tpath
-    - { role: checkisdrupal,  target: "{{ target }}" }
-    - { role: fixpermissions, target: "{{ target }}", ownall: 'yes' }
+    - { role: checkisdrupal }
+    - { role: fixpermissions, ownall: 'yes' }
 
     # Sync files
-    - { role: syncfiles, source: "{{ source }}", target: "{{ target }}" }
+    - { role: syncfiles }
 
     # DB - Import the live DB
     - { role: dumpdb,    target: "{{ source }}" }
-    - { role: importdb,  target: "{{ target }}" }
+    - { role: importdb }
 
-    # MODULE & THEME
-    # Rsync sites/all (exclude .git, delete missing)
-    - { role: pushfiles, source: "{{ local }}/sites/all", target: "{{ target }}/sites", deletemissing: 'yes' }
+    - { role: pushfiles, source: "{{ local }}/sites/all", destination: "{{ target }}/sites", deletemissin: yes }
 
     # Always
     # Fix permissions
-    - { role: fixpermissions, target: "{{ target }}" }
-    - { role: set-read-only,  target: "{{ target }}", rw: "yes" }
-    - { role: updb,           target: "{{ target }}" }
-    - { role: robots,         target: "{{ target }}", tags: [ 'nofollow' ] }
-    - { role: ccall,          target: "{{ target }}" }
+    - { role: fixpermissions }
+    - { role: set-read-only, rw: "yes" }
+    - { role: updb }
+    - { role: robots, tags: [ 'nofollow' ] }
+    - { role: ccall }
     # Role up changelog minor
     - { role: changelog, bump: 'patch' }

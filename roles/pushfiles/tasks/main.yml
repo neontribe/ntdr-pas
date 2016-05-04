@@ -2,7 +2,7 @@
 - name: Sync files onto remote site
   synchronize:
     src: "{{ source }}"
-    dest: "{{ target }}"
+    dest: "{{ destination }}"
     rsync_opts:
       - "-rlD"
       - "--log-file=/tmp/sync.log"
@@ -14,7 +14,7 @@
 - name: Sync files onto remote site and delete old files
   synchronize:
     src: "{{ source }}"
-    dest: "{{ target }}"
+    dest: "{{ destination }}"
     delete: yes
     rsync_opts:
       - "-rlD"

@@ -28,7 +28,6 @@
 
 - name: Copy make file to tmp
   copy: src={{ brandcode }}.make dest=/tmp/{{ brandcode }}.make
-  delegate_to: localhost
 
 - name: Bump minor version number
   ntbumpversion:
