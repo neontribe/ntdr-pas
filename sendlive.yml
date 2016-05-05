@@ -15,4 +15,4 @@
       - { role: robots, tags: [ 'live' ] }
       - { role: ccall }
       - { role: smoketest }
-      - { role: swaplinks, link: "{{ source }}" }
+      - { role: swaplinks, link: "{{ source }}", clear: "{{ target }}" }
