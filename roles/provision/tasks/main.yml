@@ -8,11 +8,12 @@
     group: "{{ ansible_ssh_user }}"
     mode:  0755
     state: directory
-  register: var_www
+  register: deploy_dir
+  become: yes
 
 - name: Get latest version
   ntdr_sort_versions_dir:
-    path: /var/www
+    path: "{{ deploy_dir.path }}"
     brandcode: "{{ brandcode }}"
   register: latest_version
   when: latest_version is not defined
@@ -37,7 +38,7 @@
   register: new_version
 
 - name: Declare new directory
-  set_fact: target={{ var_www.path }}/{{ new_version.stat.short_version }}
+  set_fact: target={{ deploy_dir.path }}/{{ new_version.stat.short_version }}
 
 # Do the make and create db/settings
 - name: Drush make
@@ -72,3 +73,6 @@
   shell: rsync -a {{ source }}/sites/default/files {{ target }}/sites/default
   become: yes
   when: source is defined
+
+- name: Upload and unpack files
+  unarchive: src="{{ files_bundle }}" dest={{ target }}/sites/default

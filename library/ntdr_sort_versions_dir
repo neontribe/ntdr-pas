@@ -86,14 +86,23 @@ def main():
 
         nested[brand][major][minor][patch] = patch
 
-    max_brand = max(nested)
-    max_major = max(nested[max_brand])
-    max_minor = max(nested[max_brand][max_major])
-    max_patch = max(nested[max_brand][max_major][max_minor])
+    try:
+        max_brand = max(nested)
+        max_major = max(nested[max_brand])
+        max_minor = max(nested[max_brand][max_major])
+        max_patch = max(nested[max_brand][max_major][max_minor])
+    except:
+        max_brand = brandcode
+        max_major = 0
+        max_minor = 0
+        max_patch = 0
 
     max_version = max_brand + '_' + str(max_major) + '_' + str(max_minor) + '_' + str(max_patch)
     data = {}
     data['max_version'] = max_version
+    data['nested'] = nested
+    data['path'] = path
+    data['dir_list'] = dir_list
     data['parts'] = [max_brand, max_major, max_minor, max_patch]
     data['dirname'] = max_brand + '_' + str(max_major) + '_' + str(max_minor)
     data['clean_version'] = str(max_major) + '_' + str(max_minor) + '_' + str(max_patch)
