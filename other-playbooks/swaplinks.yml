@@ -1,7 +1,0 @@
----
-- hosts: all
-  vars:
-    source: /var/www/latest
-    target: /var/www/testing
-  roles:
-      - { role: swaplinks,      target: "{{ target }}", link: /var/www/latest }

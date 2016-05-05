@@ -12,5 +12,3 @@
       - { role: robots,         target: "{{ target }}", tags: [ 'nofollow' ] }
       - { role: ccall,          target: "{{ target }}" }
       - { role: changelog,      target: "{{ target }}", bump: minor, from: "{{ source }}" }
-      - { role: swaplinks,      target: "{{ target }}", link: /var/www/testing }
-

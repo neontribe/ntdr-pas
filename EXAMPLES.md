@@ -25,3 +25,5 @@ In this example I override a lot of features:
         --limit=tobias provision-from-local.yml \
         --ask-become-pass \
         --extra-vars="brandcode=br mysql_root_pw=password theme_folder=sites/all/themes/ntbr_theme var_www=/tmp/ansible sql_file=/tmp/br.sql files_bundle=/tmp/br.tgz"
+
+    ansible-playbook -i inventory/intranet --limit=tobias provision-from-remote.yml --ask-become-pass --extra-vars="brandcode=br mysql_root_pw=PASSWORD theme_folder=sites/all/themes/ntbr_theme source=/tmp/ansible/br_0_5" -v

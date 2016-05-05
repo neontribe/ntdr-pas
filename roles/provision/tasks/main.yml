@@ -76,3 +76,4 @@
 
 - name: Upload and unpack files
   unarchive: src="{{ files_bundle }}" dest={{ target }}/sites/default
+  when: files_bundle is defined

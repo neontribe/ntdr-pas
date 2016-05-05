@@ -1,7 +1,4 @@
 ---
-#- debug: var=link
-#- debug: var=target
-
 - name: "Stat link directory ({{ link }})"
   stat: path="{{ link }}"
   register: link_folder
@@ -10,22 +7,39 @@
   stat: path="{{ target }}"
   register: target_folder
 
-- name: "if {{ target_folder }} is a link get it's real path"
-  set_fact: target_real_folder={{ target_folder.stat.lnk_source }}
+- fail: msg="Refusing to continue when {{ target }} does not exist."
+  when: not target_folder.stat.exists
+
+- name: "Stat clear directory {{ clear }}"
+  stat: path="{{ clear }}"
+  register: clear_folder
+  when: clear is defined
+
+- name: When the target is a link get the real path
+  set_fact: target_path={{ target_folder.stat.lnk_source }}
   when: target_folder.stat.islnk is defined and target_folder.stat.islnk
 
-- name: "if {{ target_folder }} is a real folder register the directory"
-  set_fact: target_real_folder={{ target }}
-  when: target_folder.stat.isdir
+- name: When the target is a real path set the target_path
+  set_fact: target_path={{ target_folder.stat.path }}
+  when: target_folder.stat.isdir is defined and target_folder.stat.isdir
 
-- name: Remove current {{ link }} link
-  file: path="{{ link }}" state=absent
-  when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_real_folder is defined and target_real_folder
+- name: Stat the target_path {{ target_path }}
+  stat: path="{{ target_path }}"
+  register: target_path_detail
 
-- name: Link {{ target }} to {{ link }}
-  file: src={{ target_real_folder }} dest={{ link }} state=link
-  when: link_folder.stat.islnk is defined and link_folder.stat.islnk and target_real_folder is defined and target_real_folder
+- fail: msg="Refusing to continue when {{ target }} does not exist."
+  when: not target_path_detail.stat.exists
 
-- name: Ensure new testing is not in read only
-  shell: "drush -r {{ target }} --uri=default vset site_readonly 0"
+- fail: msg="Refusing to continue when {{ target }} is not a dir."
+  when: not target_path_detail.stat.isdir
 
+- name: "Remove existing link"
+  file: path="{{ link_folder.stat.path }}" state=absent
+  when: link_folder.stat.islnk is defined and link_folder.stat.islnk
+
+- name: Create new link
+  file: src={{ target_path }} dest={{ link }} state=link
+
+- name: Remove the clear link
+  file: path="{{ clear_folder.stat.path }}" state=absent
+  when: clear_folder.stat.path is defined

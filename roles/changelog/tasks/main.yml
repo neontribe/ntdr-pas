@@ -13,6 +13,9 @@
   when: from is defined and from_folder.stat.isdir
 
 - name: Create changelog src file
+  file: path="{{ from_real_folder }}/changelog.json" state=touch
+
+- name: Register changelog sourec file
   set_fact: changelog={{ from_real_folder }}/changelog.json
   when: from_real_folder is defined
 
