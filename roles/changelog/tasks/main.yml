@@ -14,6 +14,7 @@
 
 - name: Create changelog src file
   file: path="{{ from_real_folder }}/changelog.json" state=touch
+  when: from_real_folder is defined
 
 - name: Register changelog sourec file
   set_fact: changelog={{ from_real_folder }}/changelog.json
