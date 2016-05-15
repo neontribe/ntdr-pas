@@ -1,0 +1,115 @@
+#! /usr/bin/env python
+
+# list diretcories in the folder and return the newest by name
+
+import sys, os, json, shlex, re
+
+def main():
+    module = AnsibleModule(
+        argument_spec = dict(
+            path = dict(required=True),
+            brandcode = dict(default=True),
+        ),
+        supports_check_mode = True
+    )
+
+    path = module.params.get('path')
+    path = os.path.expanduser(path)
+    brandcode = module.params.get('brandcode')
+
+    dir_list = os.listdir(path)
+    split_list = []
+
+    i = 0;
+    for (name) in (dir_list):
+        parts = re.split('\.|_', name)
+        count = len(parts)
+
+        try:
+            if (count >= 4):
+                brand = parts[0]
+                major = int(parts[1])
+                minor = int(parts[2])
+                patch = int(parts[3])
+            elif (count >= 3):
+                brand = parts[0]
+                major = int(parts[1])
+                minor = int(parts[2])
+                patch = 0
+            elif (count >= 2):
+                brand = parts[0]
+                major = int(parts[1])
+                minor = 0
+                patch = 0
+            elif (count >= 1):
+                brand = parts[0]
+                major = 0
+                minor = 0
+                patch = 0
+            elif (count >= 0):
+                # Unreachable?
+                brand = brandcode
+                major = 0
+                minor = 0
+                patch = 0
+
+            if (parts[0] == brandcode):
+                # Only add genuine brand code folders.
+                split_list.append([brand, major, minor, patch])
+            else:
+                i = i + 1
+
+        except ValueError:
+            # do nothing
+            continue
+
+    # Now build a nested array
+    nested = {}
+
+    for (version) in (split_list):
+        brand = version[0]
+        major = version[1]
+        minor = version[2]
+        patch = version[3]
+
+        if not (brand in nested):
+            nested[brand] = {}
+
+        if not (major in nested[brand]):
+            nested[brand][major] = {}
+
+        if not (minor in nested[brand][major]):
+            nested[brand][major][minor] = {}
+
+        if not (patch in nested[brand][major][minor]):
+            nested[brand][major][minor][patch] = {}
+
+        nested[brand][major][minor][patch] = patch
+
+    try:
+        max_brand = max(nested)
+        max_major = max(nested[max_brand])
+        max_minor = max(nested[max_brand][max_major])
+        max_patch = max(nested[max_brand][max_major][max_minor])
+    except:
+        max_brand = brandcode
+        max_major = 0
+        max_minor = 0
+        max_patch = 0
+
+    max_version = max_brand + '_' + str(max_major) + '_' + str(max_minor) + '_' + str(max_patch)
+    data = {}
+    data['max_version'] = max_version
+    data['nested'] = nested
+    data['path'] = path
+    data['dir_list'] = dir_list
+    data['parts'] = [max_brand, max_major, max_minor, max_patch]
+    data['dirname'] = max_brand + '_' + str(max_major) + '_' + str(max_minor)
+    data['clean_version'] = str(max_major) + '_' + str(max_minor) + '_' + str(max_patch)
+
+    module.exit_json(changed=False, stat=data)
+
+# import module snippets
+from ansible.module_utils.basic import *
+main()
+

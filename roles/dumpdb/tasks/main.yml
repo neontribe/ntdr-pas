@@ -1,0 +1,16 @@
+---
+- name: Ensure we have a SQL file name
+  set_fact: sql_dump_file=/tmp/source.sql
+  when: sql_dump_file is not defined
+
+- name: Install readonly module
+  shell: "drush -r {{ target }} --uri=default en -y readonlymode"
+
+- name: Turn readonly on
+  shell: "drush -r {{ target }} --uri=default vset site_readonly 1"
+
+- name: Dump DB from {{ target }}
+  shell: drush -r {{ target }} sql-dump --ordered-dump --structure-tables-key=common --result-file={{ sql_dump_file }}
+
+- name: Restore read write
+  shell: "drush -r {{ target }} --uri=default vset site_readonly 0"

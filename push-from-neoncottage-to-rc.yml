@@ -1,0 +1,32 @@
+---
+- hosts: all
+  become_method: sudo
+  become_user: root
+  vars:
+    source: /var/www/latest
+    target: /var/www/testing
+    patch_release: true
+  roles:
+    # get real dir of target and register it as tpath
+    # check tpath is a drupal + fix permissions on tpath
+    - { role: checkisdrupal }
+    - { role: fixpermissions, ownall: 'yes' }
+
+    # Sync files
+    - { role: syncfiles }
+
+    # DB - Import the live DB
+    - { role: dumpdb,    target: "{{ source }}" }
+    - { role: importdb }
+
+    - { role: pushfiles, source: "{{ local }}/sites/all", destination: "{{ target }}/sites", deletemissin: yes }
+
+    # Always
+    # Fix permissions
+    - { role: fixpermissions }
+    - { role: set-read-only, rw: "yes" }
+    - { role: updb }
+    - { role: robots, tags: [ 'nofollow' ] }
+    - { role: ccall }
+    # Role up changelog minor
+    - { role: changelog, bump: 'patch' }

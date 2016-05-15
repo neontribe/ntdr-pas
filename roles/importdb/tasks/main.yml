@@ -1,0 +1,7 @@
+---
+- name: Ensure we have a SQL file name
+  set_fact: sql_dump_file=/tmp/source.sql
+  when: sql_dump_file is not defined
+
+- name: Import DB into {{ target }}
+  shell: drush -r {{ target }} sqlc < {{ sql_dump_file }}

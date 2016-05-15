@@ -1,0 +1,3 @@
+---
+- name: Check is a drupal {{ target }}
+  shell: drush -r {{ target }} status | grep "Drupal bootstrap" # chdir=/var/www/{{ item }}"

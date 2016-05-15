@@ -6,7 +6,7 @@ import sys, os, json, shlex, time, json, glob , subprocess, git, math
 
 
 def touch(fname, times=None):
-    fhandle = open(fname, 'a')
+    fhandle = open(fname, 'w')
     try:
         os.utime(fname, times)
     finally:
@@ -31,25 +31,6 @@ a  Auto tag. If used in conjuction with -l then drupal-tag will be called with
 
 
 
-class Prepender:
-
-    def __init__(self, fname, mode='a'):
-        self.__write_queue = []
-        self.__f = open(fname, mode)
-
-    def write(self, s):
-        self.__write_queue.insert(0, s)
-
-    def close(self):
-        self.__exit__(None, None, None)
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, traceback):
-        if self.__write_queue: 
-            self.__f.writelines(self.__write_queue)
-        self.__f.close()
 
 
 def branches(pathname,options):
@@ -135,11 +116,11 @@ def main():
     )
     path = module.params.get('path')
     version = module.params.get('version')
+	
 
     touch(path+'/changelog.txt')
     touch(path+'/testlog2.txt')
    
-     
     f = open(path+'/testlog2.txt','a+')
     f.write('+----- '+version+' -----+\n')
     f.write(time.strftime("%y-%m-%d_%H-%M\n"))
@@ -165,7 +146,6 @@ def main():
         'version': version,
         'number':path
     }
-
     module.exit_json(changed=False, stat=d)
 
 # import module snippets

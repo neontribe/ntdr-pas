@@ -1,0 +1,4 @@
+---
+- hosts: all
+  roles:
+    # We use this sooooo rarely I refer you to: https://xkcd.com/1205/

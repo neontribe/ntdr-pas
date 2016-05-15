@@ -1,0 +1,13 @@
+---
+- hosts: all
+  vars:
+    var_www: /var/www
+    sql_file: /tmp/dump.sql
+    files_bundle: /tmp/files.tgz
+  roles:
+      - provision
+      # Traget gets defined in the provision script
+      - { role: importdb,       target: "{{ target }}", sql_dump_file: "{{ sql_file }}" }
+      - { role: fixpermissions, target: "{{ target }}" }
+      - { role: robots,         target: "{{ target }}", tags: [ 'nofollow' ] }
+      - { role: ccall,          target: "{{ target }}" }

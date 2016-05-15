@@ -1,0 +1,74 @@
+#! /usr/bin/env python
+
+# Find changelog vesion
+
+import sys, os, json, shlex, time, commands, re
+
+def main():
+    module = AnsibleModule(
+        argument_spec = dict(
+            current = dict(required=True),
+            bump = dict(default='minor', choices=['major', 'minor', 'patch']),
+            includepatch = dict(default=False)
+        ),
+        supports_check_mode = True
+    )
+    current = module.params.get('current')
+    bump = module.params.get('bump')
+    includepatch = module.params.get('includepatch')
+
+    parts = re.split('\.|_', current);
+
+    try:
+      brand = parts[0]
+    except IndexError:
+      brand = 'xx'
+
+    try:
+      major = parts[1]
+    except IndexError:
+      major = 0
+
+    try:
+      minor = parts[2]
+    except IndexError:
+      minor = 0
+
+    try:
+      patch = parts[3]
+    except IndexError:
+      patch = 0
+
+    if bump == 'major':
+        major = int(major) + 1
+        minor = 0
+        patch = 0
+    elif bump == 'patch':
+        patch = int(patch) + 1
+    else: # if bump is undefined or equal minor
+        minor = int(minor) + 1
+        patch = 0
+
+    short_version = brand + '_' + str(major) + '_' + str(minor)
+    long_version = brand + '_' + str(major) + '_' + str(minor) + '_' + str(patch)
+
+    if (includepatch):
+        newversion = long_version
+    else:
+        newversion = short_version
+
+    # back to ansible
+    d = {}
+    d['version'] = current,
+    d['newversion'] = newversion
+    d['short_version'] = short_version
+    d['long_version'] = long_version
+    d['parts'] = [major, minor, patch]
+
+    module.exit_json(changed=False, stat=d)
+
+# import module snippets
+from ansible.module_utils.basic import *
+
+main()
+

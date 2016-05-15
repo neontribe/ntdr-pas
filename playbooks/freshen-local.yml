@@ -1,9 +1,0 @@
----
-
-- hosts: all
-  vars:
-    source: /var/www/latest
-    local: /var/tmp/cottage_{{ ansible_hostname }}
-    devsite: true
-  roles:
-    - freshen-local

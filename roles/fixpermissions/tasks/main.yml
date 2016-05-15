@@ -1,0 +1,23 @@
+---
+- name: Stat {{ target }}
+  stat: path="{{ target }}"
+  register: target_folder
+
+- name: Fix permissions on {{ target }} as a folder
+  file: path={{ target }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
+  become: yes
+  when: target_folder.stat.islnk is defined and target_folder.stat.islnk == False
+
+- name: Fix permissions on {{ target }} as a symlink
+  file: path={{ target_folder.stat.lnk_source }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
+  become: yes
+  when: target_folder.stat.islnk is defined and target_folder.stat.islnk
+
+- name: Stat files {{ target }}/sites/default/files
+  stat: path="{{ target }}/sites/default/files"
+  register: files_folder
+
+- name: Fix permissions on {{ target }}/sites/default/files folder
+  file: path={{ files_folder.stat.path }} state=directory owner=www-data mode="u=rwX,g=rwX,o=rX" recurse=yes
+  become: yes
+  when: files_folder.stat.isdir is defined and files_folder.stat.isdir and ownall is undefined

@@ -1,3 +1,4 @@
 phansible
 nbproject
 inventory/cottage-servers-local-vm
+*.retry

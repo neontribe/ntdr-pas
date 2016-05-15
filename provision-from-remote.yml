@@ -1,0 +1,14 @@
+---
+- hosts: all
+  vars:
+    var_www: /var/www
+    source: /var/www/latest
+  roles:
+      - { role: dumpdb, target: "{{ source }}" }
+      - provision
+      # Traget gets defined in the provision script
+      - { role: importdb,       target: "{{ target }}" }
+      - { role: fixpermissions, target: "{{ target }}" }
+      - { role: robots,         target: "{{ target }}", tags: [ 'nofollow' ] }
+      - { role: ccall,          target: "{{ target }}" }
+      - { role: changelog,      target: "{{ target }}", bump: minor, from: "{{ source }}" }

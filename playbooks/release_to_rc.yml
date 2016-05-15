@@ -1,9 +1,0 @@
----
-- hosts: all
-  vars:
-    target: /var/www/testing
-    latest: /var/www/latest
-    patch_release: true
-  roles:
-    - push-local-to-remote
-    - { role: freshen-remote-site, target: '{{ target }}', source: '{{ latest }}' }

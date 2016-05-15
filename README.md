@@ -4,15 +4,17 @@
 
     mkdir ~/.drush
 
-## Cleaning up ZZ
+Ansible should ab at verion 1.8 or higher, 14.04 ships with 1.5.4:
 
-If you have been testing against the ZZ site(s) and you want to reset them:
-
-    mysql-dropuser-and-db -u zz_0.0.2 -m b191wkm && sudo rm -rf /var/www/*
-
-Where the DB name is set correctly.
+    $ sudo apt-get install software-properties-common
+    $ echo deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main | sudo tee --append /etc/apt/sources.list.d/ansible-ubuntu-ansible-utopic.list
+    $ echo deb-src http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main | sudo tee --append /etc/apt/sources.list.d/ansible-ubuntu-ansible-utopic.list
+    $ sudo apt-get update
+    $ sudo apt-get install ansible
 
 ## Quick Examples
+
+### Pull functions
 
 Pull a remote site to local, including new DB
 
@@ -36,61 +38,51 @@ Create a whole new site on a remote site
         --limit=cottage \
         --extra-vars="source=/var/www/html/Cottaging/sites/br target=/var/www/sites/testing/br/openmap withdb=true mysql_root_pw=password"
 
+Pull a remote site to local.
 
+#### Extra vars
 
+  * source - The location of the site on the remote fiule system; **default**: /var/www/latest
+  * local - The location of the local site; **default**: /var/tmp/cottage + ansible_hostname
+  * devsite - If set to true robots.txt is set to no follow; **default**: true
+  * mysql_root_pw - The local mysql root passwd; **default**: Ansible will prompt for this
 
-Freshen a remote site with local files, no DB push/update
+#### Tags
 
-    ansible-playbook push-local-to-remote.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0 source=/home/tobias/workspace/Cottaging/sites/zz/"
+  * fullsync - Full files sync, whole of drupal
+  * db - Sync the data base, it's advisable to pull files as well.
+  * filesync - Sync the sites/default/files folder down
 
-Pull a remote site to local, including new DB
+#### Examples
 
-    ansible-playbook pull-full-copy.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="source=/var/www/zz_0.0 local=/var/tmp withdb=true"
+    See the EXAMPLES.md in this folder.
 
-Pull a remote site to local, No DB
+### Push functions
 
-    ansible-playbook pull-full-copy.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0.0"
+Push a site to a remotye server
 
-Freshen local, files folder and DB
+#### Extra vars
 
-    ansible-playbook freshen-local.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="source=/var/www/zz_0.0 withdb=true"
+  * local - The location of the site on the remote fiule system; **default**: /var/www/latest
+  * target - The location of the local site; **default**: /var/tmp/cottage + ansible_hostname
+  * mysql_root_pw - The local mysql root passwd; **default**: Ansible will prompt for this
+  * includefiles - If set to yes it will push sites/default/files
+  * includedb -If set to yes it will push the local DB
 
-Freshen local, files folder, No DB
+#### Examples
 
-    ansible-playbook freshen-local.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="source=/var/www/zz_0.0"
+    See the EXAMPLES.md in this folder.
 
-Create a new RC site, minor version bump
+### Remote functions
 
-    ansible-playbook provision-new-release.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
+#### Send Live
 
-Freshen remote (from live)
+Copies files and db from /var/www/latest to /var/www/testing, runs updb, fixes permissions and installs a robots.txt from the theme. Then it symlinks the source of /var/www/testing to /var/www/latest. Then it creates a whole new drupal and copies the files. module and db from the new /var/www/latest into it and symlinks it as /var/www/testing.
 
-    ansible-playbook freshen-remote.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="target=/var/www/zz_0_1 source=/var/www/zz_0_0"
+    ansible-playbook sendlive.yml --vault-password-file ~/.vault_pass.txt -i inventory/kvm --limit=kvm
 
-Send live
+Default values:
 
-    ansible-playbook swap-rc-to-live.yml \
-      -i inventory/cottage-servers \
-      --limit zz_test \
-      --extra-vars="latest=/var/www/zz_0_2 testing=/var/www/foo"
+    source: /var/www/latest
+    target: /var/www/testing
+
