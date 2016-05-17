@@ -3,80 +3,37 @@ core = 7.x
 api = 2
 
 ; Core
-projects[drupal][version] = "7.43"
+projects[drupal][version] = "7.x"
 
 ; Modules
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.9"
-
 projects[cacheexclude][subdir] = "contrib"
-projects[cacheexclude][version] = "2.3"
-
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.7"
-
 projects[field_group][subdir] = "contrib"
-projects[field_group][version] = "1.5"
-
 projects[globalredirect][subdir] = "contrib"
-projects[globalredirect][version] = "1.5"
-
 projects[google_analytics][subdir] = "contrib"
-projects[google_analytics][version] = "2.1"
-
 projects[jquery_update][subdir] = "contrib"
-projects[jquery_update][version] = "2.7"
-
 projects[libraries][subdir] = "contrib"
-projects[libraries][version] = "2.2"
-
 projects[link][subdir] = "contrib"
-projects[link][version] = "1.4"
-
 projects[menu_block][subdir] = "contrib"
-projects[menu_block][version] = "2.7"
-
 projects[menu_expanded][subdir] = "contrib"
-projects[menu_expanded][version] = "1.0-beta1"
-
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.13"
-
 projects[references][subdir] = "contrib"
-projects[references][version] = "2.1"
-
 projects[pathauto][subdir] = "contrib"
-projects[pathauto][version] = "1.3"
-
 projects[redirect][subdir] = "contrib"
-projects[redirect][version] = "1.0-rc3"
-
 projects[seckit][subdir] = "contrib"
-projects[seckit][version] = "1.9"
-
 projects[site_map][subdir] = "contrib"
-projects[site_map][version] = "1.3"
-
 projects[token][subdir] = "contrib"
-projects[token][version] = "1.6"
-
 projects[views][subdir] = "contrib"
-projects[views][version] = "3.13"
-
 projects[webform][subdir] = "contrib"
-projects[webform][version] = "3.24"
-
 projects[wysiwyg][subdir] = "contrib"
-projects[wysiwyg][version] = "2.2"
-
 projects[xmlsitemap][subdir] = "contrib"
-projects[xmlsitemap][version] = "2.2"
 
 ; Modules
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = "neontabs_0_12_2"
+projects[neontabs][download][tag] = "neontabs_0_14_1"
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
@@ -88,13 +45,13 @@ projects[nt_tabs][subdir] = "custom"
 projects[ntfb_modules][type] = "module"
 projects[ntfb_modules][download][type] = "git"
 projects[ntfb_modules][download][url] = "git@bitbucket.org:neontabs/ntfb_modules.git"
-projects[ntfb_modules][download][tag] = "ntfb_modules_0_5"
+projects[ntfb_modules][tag] = "ntfb_modules_0_6"
 projects[ntfb_modules][subdir] = "custom"
 
 ; Themes
+projects[ntfb_theme][type] = "theme"
 projects[ntfb_theme][download][type] = "git"
 projects[ntfb_theme][download][url] = "git@bitbucket.org:neontabs/ntfb_theme.git"
-projects[ntfb_theme][type] = "theme"
 projects[ntfb_theme][download][tag] = "0.5.5"
 
 projects[neontabs_theme][download][type] = "git"
