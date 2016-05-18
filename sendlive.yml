@@ -12,7 +12,7 @@
       - { role: fixpermissions }
       - { role: syncfiles }
       - { role: updb }
-      - { role: robots, tags: [ 'live' ] }
+      - { role: robots, tags: [ 'fulllive' ] }
       - { role: ccall }
       - { role: smoketest }
       - { role: swaplinks, link: "{{ source }}", clear: "{{ target }}" }

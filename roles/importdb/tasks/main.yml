@@ -5,3 +5,6 @@
 
 - name: Import DB into {{ target }}
   shell: drush -r {{ target }} sqlc < {{ sql_dump_file }}
+
+- name: Restore read write
+  shell: "drush -r {{ target }} --nocolor vset site_readonly 0"
