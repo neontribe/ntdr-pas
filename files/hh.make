@@ -55,12 +55,8 @@ projects[nthh_modules][subdir] = "custom"
 ; Themes
 projects[nthh_theme][download][type] = "git"
 projects[nthh_theme][download][url] = "git@bitbucket.org:neontabs/nthh_theme.git"
-<<<<<<< Updated upstream
 projects[nthh_theme][type] = "theme"
-projects[nthh_theme][download][tag] = "0.0.1"
-=======
 projects[nthh_theme][download][tag] = "nthh_theme_0_0_2"
->>>>>>> Stashed changes
 
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
