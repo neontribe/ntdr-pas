@@ -30,6 +30,7 @@ projects[views][subdir] = "contrib"
 projects[webform][subdir] = "contrib"
 projects[wysiwyg][subdir] = "contrib"
 projects[xmlsitemap][subdir] = "contrib"
+projects[xmlsitemap][version] = "2.1"
 
 ; Modules
 projects[neontabs][download][type] = "git"
@@ -46,14 +47,14 @@ projects[nt_tabs][subdir] = "custom"
 
 projects[ntwl_modules][type] = "module"
 projects[ntwl_modules][download][type] = "git"
-projects[ntwl_modules][download][url] = "git@bitbucket.org:neontabs/ntbr_modules.git"
+projects[ntwl_modules][download][url] = "git@bitbucket.org:neontabs/ntwl.git"
 projects[ntwl_modules][tag] = "1.6.4"
 projects[ntwl_modules][subdir] = "custom"
 
 ; Themes
 projects[ntwl_theme][type] = "theme"
 projects[ntwl_theme][download][type] = "git"
-projects[ntwl_theme][download][url] = "git@bitbucket.org:neontabs/ntbr_theme.git"
+projects[ntwl_theme][download][url] = "git@bitbucket.org:neontabs/ntwl_theme.git"
 projects[ntwl_theme][download][tag] = "2.3.3"
 
 projects[neontabs_theme][download][type] = "git"

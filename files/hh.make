@@ -8,7 +8,6 @@ projects[drupal][version] = "7.x"
 projects[ctools][subdir] = "contrib"
 projects[cacheexclude][subdir] = "contrib"
 projects[css_injector][subdir] = "contrib"
-projects[devel][subdir] = "contrib"
 projects[entity][subdir] = "contrib"
 projects[field_group][subdir] = "contrib"
 projects[globalredirect][subdir] = "contrib"
@@ -32,6 +31,7 @@ projects[views][subdir] = "contrib"
 projects[webform][subdir] = "contrib"
 projects[wysiwyg][subdir] = "contrib"
 projects[xmlsitemap][subdir] = "contrib"
+projects[xmlsitemap][version] = "2.1"
 
 ; Modules
 projects[neontabs][download][type] = "git"
@@ -54,8 +54,11 @@ projects[nthh_modules][subdir] = "custom"
 
 ; Themes
 projects[nthh_theme][type] = "theme"
+<<<<<<< HEAD
 projects[nthh_theme][download][type] = "git"
 projects[nthh_theme][download][url] = "git@bitbucket.org:neontabs/ntbr_theme.git"
+=======
+>>>>>>> release/0_0
 projects[nthh_theme][download][tag] = "nthh_theme_0_0_2"
 
 projects[neontabs_theme][download][type] = "git"

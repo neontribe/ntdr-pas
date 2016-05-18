@@ -28,6 +28,10 @@ projects[views][subdir] = "contrib"
 projects[webform][subdir] = "contrib"
 projects[wysiwyg][subdir] = "contrib"
 projects[xmlsitemap][subdir] = "contrib"
+<<<<<<< HEAD
+=======
+projects[xmlsitemap][version] = "2.1"
+>>>>>>> release/0_0
 
 ; Modules
 projects[neontabs][download][type] = "git"
