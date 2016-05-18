@@ -3,84 +3,35 @@ core = 7.x
 api = 2
 
 ; Core
-projects[drupal][version] = "7.43"
+projects[drupal][version] = "7.x"
 
 ; Modules
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.9"
-
 projects[cacheexclude][subdir] = "contrib"
-projects[cacheexclude][version] = "2.3"
-
 projects[devel][subdir] = "contrib"
-projects[devel][version] = "1.5"
-
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.6"
-
 projects[field_group][subdir] = "contrib"
-projects[field_group][version] = "1.5"
-
 projects[globalredirect][subdir] = "contrib"
-projects[globalredirect][version] = "1.5"
-
 projects[google_analytics][subdir] = "contrib"
-projects[google_analytics][version] = "2.1"
-
 projects[jquery_update][subdir] = "contrib"
-projects[jquery_update][version] = "2.7"
-
 projects[libraries][subdir] = "contrib"
-projects[libraries][version] = "2.2"
-
 projects[link][subdir] = "contrib"
-projects[link][version] = "1.4"
-
 projects[menu_block][subdir] = "contrib"
-projects[menu_block][version] = "2.7"
-
 projects[menu_expanded][subdir] = "contrib"
-projects[menu_expanded][version] = "1.0-beta1"
-
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.13"
-
 projects[references][subdir] = "contrib"
-projects[references][version] = "2.1"
-
 projects[pathauto][subdir] = "contrib"
-projects[pathauto][version] = "1.3"
-
 projects[pathologic][subdir] = "contrib"
-projects[pathologic][version] = "3.1"
-
 projects[readonlymode][subdir] = "contrib"
-projects[readonlymode][version] = "1.2"
-
 projects[redirect][subdir] = "contrib"
-projects[redirect][version] = "1.0-rc3"
-
 projects[seckit][subdir] = "contrib"
-projects[seckit][version] = "1.9"
-
 projects[site_map][subdir] = "contrib"
-projects[site_map][version] = "1.3"
-
 projects[token][subdir] = "contrib"
-projects[token][version] = "1.6"
-
 projects[views][subdir] = "contrib"
-projects[views][version] = "3.13"
-
 projects[webform][subdir] = "contrib"
-projects[webform][version] = "3.24"
-
 projects[wysiwyg][subdir] = "contrib"
-projects[wysiwyg][version] = "2.2"
-
 projects[xmlsitemap][subdir] = "contrib"
-projects[xmlsitemap][version] = "2.0"
-
+projects[xmlsitemap][version] = "2.1"
 
 ; Modules
 projects[neontabs][download][type] = "git"
@@ -105,7 +56,7 @@ projects[nthh_modules][subdir] = "custom"
 projects[nthh_theme][download][type] = "git"
 projects[nthh_theme][download][url] = "git@bitbucket.org:neontabs/nthh_theme.git"
 projects[nthh_theme][type] = "theme"
-projects[nthh_theme][download][tag] = "0.0.1"
+projects[nthh_theme][download][tag] = "nthh_theme_0_0_2"
 
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
