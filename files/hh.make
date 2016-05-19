@@ -5,15 +5,15 @@ api = 2
 ; Core
 projects[drupal][version] = "7.x"
 
-; Modules
 projects[ctools][subdir] = "contrib"
 projects[cacheexclude][subdir] = "contrib"
-projects[devel][subdir] = "contrib"
+projects[css_injector][subdir] = "contrib"
 projects[entity][subdir] = "contrib"
 projects[field_group][subdir] = "contrib"
 projects[globalredirect][subdir] = "contrib"
 projects[google_analytics][subdir] = "contrib"
 projects[jquery_update][subdir] = "contrib"
+projects[js_injector][subdir] = "contrib"
 projects[libraries][subdir] = "contrib"
 projects[link][subdir] = "contrib"
 projects[menu_block][subdir] = "contrib"
@@ -37,25 +37,24 @@ projects[xmlsitemap][version] = "2.1"
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = "4.11.1"
+projects[neontabs][download][tag] = "neontabs_0_14_1"
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
 projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
-projects[nt_tabs][download][tag] = "4.11.10"
+projects[nt_tabs][download][tag] = "nt_tabs_4_12"
 projects[nt_tabs][subdir] = "custom"
 
 projects[nthh_modules][type] = "module"
 projects[nthh_modules][download][type] = "git"
-projects[nthh_modules][download][url] = "git@bitbucket.org:neontabs/nthh_modules.git"
-projects[nthh_modules][download][tag] = "nthh_modules_0_0_2"
+projects[nthh_modules][download][url] = "git@bitbucket.org:neontabs/ntbr_modules.git"
+projects[nthh_modules][tag] = "nthh_modules_0_3"
 projects[nthh_modules][subdir] = "custom"
 
 ; Themes
-projects[nthh_theme][download][type] = "git"
-projects[nthh_theme][download][url] = "git@bitbucket.org:neontabs/nthh_theme.git"
 projects[nthh_theme][type] = "theme"
+projects[nthh_theme][download][type] = "git"
 projects[nthh_theme][download][tag] = "nthh_theme_0_0_2"
 
 projects[neontabs_theme][download][type] = "git"
@@ -65,7 +64,7 @@ projects[neontabs_theme][download][tag] = "3.3.2"
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
-libraries[tabs-api-client][download][url] = "https://neontabs.neontribe.org/drupal/tabs-api-client-2.1.zip"
+libraries[tabs-api-client][download][url] = "https://jenkins.neontribe.org/drupal/tabs-api-client-2.1.zip"
 libraries[tabs-api-client][directory_name] = "tabs-api-client"
 libraries[tabs-api-client][type] = "library"
 
@@ -79,4 +78,3 @@ projects[neontabs_profile][download][type] = "git"
 projects[neontabs_profile][download][url] = "git@bitbucket.org:neontabs/neontabs_profile.git"
 projects[neontabs_profile][download][tag] = "1.0.0"
 projects[neontabs_profile][type] = "profile"
-
