@@ -54,11 +54,7 @@ projects[nthh_modules][subdir] = "custom"
 
 ; Themes
 projects[nthh_theme][type] = "theme"
-<<<<<<< HEAD
 projects[nthh_theme][download][type] = "git"
-projects[nthh_theme][download][url] = "git@bitbucket.org:neontabs/ntbr_theme.git"
-=======
->>>>>>> release/0_0
 projects[nthh_theme][download][tag] = "nthh_theme_0_0_2"
 
 projects[neontabs_theme][download][type] = "git"
