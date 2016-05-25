@@ -43,7 +43,7 @@ projects[neontabs][subdir] = "custom"
 projects[nt_tabs][download][type] = "git"
 projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
-projects[nt_tabs][download][tag] = "nt_tabs_4_12"
+projects[nt_tabs][download][tag] = "nt_0_1_12"
 projects[nt_tabs][subdir] = "custom"
 
 projects[nthh_modules][type] = "module"
