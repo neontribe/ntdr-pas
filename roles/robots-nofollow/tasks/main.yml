@@ -5,6 +5,5 @@
   shell: 'cp {{ target }}/robots.txt {{ target }}/robots.`date +"%Y%m%d"`.txt'
   tags: always
 
-- name: Install live robots.txt
-  shell: cp {{ target }}/{{ theme_folder }}/robots.txt {{ target }}/robots.txt
-  ignore_errors: yes
+- name: Install nofollow robots.txt
+  copy: src=robots.nofollow.txt dest={{ target }}/robots.txt
