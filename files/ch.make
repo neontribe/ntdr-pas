@@ -37,7 +37,7 @@ projects[xmlsitemap][version] = "2.1"
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = "neontabs_0_14_1"
+projects[neontabs][download][tag] = "neontabs_0_15_3"
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
@@ -56,12 +56,12 @@ projects[ntch_modules][subdir] = "custom"
 projects[ntch_theme][type] = "theme"
 projects[ntch_theme][download][type] = "git"
 projects[ntch_theme][download][url] = "git@bitbucket.org:neontabs/ntch_theme.git"
-projects[ntch_theme][download][tag] = "1.3.0"
+projects[ntch_theme][download][tag] = "ntch_0_4_0"
 
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
 projects[neontabs_theme][type] = "theme"
-projects[neontabs_theme][download][tag] = "3.3.2"
+projects[neontabs_theme][download][tag] = "neontabs_theme_0_4_2"
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
