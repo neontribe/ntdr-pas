@@ -46,7 +46,7 @@ projects[nt_tabs][subdir] = "custom"
 projects[ntfb_modules][type] = "module"
 projects[ntfb_modules][download][type] = "git"
 projects[ntfb_modules][download][url] = "git@bitbucket.org:neontabs/ntfb_modules.git"
-projects[ntfb_modules][tag] = "ntfb_modules_0_6"
+projects[ntfb_modules][tag] = "ntfb_0_2_7"
 projects[ntfb_modules][subdir] = "custom"
 
 ; Themes
