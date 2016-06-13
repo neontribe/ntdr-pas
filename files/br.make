@@ -2,10 +2,15 @@
 core = 7.x
 
 api = 2
+<<<<<<< HEAD
 
 ; Core
 projects[drupal][version] = "7.x"
 
+=======
+projects[drupal][version] = "7.x"
+
+>>>>>>> 624480459e31e60183c8e1a84f168d8480d67e6e
 projects[ctools][subdir] = "contrib"
 projects[cacheexclude][subdir] = "contrib"
 projects[entity][subdir] = "contrib"
@@ -32,24 +37,25 @@ projects[views][subdir] = "contrib"
 projects[webform][subdir] = "contrib"
 projects[wysiwyg][subdir] = "contrib"
 projects[xmlsitemap][subdir] = "contrib"
+projects[xmlsitemap][version] = "2.1"
 
 ; Modules
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = "neontabs_0_12_2"
+projects[neontabs][download][tag] = "neontabs_0_15_2"
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
 projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
-projects[nt_tabs][download][tag] = "nt_tabs_4_12"
+projects[nt_tabs][download][tag] = "nt_0_1_12"
 projects[nt_tabs][subdir] = "custom"
 
 projects[ntbr_modules][type] = "module"
 projects[ntbr_modules][download][type] = "git"
 projects[ntbr_modules][download][url] = "git@bitbucket.org:neontabs/ntbr_modules.git"
-projects[ntbr_modules][tag] = "ntbr_modules_1_5_9"
+projects[ntbr_modules][tag] = "ntbr_modules_1_5_10"
 projects[ntbr_modules][subdir] = "custom"
 
 ; Themes
@@ -79,4 +85,3 @@ projects[neontabs_profile][download][type] = "git"
 projects[neontabs_profile][download][url] = "git@bitbucket.org:neontabs/neontabs_profile.git"
 projects[neontabs_profile][download][tag] = "1.0.0"
 projects[neontabs_profile][type] = "profile"
-

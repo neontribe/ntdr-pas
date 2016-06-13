@@ -16,6 +16,28 @@ Ansible should ab at verion 1.8 or higher, 14.04 ships with 1.5.4:
 
 ### Pull functions
 
+Pull a remote site to local, including new DB
+
+    ansible-playbook pull-full-copy.yml \
+        -i inventory/cottage-servers-live \
+        --limit=ch_live \
+        --extra-vars="source=/var/www/latest local=/var/tmp/ch withdb=true mysql_root_pw=password"
+
+Pull a remote site to local, No DB
+
+    ansible-playbook pull-full-copy.yml \
+        -i inventory/cottage-servers-live \
+        --limit=ch_live \
+        --extra-vars="source=/var/www/latest target=/var/tmp/ch mysql_root_pw=password"
+
+Create a whole new site on a remote site
+
+    ansible-playbook push-local-to-remote.yml \
+        --ask-sudo-pass \
+        -i inventory/cottage-servers \
+        --limit=cottage \
+        --extra-vars="source=/var/www/html/Cottaging/sites/br target=/var/www/sites/testing/br/openmap withdb=true mysql_root_pw=password"
+
 Pull a remote site to local.
 
 #### Extra vars

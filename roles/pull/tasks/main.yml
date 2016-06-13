@@ -98,6 +98,8 @@
     - db
     - fullsync
 
+- debug: var="{{ mysql_root_pw }}"
+
 - name: Create db using existing local settings file
   mysql_db:
     name: "{{ local_db.stat.dbname }}"
