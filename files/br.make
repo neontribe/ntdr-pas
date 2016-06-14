@@ -2,15 +2,10 @@
 core = 7.x
 
 api = 2
-<<<<<<< HEAD
 
 ; Core
 projects[drupal][version] = "7.x"
 
-=======
-projects[drupal][version] = "7.x"
-
->>>>>>> 624480459e31e60183c8e1a84f168d8480d67e6e
 projects[ctools][subdir] = "contrib"
 projects[cacheexclude][subdir] = "contrib"
 projects[entity][subdir] = "contrib"
@@ -43,13 +38,13 @@ projects[xmlsitemap][version] = "2.1"
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = "neontabs_0_15_2"
+projects[neontabs][download][tag] = "v_5_2_0"
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
 projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
-projects[nt_tabs][download][tag] = "nt_0_1_12"
+projects[nt_tabs][download][tag] = "v_5_2_0"
 projects[nt_tabs][subdir] = "custom"
 
 projects[ntbr_modules][type] = "module"
@@ -67,7 +62,7 @@ projects[ntbr_theme][download][tag] = "ntbr_theme_0_7_4"
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
 projects[neontabs_theme][type] = "theme"
-projects[neontabs_theme][download][tag] = "3.3.2"
+projects[neontabs_theme][download][tag] = "v_1_2_0"
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
