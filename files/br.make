@@ -50,7 +50,7 @@ projects[nt_tabs][subdir] = "custom"
 projects[ntbr_modules][type] = "module"
 projects[ntbr_modules][download][type] = "git"
 projects[ntbr_modules][download][url] = "git@bitbucket.org:neontabs/ntbr_modules.git"
-projects[ntbr_modules][tag] = "ntbr_modules_1_5_10"
+projects[ntbr_modules][tag] = "v_1_5_9"
 projects[ntbr_modules][subdir] = "custom"
 
 ; Themes
