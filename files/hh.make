@@ -64,7 +64,7 @@ projects[neontabs_theme][download][tag] = "3.3.2"
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
-libraries[tabs-api-client][download][url] = "https://autobuild.neontribe.org/drupal/tabs-api-client-2.1.zip"
+libraries[tabs-api-client][download][url] = "https://autobuild.neontribe.org/.resources/tabs-api-client-2.1.zip"
 libraries[tabs-api-client][directory_name] = "tabs-api-client"
 libraries[tabs-api-client][type] = "library"
 
