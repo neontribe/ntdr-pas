@@ -60,7 +60,7 @@ projects[ntbr_theme][download][tag] = "ntbr_theme_0_7_4"
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
 projects[neontabs_theme][type] = "theme"
-projects[neontabs_theme][download][tag] = "3.3.2"
+; projects[neontabs_theme][download][tag] = "3.3.2"
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
