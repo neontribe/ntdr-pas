@@ -48,14 +48,14 @@ projects[nt_tabs][subdir] = "custom"
 
 projects[nthh_modules][type] = "module"
 projects[nthh_modules][download][type] = "git"
-projects[nthh_modules][download][url] = "git@bitbucket.org:neontabs/ntbr_modules.git"
+projects[nthh_modules][download][url] = "git@bitbucket.org:neontabs/nthh_modules.git"
 projects[nthh_modules][tag] = "v_0_2_0"
 projects[nthh_modules][subdir] = "custom"
 
 ; Themes
 projects[nthh_theme][type] = "theme"
 projects[nthh_theme][download][type] = "git"
-projects[nthh_modules][download][url] = "git@bitbucket.org:neontabs/nthh_theme.git"
+projects[nthh_theme][download][url] = "git@bitbucket.org:neontabs/nthh_theme.git"
 projects[nthh_theme][download][tag] = "v_0_1_1"
 
 projects[neontabs_theme][download][type] = "git"
