@@ -37,31 +37,31 @@ projects[xmlsitemap][version] = "2.1"
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = "v_5_2_1"
+projects[neontabs][download][tag] = "v_5_3_0"
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
 projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
-projects[nt_tabs][download][tag] = "v_5_2_1"
+projects[nt_tabs][download][tag] = "v_5_3_1"
 projects[nt_tabs][subdir] = "custom"
 
 projects[nthh_modules][type] = "module"
 projects[nthh_modules][download][type] = "git"
 projects[nthh_modules][download][url] = "git@bitbucket.org:neontabs/ntbr_modules.git"
-projects[nthh_modules][tag] = "v_0_2_0"
+projects[nthh_modules][tag] = "v_0_2_3"
 projects[nthh_modules][subdir] = "custom"
 
 ; Themes
 projects[nthh_theme][type] = "theme"
 projects[nthh_theme][download][type] = "git"
-projects[nthh_modules][download][url] = "git@bitbucket.org:neontabs/nthh_theme.git"
-projects[nthh_theme][download][tag] = "v_0_1_1"
+projects[nthh_theme][download][url] = "git@bitbucket.org:neontabs/nthh_theme.git"
+projects[nthh_theme][download][tag] = "v_0_2_1"
 
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
 projects[neontabs_theme][type] = "theme"
-projects[neontabs_theme][download][tag] = "v_1_2_0"
+projects[neontabs_theme][download][tag] = "v_5_3_0"
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
