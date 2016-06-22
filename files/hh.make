@@ -49,7 +49,7 @@ projects[nt_tabs][subdir] = "custom"
 projects[nthh_modules][type] = "module"
 projects[nthh_modules][download][type] = "git"
 projects[nthh_modules][download][url] = "git@bitbucket.org:neontabs/nthh_modules.git"
-projects[nthh_modules][tag] = "v_0_2_1"
+projects[nthh_modules][tag] = "v_0_2_2"
 projects[nthh_modules][subdir] = "custom"
 
 ; Themes
