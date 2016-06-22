@@ -26,7 +26,7 @@
     - { role: fixpermissions }
     - { role: set-read-only, rw: "yes" }
     - { role: updb }
-    - { role: robots, tags: [ 'nofollow' ] }
+    - { role: robots-nofollow }
     - { role: ccall }
     # Role up changelog minor
     - { role: changelog, bump: 'patch' }
