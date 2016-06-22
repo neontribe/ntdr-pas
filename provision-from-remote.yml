@@ -12,5 +12,5 @@
       - { role: fixpermissions,  target: "{{ target }}" }
       - { role: robots-nofollow, target: "{{ target }}" }
       - { role: ccall,           target: "{{ target }}" }
-      - { role: changelog,       target: "{{ target }}", bump: minor, from: "{{ source }}" }
+      - { role: changelog,       target: "{{ target }}", bump: minor }
       - { role: swaplinks }
