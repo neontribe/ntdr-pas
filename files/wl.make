@@ -48,7 +48,7 @@ projects[nt_tabs][subdir] = "custom"
 projects[ntwl_modules][type] = "module"
 projects[ntwl_modules][download][type] = "git"
 projects[ntwl_modules][download][url] = "git@bitbucket.org:neontabs/ntwl.git"
-projects[ntwl_modules][tag] = "v_1_7_0"
+projects[ntwl_modules][tag] = "v_2_0_0"
 projects[ntwl_modules][subdir] = "custom"
 
 ; Themes
