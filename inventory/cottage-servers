@@ -22,7 +22,7 @@ wl_live ansible_ssh_host=178.62.7.133 ansible_ssh_user=neonwl
 wl_test ansible_ssh_host=178.62.98.134 ansible_ssh_user=neonwl
 
 [zz]
-zz_live ansible_ssh_host=192.168.21.128  ansible_ssh_user=neonzz
+zz_live ansible_ssh_host=188.166.147.66  ansible_ssh_user=neonzz
 
 [cottage]
 neoncottage ansible_ssh_host=192.168.21.44
