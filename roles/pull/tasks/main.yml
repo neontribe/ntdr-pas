@@ -63,9 +63,9 @@
     mode: pull
     src:  "{{ source }}/sites/default/files"
     dest: "{{ local }}/sites/default"
-  rsync_opts:
-    - "--no-motd"
-    - "--size-only"
+    rsync_opts:
+      - "--no-motd"
+      - "--size-only"
   tags: filesync
 
 # Sync DB
