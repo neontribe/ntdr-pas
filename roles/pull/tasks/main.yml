@@ -66,6 +66,10 @@
     rsync_opts:
       - "--no-motd"
       - "--size-only"
+      - "--exclude=sites/default/files/tabs-imagecache"
+      - "--exclude=sites/default/files/styles"
+      - "--exclude=sites/default/files/js"
+      - "--exclude=sites/default/files/css"
   tags: filesync
 
 # Sync DB
