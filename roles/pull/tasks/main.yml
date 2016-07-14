@@ -44,7 +44,7 @@
 # File sync
 
 - name: Fetch fresh drupal
-  shell: drush dl --destination={{ local | dirname }} --drupal-project-rename={{ local | basename }}
+  shell: drush dl drupal-7.x --destination={{ local | dirname }} --drupal-project-rename={{ local | basename }}
   delegate_to: 127.0.0.1
   when: not local_site.stat.exists
   tags: fullsync
