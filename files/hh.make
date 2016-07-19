@@ -13,6 +13,7 @@ projects[neontabs][download][tag]       = "v_5_4_0"
 ; Core
 projects[drupal][version] = "7.x"
 
+projects[advagg][subdir] = "contrib"
 projects[ctools][subdir] = "contrib"
 projects[cacheexclude][subdir] = "contrib"
 projects[css_injector][subdir] = "contrib"
