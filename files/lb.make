@@ -2,6 +2,12 @@
 core = 7.x
 api = 2
 
+projects[ntlb_modules][tag]             = "v_2_4_1"
+projects[neontabs][download][tag]       = "v_5_5_0"
+projects[nt_tabs][download][tag]        = "v_5_4_2"
+projects[ntlb_theme][download][tag]     = "v_1_6_0"
+projects[neontabs_theme][download][tag] = "v_1_2_2"
+
 ; Core
 projects[drupal][version] = "7.x"
 
@@ -30,6 +36,7 @@ projects[site_map][subdir] = "contrib"
 projects[token][subdir] = "contrib"
 projects[views][subdir] = "contrib"
 projects[webform][subdir] = "contrib"
+projects[webform][version] = "3.24"
 projects[wysiwyg][subdir] = "contrib"
 projects[xmlsitemap][subdir] = "contrib"
 projects[xmlsitemap][version] = "2.1"
@@ -38,35 +45,30 @@ projects[xmlsitemap][version] = "2.1"
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = "v_5_2_0"
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
 projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
-projects[nt_tabs][download][tag] = "v_5_2_0"
 projects[nt_tabs][subdir] = "custom"
 
 projects[ntlb_modules][type] = "module"
 projects[ntlb_modules][download][type] = "git"
 projects[ntlb_modules][download][url] = "git@bitbucket.org:neontabs/ntlb_modules.git"
-projects[ntlb_modules][tag] = "v_2_3_0"
 projects[ntlb_modules][subdir] = "custom"
 
 ; Themes
 projects[ntlb_theme][type] = "theme"
 projects[ntlb_theme][download][type] = "git"
 projects[ntlb_theme][download][url] = "git@bitbucket.org:neontabs/ntlb_theme.git"
-projects[ntlb_theme][download][tag] = "v_1_5_0"
 
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
 projects[neontabs_theme][type] = "theme"
-projects[neontabs_theme][download][tag] = "v_1_2_0"
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
-libraries[tabs-api-client][download][url] = "https://autobuild.neontribe.org/.resources/tabs-api-client-2.1.zip"
+libraries[tabs-api-client][download][url] = "https://staging.neontribe.org/.resources/tabs-api-client-2.1.zip"
 libraries[tabs-api-client][directory_name] = "tabs-api-client"
 libraries[tabs-api-client][type] = "library"
 

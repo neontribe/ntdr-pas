@@ -29,9 +29,9 @@
 
 # Fix permissions
 
-- name: Fix permissions on source
-  shell: sudo ntdrchown {{ source }}
-  tags: always
+#- name: Fix permissions on source
+#  shell: sudo ntdrchown {{ source }}
+#  tags: always
 
 - name: If local exists fix permissions on local
   shell: sudo ntdrchown -a {{ local }}
@@ -44,7 +44,7 @@
 # File sync
 
 - name: Fetch fresh drupal
-  shell: drush dl --destination={{ local | dirname }} --drupal-project-rename={{ local | basename }}
+  shell: drush dl drupal-7.x --destination={{ local | dirname }} --drupal-project-rename={{ local | basename }}
   delegate_to: 127.0.0.1
   when: not local_site.stat.exists
   tags: fullsync
@@ -63,6 +63,13 @@
     mode: pull
     src:  "{{ source }}/sites/default/files"
     dest: "{{ local }}/sites/default"
+    rsync_opts:
+      - "--no-motd"
+      - "--size-only"
+      - "--exclude={{ source }}/sites/default/files/tabs-imagecache"
+      - "--exclude={{ source }}/sites/default/files/styles"
+      - "--exclude={{ source }}/sites/default/files/js"
+      - "--exclude={{ source }}/sites/default/files/css"
   tags: filesync
 
 # Sync DB

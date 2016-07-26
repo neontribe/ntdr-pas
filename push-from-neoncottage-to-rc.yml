@@ -28,5 +28,3 @@
     - { role: updb }
     - { role: robots-nofollow }
     - { role: ccall }
-    # Role up changelog minor
-    - { role: changelog, bump: 'patch' }

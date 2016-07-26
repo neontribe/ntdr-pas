@@ -26,6 +26,7 @@ projects[site_map][subdir] = "contrib"
 projects[token][subdir] = "contrib"
 projects[views][subdir] = "contrib"
 projects[webform][subdir] = "contrib"
+projects[webform][version] = "3.24"
 projects[wysiwyg][subdir] = "contrib"
 projects[xmlsitemap][subdir] = "contrib"
 projects[xmlsitemap][version] = "2.1"
@@ -62,7 +63,7 @@ projects[neontabs_theme][download][tag] = "v_1_2_0"
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
-libraries[tabs-api-client][download][url] = "https://autobuild.neontribe.org/.resources/tabs-api-client-2.1.zip"
+libraries[tabs-api-client][download][url] = "https://staging.neontribe.org/.resources/tabs-api-client-2.1.zip"
 libraries[tabs-api-client][directory_name] = "tabs-api-client"
 libraries[tabs-api-client][type] = "library"
 

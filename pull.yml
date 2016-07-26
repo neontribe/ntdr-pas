@@ -10,5 +10,6 @@
       private: true
       when: mysql_root_pw is not defined
   roles:
+    - { role: fixpermissions, target: "{{ source }}", tags: always }
     - pull
-    - { role: ccall, target: "{{ local }}", delegate_to: 127.0.0.1 }
+    - { role: ccall, target: "{{ local }}", delegate_to: 127.0.0.1, tags: always }
