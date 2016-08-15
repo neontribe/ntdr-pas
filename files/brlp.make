@@ -66,11 +66,11 @@ projects[ntbr_theme2][download][url] = "git@bitbucket.org:neontabs/ntbr_theme2.g
 
 projects[listingplus][type] = "theme"
 projects[listingplus][download][type] = "get"
-projects[listingplus][download][url] = "https://autobuild.neontribe.org/.resources/listingplus.zip"
+projects[listingplus][download][url] = "https://staging.neontribe.org/.resources/listingplus.zip"
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
-libraries[tabs-api-client][download][url] = "https://autobuild.neontribe.org/.resources/tabs-api-client-2.1.zip"
+libraries[tabs-api-client][download][url] = "https://staging.neontribe.org/.resources/tabs-api-client-2.1.zip"
 libraries[tabs-api-client][directory_name] = "tabs-api-client"
 libraries[tabs-api-client][type] = "library"
 
