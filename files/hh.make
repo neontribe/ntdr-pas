@@ -4,11 +4,11 @@ api = 2
 
 ; These are the lines that need to kept up to date with releases, they are grouped here
 
-projects[neontabs_theme][download][tag] = "v_1_2_2"
-projects[nthh_theme][download][tag]     = "v_0_3_0"
-projects[nthh_modules][tag]             = "v_0_6_0"
+projects[nthh_theme][download][tag]     = "v_0_4_0"
+projects[nthh_modules][tag]             = "v_0_7_0"
 projects[nt_tabs][download][tag]        = "v_5_4_2"
-projects[neontabs][download][tag]       = "v_5_4_0"
+projects[neontabs][download][tag]       = "v_5_5_2"
+projects[neontabs_theme][download][tag] = "v_1_2_2"
 
 ; Core
 projects[drupal][version] = "7.x"
