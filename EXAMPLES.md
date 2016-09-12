@@ -12,7 +12,7 @@
 ## Create a whole new local site
 
     drush make --working-copy /path/to/make/file /path/to/new/site
-    ansible-playbook -i inventory/cottage-servers --limit=BRANDCODE_live --extra-vars="local=/home/tobias/workspace/BRANDCODE" --tags=db,files pull.yml
+    ansible-playbook -i inventory/cottage-servers --limit=BRANDCODE_live --extra-vars="local=/home/tobias/workspace/BRANDCODE" --tags=db,filesync pull.yml
 
 ## Provision from local
 
