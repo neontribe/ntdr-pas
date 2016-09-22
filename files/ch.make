@@ -57,7 +57,7 @@ projects[ntch_modules][subdir] = "custom"
 projects[ntch_theme][type] = "theme"
 projects[ntch_theme][download][type] = "git"
 projects[ntch_theme][download][url] = "git@bitbucket.org:neontabs/ntch_theme.git"
-projects[ntch_theme][download][tag] = "ntch_0_4_0"
+projects[ntch_theme][download][tag] = "ntch_0_5_1"
 
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
