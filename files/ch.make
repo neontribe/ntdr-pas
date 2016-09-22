@@ -50,7 +50,7 @@ projects[nt_tabs][subdir] = "custom"
 projects[ntch_modules][type] = "module"
 projects[ntch_modules][download][type] = "git"
 projects[ntch_modules][download][url] = "git@bitbucket.org:neontabs/ntch_modules.git"
-projects[ntch_modules][tag] = "1.5.0"
+projects[ntch_modules][tag] = "v_1_6_1"
 projects[ntch_modules][subdir] = "custom"
 
 ; Themes
