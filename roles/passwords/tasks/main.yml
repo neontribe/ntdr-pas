@@ -1,0 +1,30 @@
+---
+- name: Set mysql root user password
+  mysql_user: name=root
+              host="localhost"
+              password="{{ mysql_root_pw_new }}"
+              check_implicit_admin=yes
+              login_user="root"
+              login_password="{{ mysql_root_pw }}"
+              state=present
+  tags: mysql
+
+- name: Set details in $HOME/.my.cnf
+  template: src=my.cnf dest={{ ansible_env.HOME}}/.my.cnf
+  tags: mysql
+
+- name: Set drupal super admin password
+  shell: "drush -r {{ item }} upwd superadmin --password={{ drupal_su_pass_new }}"
+  with_items:
+    - "{{ latest }}"
+    - "{{ testing }}"
+  tags: drupal
+
+- name: Change user password
+  become: yes
+  user: "name={{ ansible_ssh_user }} update_password=always password={{ ansible_become_pass_new_hash }}"
+  tags: user
+
+- name: Set authorised keys
+  template: src=authorized_keys dest={{ ansible_env.HOME}}/.ssh/authorized_keys
+  tags: ssh
