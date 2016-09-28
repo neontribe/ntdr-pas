@@ -2,10 +2,10 @@
 core = 7.x
 api = 2
 
-projects[ntlb_modules][tag]             = "v_2_4_4"
+projects[ntlb_modules][tag]             = "v_2_5_0"
 projects[neontabs][download][tag]       = "v_5_5_7"
 projects[nt_tabs][download][tag]        = "v_5_4_2"
-projects[ntlb_theme][download][tag]     = "v_1_6_1"
+projects[ntlb_theme][download][tag]     = "v_1_8_0"
 projects[neontabs_theme][download][tag] = "v_1_2_2"
 
 ; Core
@@ -20,6 +20,7 @@ projects[field_group][subdir] = "contrib"
 projects[globalredirect][subdir] = "contrib"
 projects[google_analytics][subdir] = "contrib"
 projects[httprl][subdir] = "contrib"
+projects[imagecache_external][subdir] = "contrib"
 projects[imageapi_optimize][subdir] = "contrib"
 projects[imagemagick][subdir] = "contrib"
 projects[jquery_update][subdir] = "contrib"
