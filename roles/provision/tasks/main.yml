@@ -38,19 +38,19 @@
   register: new_version
 
 - name: Declare new directory
-  set_fact: target={{ deploy_dir.path }}/{{ new_version.stat.short_version }}
+  set_fact: new_site={{ deploy_dir.path }}/{{ new_version.stat.short_version }}
 
 # Do the make and create db/settings
 - name: Drush make
-  shell: drush --nocolor -q make /tmp/{{ brandcode }}.make {{ target }}
-  # ntdr_drush_make: path="{{ target }}" makefile="/tmp/{{ brandcode }}.make"
+  shell: drush --nocolor -q make /tmp/{{ brandcode }}.make {{ new_site }}
+  # ntdr_drush_make: path="{{ new_site }}" makefile="/tmp/{{ brandcode }}.make"
 
 - set_fact: db_user={{ new_version.stat.short_version }}
 - set_fact: db_name={{ new_version.stat.short_version }}
 - set_fact: db_pass={{ new_version.stat.short_version }}
 
 - name: Create new settings file
-  template: src=settings.php.tpl dest={{ target }}/sites/default/settings.php
+  template: src=settings.php.tpl dest={{ new_site }}/sites/default/settings.php
 
 - name: Create db using existing local settings file
   mysql_db:
@@ -70,13 +70,13 @@
 
 # If we have a source value copy the files
 - name: Copy files folder
-  shell: rsync -a {{ source }}/sites/default/files {{ target }}/sites/default
+  shell: rsync -a {{ source }}/sites/default/files {{ new_site }}/sites/default
   become: yes
   when: source is defined
 
 - name: Upload and unpack files
-  unarchive: src="{{ files_bundle }}" dest={{ target }}/sites/default
+  unarchive: src="{{ files_bundle }}" dest={{ new_site }}/sites/default
   when: files_bundle is defined
 
 - name: Copy make file to tmp
-  copy: src={{ brandcode }}.make dest={{ target }}/{{ brandcode }}.make
+  copy: src={{ brandcode }}.make dest={{ new_site }}/{{ brandcode }}.make

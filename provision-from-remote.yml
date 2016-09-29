@@ -8,9 +8,8 @@
       - { role: dumpdb, target: "{{ source }}" }
       - provision
       # Target gets defined in the provision script
-      - { role: importdb,        target: "{{ target }}" }
-      - { role: fixpermissions,  target: "{{ target }}" }
-      - { role: robots-nofollow, target: "{{ target }}" }
-      - { role: ccall,           target: "{{ target }}" }
-      - { role: changelog,       target: "{{ target }}", bump: minor }
-      - { role: swaplinks }
+      - { role: importdb,        target: "{{ new_site }}" }
+      - { role: fixpermissions,  target: "{{ new_site }}" }
+      - { role: robots-nofollow, target: "{{ new_site }}" }
+      - { role: ccall,           target: "{{ new_site }}" }
+      - { role: swaplinks,       target: "{{ new_site }}" }

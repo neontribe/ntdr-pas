@@ -13,3 +13,4 @@
     - { role: fixpermissions, target: "{{ source }}", tags: always }
     - pull
     - { role: ccall, target: "{{ local }}", delegate_to: 127.0.0.1, tags: always }
+    - { role: fixpermissions, target: "{{ source }}" }

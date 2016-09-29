@@ -7,7 +7,7 @@
   roles:
       - provision
       # Traget gets defined in the provision script
-      - { role: importdb,        target: "{{ target }}", sql_dump_file: "{{ sql_file }}" }
-      - { role: fixpermissions,  target: "{{ target }}" }
-      - { role: robots-nofollow, target: "{{ target }}" }
-      - { role: ccall,           target: "{{ target }}" }
+      - { role: importdb,        target: "{{ new_site }}", sql_dump_file: "{{ sql_file }}" }
+      - { role: fixpermissions,  target: "{{ new_site }}" }
+      - { role: robots-nofollow, target: "{{ new_site }}" }
+      - { role: ccall,           target: "{{ new_site }}" }
