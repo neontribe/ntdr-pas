@@ -8,8 +8,8 @@ projects[drupal][version] = "7.x"
 
 projects[neontabs][download][tag] = "v_5_6_0"
 projects[nt_tabs][download][tag] = "v_5_5_0"
-projects[ntbr_modules][tag] = "v_2_2_0"
-projects[ntbr_theme2][tag] = "v_0_2_0"
+projects[ntbr_modules][tag] = "v_2_2_1"
+projects[ntbr_theme2][tag] = "v_0_3_0"
 
 
 projects[advagg][subdir] = "contrib"
