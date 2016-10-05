@@ -1,3 +1,0 @@
-[submodule "roles/drush"]
-	path = roles/drush
-	url = git@github.com:tobybatch-ansible/ansible-drush.git
