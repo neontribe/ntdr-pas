@@ -60,9 +60,9 @@ projects[ntcm_modules][download][url] = "git@bitbucket.org:neontabs/ntcm_modules
 projects[ntcm_modules][subdir] = "custom"
 
 ; Themes
-projects[ntcm_theme2][type] = "theme"
-projects[ntcm_theme2][download][type] = "git"
-projects[ntcm_theme2][download][url] = "git@bitbucket.org:neontabs/ntcm_theme2.git"
+projects[ntcm_theme][type] = "theme"
+projects[ntcm_theme][download][type] = "git"
+projects[ntcm_theme][download][url] = "git@bitbucket.org:neontabs/ntcm_theme2.git"
 
 projects[listingplus][type] = "theme"
 projects[listingplus][download][type] = "get"
