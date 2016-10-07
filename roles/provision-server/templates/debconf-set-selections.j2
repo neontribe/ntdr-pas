@@ -1,0 +1,4 @@
+mysql-server mysql-server/root_password password {{ mysql_root_pw }}
+mysql-server mysql-server/root_password_again password {{ mysql_root_pw }}
+postfix postfix/mailname string {{ domain_name }}
+postfix postfix/main_mailer_type string 'Internet Site'

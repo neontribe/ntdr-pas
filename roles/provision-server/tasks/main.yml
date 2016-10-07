@@ -1,0 +1,29 @@
+---
+- name: Update apt
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Template up the debconf data
+  template: src=debconf-set-selections.j2 dest=/tmp/debconf-set-selections
+
+- name: Set mysql-server/root_password
+  shell: "debconf-set-selections /tmp/debconf-set-selections"
+
+- name: Remove debconf file
+  file: path=/tmp/debconf-set-selections state=absent
+
+- name: Configure the timezone
+  template: src=timezone.tpl dest=/etc/timezone
+
+- name: More Configure the timezone
+  file: src=/usr/share/zoneinfo/{{server.timezone}} dest=/etc/localtime state=link force=yes backup=yes
+
+- name: Set default system language pack
+  shell: locale-gen {{server.locale}}
+
+- name: Install System Packages
+  apt: pkg={{ item }} state=latest
+  with_items: server.packages
+
+- name: Set vim as default editor
+  alternatives: name=editor path=/usr/bin/vim.basic
+

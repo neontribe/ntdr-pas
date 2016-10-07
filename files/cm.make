@@ -8,8 +8,8 @@ projects[drupal][version] = "7.x"
 
 projects[neontabs][download][tag] = "v_5_6_0"
 projects[nt_tabs][download][tag] = "v_5_5_0"
-projects[ntbr_modules][tag] = "v_2_2_2"
-projects[ntbr_theme2][tag] = "v_0_3_4"
+projects[ntcm_modules][tag] = "v_0_0_0"
+projects[ntcm_theme][tag] = "v_0_0_0"
 
 
 projects[advagg][subdir] = "contrib"
@@ -54,15 +54,15 @@ projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
 projects[nt_tabs][subdir] = "custom"
 
-projects[ntbr_modules][type] = "module"
-projects[ntbr_modules][download][type] = "git"
-projects[ntbr_modules][download][url] = "git@bitbucket.org:neontabs/ntbr_modules.git"
-projects[ntbr_modules][subdir] = "custom"
+projects[ntcm_modules][type] = "module"
+projects[ntcm_modules][download][type] = "git"
+projects[ntcm_modules][download][url] = "git@bitbucket.org:neontabs/ntcm_modules.git"
+projects[ntcm_modules][subdir] = "custom"
 
 ; Themes
-projects[ntbr_theme2][type] = "theme"
-projects[ntbr_theme2][download][type] = "git"
-projects[ntbr_theme2][download][url] = "git@bitbucket.org:neontabs/ntbr_theme2.git"
+projects[ntcm_theme][type] = "theme"
+projects[ntcm_theme][download][type] = "git"
+projects[ntcm_theme][download][url] = "git@bitbucket.org:neontabs/ntcm_theme.git"
 
 projects[listingplus][type] = "theme"
 projects[listingplus][download][type] = "get"
@@ -84,8 +84,3 @@ libraries[superfish][download][url] = "https://github.com/mehrpadin/Superfish-fo
 libraries[superfish][directory_name] = "superfish"
 libraries[superfish][type] = "library"
 
-; Profiles
-projects[neontabs_profile][download][type] = "git"
-projects[neontabs_profile][download][url] = "git@bitbucket.org:neontabs/neontabs_profile.git"
-projects[neontabs_profile][download][tag] = "1.0.0"
-projects[neontabs_profile][type] = "profile"

@@ -1,0 +1,8 @@
+# ansible-playbook -u neontribe --ask-become-pass -i "192.168.21.138," --extra-vars="mysql_root_pw=foobar domain_name=foo.bar.com" provision-server.yml
+---
+- hosts: all
+  vars_files:
+    - vars/provision-server.yml
+  become: true
+  roles:
+    - { role: provision-server }
