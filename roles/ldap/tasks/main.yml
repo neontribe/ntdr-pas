@@ -14,9 +14,18 @@
 
 - lineinfile: dest=/etc/ldap.conf             regexp="^#bind_policy hard" line="bind_policy soft"
 
-- lineinfile: dest=/etc/nsswitch.conf         regexp="^passwd:"           line="passwd:          ldap compat"
-- lineinfile: dest=/etc/nsswitch.conf         regexp="^group:"            line="group:           ldap compat"
-- lineinfile: dest=/etc/nsswitch.conf         regexp="^shadow:"           line="shadow:          ldap compat"
+- lineinfile:
+    dest:   /etc/nsswitch.conf
+    regexp: "^passwd:"
+    line:   "passwd:          ldap compat"
+- lineinfile:
+    dest:   /etc/nsswitch.conf
+    regexp: "^group:"
+    line:   "group:           ldap compat"
+- lineinfile:
+    dest:   /etc/nsswitch.conf
+    regexp: "^shadow:"
+    line:   "shadow:          ldap compat"
 
 - lineinfile: dest=/etc/pam.d/common-password regexp="^#bind_policy hard" line="bind_policy soft"
 
@@ -28,7 +37,8 @@
     line:   "password        [success=1 user_unknown=ignore default=die]     pam_ldap.so try_first_pass"
 
 - lineinfile: dest=/etc/pam.d/common-account line="account required pam_access.so"
+  notify: Restart nscd
 
-- lineinfile: dest=/etc/security/access.conf line="-:ALL EXCEPT root sysadmin (admin):ALL"
+# This should work but breaks all logins other than admins
+#- lineinfile: dest=/etc/security/access.conf line="-:ALL EXCEPT root sysadmin (admin):ALL"
 
-/etc/init.d/nscd restart

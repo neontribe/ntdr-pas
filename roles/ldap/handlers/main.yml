@@ -1,3 +1,4 @@
 ---
 - name: Restart nscd
+  become: yes
   service: name=nscd  enabled=yes state=restarted
