@@ -26,4 +26,3 @@
 
 - name: Set vim as default editor
   alternatives: name=editor path=/usr/bin/vim.basic
-

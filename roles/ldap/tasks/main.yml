@@ -1,0 +1,34 @@
+---
+- name: Template up the debconf data
+  template: src=debconf-set-selections.j2 dest=/tmp/debconf-set-selections
+
+- name: Set LDAP Settings
+  shell: "debconf-set-selections /tmp/debconf-set-selections"
+
+- name: Remove debconf file
+  file: path=/tmp/debconf-set-selections state=absent
+
+- name: Install LDAP Pam modules
+  apt: pkg={{ item }} state=latest
+  with_items: [libpam-ldap,nscd]
+
+- lineinfile: dest=/etc/ldap.conf             regexp="^#bind_policy hard" line="bind_policy soft"
+
+- lineinfile: dest=/etc/nsswitch.conf         regexp="^passwd:"           line="passwd:          ldap compat"
+- lineinfile: dest=/etc/nsswitch.conf         regexp="^group:"            line="group:           ldap compat"
+- lineinfile: dest=/etc/nsswitch.conf         regexp="^shadow:"           line="shadow:          ldap compat"
+
+- lineinfile: dest=/etc/pam.d/common-password regexp="^#bind_policy hard" line="bind_policy soft"
+
+- lineinfile: dest=/etc/pam.d/common-session line="session required    pam_mkhomedir.so skel=/etc/skel umask=0022"
+
+- lineinfile:
+    dest:   /etc/pam.d/common-password
+    regexp: "pam_ldap.so use_authtok try_first_pass"
+    line:   "password        [success=1 user_unknown=ignore default=die]     pam_ldap.so try_first_pass"
+
+- lineinfile: dest=/etc/pam.d/common-account line="account required pam_access.so"
+
+- lineinfile: dest=/etc/security/access.conf line="-:ALL EXCEPT root sysadmin (admin):ALL"
+
+/etc/init.d/nscd restart

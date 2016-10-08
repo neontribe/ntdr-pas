@@ -1,0 +1,17 @@
+---
+- name: Create Drush folder
+  file: path=/opt/drush-8.x state=directory recurse=yes
+
+- composer:
+    command: "init"
+    arguments: "--require=drush/drush:8.* -n"
+    working_dir: "/opt/drush-8.x"
+
+- composer:
+    command: "config"
+    arguments: "bin-dir /usr/local/bin"
+    working_dir: "/opt/drush-8.x"
+
+- composer:
+    command: "install"
+    working_dir: "/opt/drush-8.x"

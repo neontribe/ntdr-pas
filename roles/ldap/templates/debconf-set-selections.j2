@@ -1,0 +1,39 @@
+ldap-auth-config    ldap-auth-config/binddn              string
+ldap-auth-config    ldap-auth-config/bindpw              password
+ldap-auth-config    ldap-auth-config/dblogin             boolean   false
+ldap-auth-config    ldap-auth-config/dbrootlogin         boolean   true
+ldap-auth-config    ldap-auth-config/ldapns/base-dn      string    {{ ldap_basedn }}
+ldap-auth-config    ldap-auth-config/ldapns/ldap-server  string    {{ ldap_srv }}
+ldap-auth-config    ldap-auth-config/ldapns/ldap_version select    3
+ldap-auth-config    ldap-auth-config/move-to-debconf     boolean   true
+ldap-auth-config    ldap-auth-config/override            boolean   true
+ldap-auth-config    ldap-auth-config/pam_password        select    crypt
+ldap-auth-config    ldap-auth-config/rootbinddn          string    {{ ldap_admin }}
+ldap-auth-config    ldap-auth-config/rootbindpw          password  {{ ldap_pass }}
+
+libnss-ldap    libnss-ldap/binddn         string
+libnss-ldap    libnss-ldap/bindpw         password
+libnss-ldap    libnss-ldap/confperm       boolean   false
+libnss-ldap    libnss-ldap/dblogin        boolean   false
+libnss-ldap    libnss-ldap/dbrootlogin    boolean   true
+libnss-ldap    libnss-ldap/nsswitch       note
+libnss-ldap    libnss-ldap/override       boolean   true
+libnss-ldap    libnss-ldap/rootbinddn     string    {{ ldap_admin }}
+libnss-ldap    libnss-ldap/rootbindpw     password  {{ ldap_pass }}
+libnss-ldap    shared/ldapns/base-dn      string    {{ ldap_basedn }}
+libnss-ldap    shared/ldapns/ldap-server  string    {{ ldap_srv }}
+libnss-ldap    shared/ldapns/ldap_version select    3
+
+libpam-ldap    libpam-ldap/binddn         string
+libpam-ldap    libpam-ldap/bindpw         password
+libpam-ldap    libpam-ldap/dblogin        boolean   false
+libpam-ldap    libpam-ldap/dbrootlogin    boolean   false
+libpam-ldap    libpam-ldap/override       boolean   true
+libpam-ldap    libpam-ldap/pam_password   select    crypt
+libpam-ldap    libpam-ldap/rootbinddn     string    {{ ldap_admin }}
+libpam-ldap    libpam-ldap/rootbindpw     password  {{ ldap_pass }}
+libpam-ldap    shared/ldapns/base-dn      string    {{ ldap_basedn }}
+libpam-ldap    shared/ldapns/ldap-server  string    {{ ldap_srv }}
+libpam-ldap    shared/ldapns/ldap_version select    3
+
+libpam-runtime    libpam-runtime/profiles    multiselect    unix, ldap
