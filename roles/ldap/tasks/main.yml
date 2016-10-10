@@ -10,7 +10,7 @@
 
 - name: Install LDAP Pam modules
   apt: pkg={{ item }} state=latest
-  with_items: [libpam-ldap,nscd]
+  with_items: [libpam-ldap,nscd,autofs,nfs-common]
 
 - lineinfile: dest=/etc/ldap.conf             regexp="^#bind_policy hard" line="bind_policy soft"
 
@@ -38,6 +38,12 @@
 
 - lineinfile: dest=/etc/pam.d/common-account line="account required pam_access.so"
   notify: Restart nscd
+
+- name: Enable /net automounter
+  lineinfile: dest=/etc/auto.master regexp="^#/net" line="/net  -hosts"
+  notify: Restart autofs
+
+- file: src=/net/192.168.51.4/export/home dest=/home/users state=link
 
 # This should work but breaks all logins other than admins
 #- lineinfile: dest=/etc/security/access.conf line="-:ALL EXCEPT root sysadmin (admin):ALL"

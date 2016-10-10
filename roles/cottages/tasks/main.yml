@@ -1,0 +1,21 @@
+---
+- name: Create cottage user
+- name: Grant sudo to the cottage user
+- name: Create my.cnf for cottage user
+- name: Pull Shelltools
+- name: Symlink
+- name: Pull ntdrpas
+- name: Drush make the drupal
+# drush make files/cm.make /var/www/cm_0_0
+
+- name: Create the DB
+# cd /var/www/cm_0_0
+# drush sql-create --db-su=root --db-su-pw=cakethousandtiereligious --db-url=mysql://cm_0_0:cm_0_0@localhost/cm_0_0
+
+- name: Import SQL
+  when: sqlfile is defined
+
+- name: Run site install
+  shell: drush si --db-url=mysql://cm_0_0:cm_0_0@localhost/cm_0_0 --account-name=superadmin --account-pass=operationproudmotionmaking --site-mail=neoncm@neontribe.co.uk --site-name="The Copper Mines" --locale="<en-GB>"
+  when: sqlfile is not defined
+
