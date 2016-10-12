@@ -1,0 +1,24 @@
+---
+- name: turn on default policy
+  # Deny everything and enable UFW
+  ufw: state=enabled policy=deny
+  
+- name: allow-ssh
+  # Allow ssh
+  ufw: rule=allow port=22
+  
+- name: prevent-dos
+  # Prevent DOS through SSH
+  ufw: rule=limit port=ssh proto=tcp
+  
+- name: allow-http
+  # Allow HTTP  
+  ufw: rule=allow port=80
+  
+- name: allow-https
+  # Allow HTTPS 
+  ufw: rule=allow port=443
+
+- name: logging on
+  # allow logging
+  ufw: logging=on
