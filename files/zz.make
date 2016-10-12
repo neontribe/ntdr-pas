@@ -47,7 +47,7 @@ projects[nt_tabs][subdir] = "custom"
 projects[ntzz_modules][type] = "module"
 projects[ntzz_modules][download][type] = "git"
 projects[ntzz_modules][download][url] = "git@bitbucket.org:neontabs/ntzz_modules.git"
-projects[ntzz_modules][download][tag] = "v2_0_0"
+projects[ntzz_modules][download][tag] = v_v2_0_6
 projects[ntzz_modules][subdir] = "custom"
 
 ; Themes
