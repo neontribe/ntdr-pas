@@ -7,7 +7,7 @@ api = 2
 projects[drupal][version] = "7.x"
 
 projects[neontabs][download][tag] = v_5_12_2
-projects[nt_tabs][download][tag] = "v_5_5_0"
+projects[nt_tabs][download][tag] = "v_5_5_1"
 projects[ntbr_modules][tag] = "v_2_2_2"
 projects[ntbr_theme2][tag] = "v_0_4_2"
 

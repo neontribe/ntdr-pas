@@ -2,6 +2,11 @@
 core = 7.x
 api = 2
 
+projects[neontabs][download][tag] = v_5_12_2
+projects[nt_tabs][download][tag] = "v_5_5_1"
+projects[ntch_modules][tag] = "v_1_6_2"
+projects[ntch_theme][download][tag] = "ntch_0_5_2"
+
 ; Core
 projects[drupal][version] = "7.x"
 
@@ -38,26 +43,22 @@ projects[xmlsitemap][version] = "2.1"
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = v_5_12_2
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
 projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
-projects[nt_tabs][download][tag] = "v_5_2_0"
 projects[nt_tabs][subdir] = "custom"
 
 projects[ntch_modules][type] = "module"
 projects[ntch_modules][download][type] = "git"
 projects[ntch_modules][download][url] = "git@bitbucket.org:neontabs/ntch_modules.git"
-projects[ntch_modules][tag] = "v_1_6_2"
 projects[ntch_modules][subdir] = "custom"
 
 ; Themes
 projects[ntch_theme][type] = "theme"
 projects[ntch_theme][download][type] = "git"
 projects[ntch_theme][download][url] = "git@bitbucket.org:neontabs/ntch_theme.git"
-projects[ntch_theme][download][tag] = "ntch_0_5_2"
 
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
