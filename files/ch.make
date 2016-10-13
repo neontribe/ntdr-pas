@@ -38,7 +38,7 @@ projects[xmlsitemap][version] = "2.1"
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = v_5_12_1
+projects[neontabs][download][tag] = v_5_12_2
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
