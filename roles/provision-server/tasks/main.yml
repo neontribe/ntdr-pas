@@ -26,3 +26,10 @@
 
 - name: Set vim as default editor
   alternatives: name=editor path=/usr/bin/vim.basic
+
+- name: Enable PHP 7
+  apache2_module: name=rewrite state=present
+
+- name: Enable rewrite
+  apache2_module: name=php7.0 state=present
+  notify: restart apache2

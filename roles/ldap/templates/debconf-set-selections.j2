@@ -1,5 +1,5 @@
 ldap-auth-config    ldap-auth-config/binddn              string
-ldap-auth-config    ldap-auth-config/bindpw              password
+ldap-auth-config    ldap-auth-config/bindpw              password  {{ ldap_pass }}
 ldap-auth-config    ldap-auth-config/dblogin             boolean   false
 ldap-auth-config    ldap-auth-config/dbrootlogin         boolean   true
 ldap-auth-config    ldap-auth-config/ldapns/base-dn      string    {{ ldap_basedn }}
@@ -12,7 +12,7 @@ ldap-auth-config    ldap-auth-config/rootbinddn          string    {{ ldap_admin
 ldap-auth-config    ldap-auth-config/rootbindpw          password  {{ ldap_pass }}
 
 libnss-ldap    libnss-ldap/binddn         string
-libnss-ldap    libnss-ldap/bindpw         password
+libnss-ldap    libnss-ldap/bindpw         password  {{ ldap_pass }}
 libnss-ldap    libnss-ldap/confperm       boolean   false
 libnss-ldap    libnss-ldap/dblogin        boolean   false
 libnss-ldap    libnss-ldap/dbrootlogin    boolean   true
@@ -25,7 +25,7 @@ libnss-ldap    shared/ldapns/ldap-server  string    {{ ldap_srv }}
 libnss-ldap    shared/ldapns/ldap_version select    3
 
 libpam-ldap    libpam-ldap/binddn         string
-libpam-ldap    libpam-ldap/bindpw         password
+libpam-ldap    libpam-ldap/bindpw         password  {{ ldap_pass }}
 libpam-ldap    libpam-ldap/dblogin        boolean   false
 libpam-ldap    libpam-ldap/dbrootlogin    boolean   false
 libpam-ldap    libpam-ldap/override       boolean   true

@@ -1,8 +1,8 @@
 ---
-- name: Restart nscd
+- name: restart nscd
   become: yes
   service: name=nscd  enabled=yes state=restarted
 
-- name: Restart autofs
+- name: restart autofs
   become: yes
   service: name=autofs  enabled=yes state=restarted

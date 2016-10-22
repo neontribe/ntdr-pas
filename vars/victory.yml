@@ -1,0 +1,34 @@
+---
+- victory:
+    packages:
+      - dnsmasq
+      - ffmpeg
+      # - motion
+      # - openvpn
+      - rtkit
+      - tidy
+      - tree
+      - ldap-utils
+      - slapd
+      # - phpmyadmin
+      - phpldapadmin
+      - phpsysinfo
+      # - transmission
+    ufw:
+      ports: [22,80,443,1194]
+
+
+# http -> 81
+# ssh +80
+# ssh hash known hosts
+# minecraft server (add ports to ufw)
+#
+# books.conf
+# camera.conf
+# cottages.conf
+# media.conf
+# phpldapadmin.conf
+# phpmyadmin.conf
+# phpsysinfo.conf
+# transmission.conf + ports
+#

@@ -1,0 +1,12 @@
+# ansible-playbook -u neontribe -i "192.168.51.47," --ask-become-pass ldap.yml --extra-vars="hostname=FOO"
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/provision-server.yml
+    - vars/victory.yml
+    - vars/victory-secure.yml
+  become: true
+  roles:
+    - provision-server
+    - victory
