@@ -2,6 +2,10 @@
 core = 7.x
 api = 2
 
+projects[nt_tabs][download][tag] = "v_5_5_5"
+projects[neontabs][download][tag] = v_5_15_2
+projects[ntzz_modules][download][tag] = v_v2_0_7
+
 ; Core
 projects[drupal][version] = "7.x"
 
@@ -35,19 +39,15 @@ projects[xmlsitemap][version] = "2.1"
 projects[neontabs][download][type] = "git"
 projects[neontabs][download][url] = "git@bitbucket.org:neontabs/neontabs.git"
 projects[neontabs][type] = "module"
-projects[neontabs][download][tag] = v_5_11_24
 projects[neontabs][subdir] = "custom"
 
 projects[nt_tabs][download][type] = "git"
-projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
-projects[nt_tabs][download][tag] = "v_5_3_1"
 projects[nt_tabs][subdir] = "custom"
 
 projects[ntzz_modules][type] = "module"
 projects[ntzz_modules][download][type] = "git"
 projects[ntzz_modules][download][url] = "git@bitbucket.org:neontabs/ntzz_modules.git"
-projects[ntzz_modules][download][tag] = v_v2_0_7
 projects[ntzz_modules][subdir] = "custom"
 
 ; Themes
