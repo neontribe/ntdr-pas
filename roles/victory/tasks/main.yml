@@ -18,18 +18,7 @@
 - template: src=hosts.j2 dest=/etc/hosts
 - template: src=hostname.j2 dest=/etc/hostname
 
-- service: name=slapd state=started
-- copy: src=directory.ldif dest=/tmp/directory.ldif
-  # The ldif for this is harvested with slapcat > /tmp/directory.ldif
-  # And the first two objects have been removed
-- shell: ldapmodify -c -x -w {{ ldap_pass }} -D "cn=admin,dc=batch,dc=org,dc=uk" -a -f /tmp/directory.ldif
-- file: path=/tmp/directory.ldif state=absent
 - service: name=slapd enabled=yes
-
-
-
-
-
-
-
-
+- service: name=slapd state=started
+- copy: content={{ ldap_users }} dest=/tmp/users.ldif
+  - shell: ldapadd -x -w {{ ldap_pass }} -H ldapi:/// -D '{{ ldap_admin }}' -f /tmp/users.ldif
