@@ -21,4 +21,4 @@
 - service: name=slapd enabled=yes
 - service: name=slapd state=started
 - copy: content={{ ldap_users }} dest=/tmp/users.ldif
-  - shell: ldapadd -x -w {{ ldap_pass }} -H ldapi:/// -D '{{ ldap_admin }}' -f /tmp/users.ldif
+- shell: ldapadd -x -w {{ ldap_pass }} -H ldapi:/// -D '{{ ldap_admin }}' -f /tmp/users.ldif
