@@ -1,3 +1,6 @@
+slapd    slapd/root_password                 password {{ ldap_pass }}
+slapd    slapd/root_password_again           password {{ ldap_pass }}
+
 slapd    slapd/internal/generated_adminpw    password {{ ldap_pass }}
 slapd    slapd/password2                     password {{ ldap_pass }}
 slapd    slapd/internal/adminpw              password {{ ldap_pass }}
