@@ -89,10 +89,18 @@
     - db
     - fullsync
 
-- name: Create settings.php
+- name: Create settings.php if local settings does not exists and db IS NOT set {{ db }}
   template: src=settings.php.tpl dest={{ local }}/sites/default/settings.php
   delegate_to: 127.0.0.1
-  when: not local_settings.stat.exists
+  when: (not local_settings.stat.exists) and db is undefined
+  tags:
+    - db
+    - fullsync
+
+- name: Create settings.php if local settings does not exists and db IS set {{ db }}
+  template: src=settings_force_db.php.tpl dest={{ local }}/sites/default/settings.php
+  delegate_to: 127.0.0.1
+  when: (not local_settings.stat.exists) and db is defined
   tags:
     - db
     - fullsync
@@ -104,8 +112,6 @@
   tags:
     - db
     - fullsync
-
-- debug: var="{{ mysql_root_pw }}"
 
 - name: Create db using existing local settings file
   mysql_db:
