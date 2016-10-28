@@ -8,17 +8,30 @@
 - name: Set mysql-server/root_password
   shell: "debconf-set-selections /tmp/debconf-set-selections"
 
+- name: Create users ldiff file
+  copy: content={{ ldap_users }} dest=/tmp/users.ldif
+
 - name: Install System Packages
   apt: pkg={{ item }} state=latest
   with_items: victory.packages
 
-- file: src=dnsmasq.conf dest=/etc/dnsmasq.conf
-- service: name=dnsmasq enabled=yes
+- name: Set /etc/dnsmasq.conf
+  file: src=dnsmasq.conf dest=/etc/dnsmasq.conf
 
-- template: src=hosts.j2 dest=/etc/hosts
-- template: src=hostname.j2 dest=/etc/hostname
+- name: Ensure dnsmasq is enabled
+  service: name=dnsmasq enabled=yes
 
-- service: name=slapd enabled=yes
-- service: name=slapd state=started
-- copy: content={{ ldap_users }} dest=/tmp/users.ldif
-- shell: ldapadd -x -w {{ ldap_pass }} -H ldapi:/// -D '{{ ldap_admin }}' -f /tmp/users.ldif
+- name: Set hosts file
+  template: src=hosts.j2 dest=/etc/hosts
+
+- name: Set hostname
+  template: src=hostname.j2 dest=/etc/hostname
+
+- name: Ensure slapd is enabled
+  service: name=slapd enabled=yes
+
+- name: Ensure slapd is started
+  service: name=slapd state=started
+
+- name: Insert users into LDAP
+  shell: ldapadd -x -w {{ ldap_pass }} -H ldapi:/// -D '{{ ldap_admin }}' -f /tmp/users.ldif
