@@ -1,6 +1,7 @@
 ---
 - victory:
     packages:
+      - apache2
       - dnsmasq
       - ffmpeg
       # - motion
@@ -14,6 +15,8 @@
       - phpldapadmin
       - phpsysinfo
       # - transmission
+      - xvfb
+      - imagemagick
     ufw:
       ports: [22,80,443,1194]
 
