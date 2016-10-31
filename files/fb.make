@@ -3,13 +3,8 @@ core = 7.x
 api = 2
 
 projects[neontabs][download][tag] = "v_5_15_2"
-<<<<<<< HEAD
 projects[nt_tabs][download][tag] = "v_5_5_6"
-projects[ntfb_theme][download][tag] = "ntfb_0_3_1"
-=======
-projects[nt_tabs][download][tag] = "v_5_5_5"
 projects[ntfb_theme][download][tag] = "ntfb_0_3_2"
->>>>>>> 54cfc81ea698ca14d16b9fa56a7a71de9d84aa7a
 projects[neontabs_theme][download][tag] = "v_1_2_0"
 projects[ntfb_modules][tag] = "ntfb_0_5_1"
 
