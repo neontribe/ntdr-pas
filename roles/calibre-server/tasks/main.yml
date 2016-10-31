@@ -1,0 +1,15 @@
+---
+- name: Update apt
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install System Packages
+  apt: pkg={{ item }} state=latest
+  with_items: calibre-server.packages
+
+- name: Get bleeding edge package
+  get_url: 'https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py'
+  dest: /tmp/linux-installer.py
+  mode: 0644
+
+- name: Install calibre server
+  shell: python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"

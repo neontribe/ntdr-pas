@@ -1,0 +1,7 @@
+---
+- calibre-server:
+    packages:
+      - apache2
+      - xvfb
+      - imagemagick
+
