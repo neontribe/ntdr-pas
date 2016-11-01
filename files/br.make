@@ -14,7 +14,7 @@ projects[ntzz_modules][download][url] = "git@bitbucket.org:neontabs/ntzz_modules
 projects[ntzz_modules][subdir] = "custom"
 
 
-projects[neontabs][download][tag] = v_5_12_2
+projects[neontabs][download][tag] = v_5_15_6
 projects[nt_tabs][download][tag] = "v_5_5_1"
 projects[ntbr_modules][tag] = "v_2_2_5"
 projects[ntbr_theme2][tag] = "v_0_4_7"
