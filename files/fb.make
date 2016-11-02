@@ -2,11 +2,11 @@
 core = 7.x
 api = 2
 
-projects[neontabs][download][tag] = "v_5_15_2"
+projects[neontabs][download][tag] = "v_5_16_0"
 projects[nt_tabs][download][tag] = "v_5_5_6"
 projects[ntfb_theme][download][tag] = "ntfb_0_3_2"
 projects[neontabs_theme][download][tag] = "v_1_2_0"
-projects[ntfb_modules][tag] = "ntfb_0_5_1"
+projects[ntfb_modules][tag] = "ntfb_0_6_0"
 
 ; Core
 projects[drupal][version] = "7.x"
