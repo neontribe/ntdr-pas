@@ -15,9 +15,9 @@ projects[ntzz_modules][subdir] = "custom"
 
 
 projects[neontabs][download][tag] = v_5_15_6
-projects[nt_tabs][download][tag] = "v_5_5_1"
+projects[nt_tabs][download][tag] = v_5_7_0
 projects[ntbr_modules][tag] = "v_2_2_5"
-projects[ntbr_theme2][tag] = "v_0_4_8"
+projects[ntbr_theme2][tag] = "v_0_5_1"
 
 
 projects[advagg][subdir] = "contrib"
