@@ -6,15 +6,7 @@ api = 2
 ; Core
 projects[drupal][version] = "7.x"
 
-; DUMMY PROJECT TO ALLOW BUILD 
-projects[ntzz_modules][download][tag] = v_v2_0_7
-projects[ntzz_modules][type] = "module"
-projects[ntzz_modules][download][type] = "git"
-projects[ntzz_modules][download][url] = "git@bitbucket.org:neontabs/ntzz_modules.git"
-projects[ntzz_modules][subdir] = "custom"
-
-
-projects[neontabs][download][tag] = v_5_15_6
+projects[neontabs][download][tag] = v_5_16_0
 projects[nt_tabs][download][tag] = v_5_7_0
 projects[ntbr_modules][tag] = "v_2_2_5"
 projects[ntbr_theme2][tag] = "v_0_5_1"
