@@ -4,7 +4,7 @@ api = 2
 
 projects[neontabs][download][tag] = "v_5_16_0"
 projects[nt_tabs][download][tag] = v_5_7_0
-projects[ntwl_modules][download][tag] = "v_2_2_5"
+projects[ntwl_modules][download][tag] = "v_2_2_6"
 projects[ntwl_theme][download][tag] = "v_2_7_1"
 projects[neontabs_theme][download][tag] = "v_1_2_2"
 
