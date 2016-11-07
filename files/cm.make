@@ -7,9 +7,9 @@ api = 2
 projects[drupal][version] = "7.x"
 
 projects[neontabs][download][tag] = "v_5_16_0"
-projects[nt_tabs][download][tag] = "v_5_7_0"
-projects[ntcm_modules][download][tag] = "v_0_2_0"
-projects[ntcm_theme][download][tag] = "v_0_1_0"
+projects[nt_tabs][download][tag] = "v_5_7_1"
+projects[ntcm_modules][download][tag] = "v_0_3_0"
+projects[ntcm_theme][download][tag] = "v_0_1_1"
 
 projects[advagg][subdir] = "contrib"
 projects[ctools][subdir] = "contrib"
