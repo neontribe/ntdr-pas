@@ -5,6 +5,7 @@ api = 2
 projects[nt_tabs][download][tag] = "v_5_5_5"
 projects[neontabs][download][tag] = v_5_15_2
 projects[ntzz_modules][download][tag] = v_v2_0_10
+projects[zzdepricated][download][tag] = v_0_0_1
 
 ; Core
 projects[drupal][version] = "7.x"
