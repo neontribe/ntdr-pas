@@ -6,10 +6,10 @@ api = 2
 ; Core
 projects[drupal][version] = "7.x"
 
-projects[neontabs][download][tag] = "v_5_16_0"
-projects[nt_tabs][download][tag] = "v_5_7_0"
-projects[ntcm_modules][download][tag] = "v_0_2_0"
-projects[ntcm_theme][download][tag] = "v_0_1_0"
+projects[neontabs][download][tag] = "v_5_16_1"
+projects[nt_tabs][download][tag] = "v_5_7_1"
+projects[ntcm_modules][download][tag] = "v_0_3_0"
+projects[ntcm_theme][download][tag] = "v_0_1_4"
 
 projects[advagg][subdir] = "contrib"
 projects[ctools][subdir] = "contrib"
