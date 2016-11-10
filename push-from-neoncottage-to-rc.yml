@@ -19,7 +19,7 @@
     - { role: dumpdb,    target: "{{ source }}" }
     - { role: importdb }
 
-    - { role: pushfiles, source: "{{ local }}/sites/all", destination: "{{ target }}/sites", deletemissin: yes }
+    - { role: pushfiles, source: "{{ local }}/sites/all", destination: "{{ target }}/sites", deletemissing: yes }
 
     # Always
     # Fix permissions
