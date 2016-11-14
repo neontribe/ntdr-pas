@@ -177,4 +177,8 @@
   checkout_branches: path={{ local }} tag={{ branch }}
   delegate_to: 127.0.0.1
   when: branch is defined
+  register: branches
+  tags: always
+
+- debug: var=branches
   tags: always
