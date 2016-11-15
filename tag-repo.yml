@@ -1,0 +1,6 @@
+---
+- hosts: all
+  vars:
+    tmp: /var/tmp/autotag
+  roles:
+    - tag

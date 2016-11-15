@@ -1,0 +1,16 @@
+---
+- hosts: all
+  vars:
+    source: /var/www/latest
+    local: /var/tmp/cottage_{{ ansible_hostname }}
+    devsite: true
+  vars_prompt:
+    - name: mysql_root_pw
+      prompt: "Enter mysql root password for the local mysql server"
+      private: true
+      when: mysql_root_pw is not defined
+  roles:
+    - { role: fixpermissions, target: "{{ source }}", tags: always }
+    - pull
+    - { role: ccall, target: "{{ local }}", delegate_to: 127.0.0.1, tags: always }
+    - { role: fixpermissions, target: "{{ source }}" }
