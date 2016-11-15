@@ -19,23 +19,31 @@ def main():
     tag = module.params.get('tag')
 
     data = {}
-    data['repos'] = []
+    data['repos'] = {}
     data['path'] = path
     data['tag'] = tag
     repos = []
-    data['_repos'] = []
     for dirpath, dirnames, filenames in os.walk(path):
         for dirname in [d for d in dirnames if d == '.git']:
             repos.append(dirpath)
     for repopath in repos:
+        data['repos'][repopath] = []
         repo = Repo(repopath)
         repo.git.fetch()
 
-        raw_branches = repo.heads
-        for branch in raw_branches:
+        raw_branches = repo.git.branch('-a')
+        branches = raw_branches.split("\n")
+        for branch in branches:
+            if branch.startswith('*'):
+                branch = branch[1:]
+            branch = branch.strip()
+            if branch.startswith('remotes/origin/'):
+                branch = branch[15:]
+            # data['repos'][repopath].append(str(branch))
             if str(branch).startswith(tag):
                 repo.git.checkout(branch)
-                data['repos'].append(repopath)
+                data['repos'][repopath].append(str(branch))
+
     module.exit_json(changed=True, stat=data)
 
 # import module snippets
