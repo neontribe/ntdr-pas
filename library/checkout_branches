@@ -3,7 +3,7 @@
 # Checkout any branch found matching the supplied tag
 
 import sys, os, json, shlex
-from git import Git
+from git import Git, Repo
 
 def main():
     module = AnsibleModule(
@@ -23,20 +23,18 @@ def main():
     data['path'] = path
     data['tag'] = tag
     repos = []
+    data['_repos'] = []
     for dirpath, dirnames, filenames in os.walk(path):
         for dirname in [d for d in dirnames if d == '.git']:
             repos.append(dirpath)
     for repopath in repos:
-        repo = Git(repopath)
-        repo.fetch()
-        raw_branches = repo.branch()
-        branches = raw_branches.split("\n")
-        for branch in branches:
-            if branch.startswith('*'):
-                branch = branch[1:]
-            branch = branch.strip()
-            if branch.startswith(tag):
-                repo.checkout(branch)
+        repo = Repo(repopath)
+        repo.git.fetch()
+
+        raw_branches = repo.heads
+        for branch in raw_branches:
+            if str(branch).startswith(tag):
+                repo.git.checkout(branch)
                 data['repos'].append(repopath)
     module.exit_json(changed=True, stat=data)
 
