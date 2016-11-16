@@ -163,7 +163,11 @@
   delegate_to: 127.0.0.1
   tags: always
 
-#here
+- name: Run drush updb
+  shell: drush -r {{ local }} updb -y
+  delegate_to: 127.0.0.1
+  tags: always
+
 - name: Re-fix permissions on local
   shell: sudo ntdrchown {{ local }}
   delegate_to: 127.0.0.1
