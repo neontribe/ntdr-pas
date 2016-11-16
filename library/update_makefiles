@@ -1,0 +1,62 @@
+#! /usr/bin/env python
+
+# update_makefiles: brandcodes={{ brandcodes }} repo={{ repo }} tag={{ bump.stat.tag }}
+import sys, os, json, shlex, re, json
+from git import Git, Repo
+
+def main():
+    module = AnsibleModule(
+        argument_spec = dict(
+            brandcodes = dict(required=True),
+            repo = dict(required=True),
+            tag = dict(required=True),
+            ntdrpas = dict(required=True),
+        ),
+    )
+
+    brandcodes = module.params.get('brandcodes')
+    repo_name = module.params.get('repo')
+    tag = module.params.get('tag')
+    ntdrpas_path = module.params.get('ntdrpas')
+
+    data = {}
+    data['repo_name'] = repo_name
+
+    brands = brandcodes.split(',')
+
+    repo = Repo(ntdrpas_path)
+    repo.git.fetch()
+
+    for brand in brands:
+        # Make file for this brand
+        makefile_path = os.path.join(ntdrpas_path, 'files', brand + '.make')
+        # make new repo line for the make file projects[neontabs][download][tag] = v_5_16_0
+        search_stub = "projects[%s][download][tag]" % repo_name
+        newline = search_stub + " = " + tag + "\n"
+
+        data['makefile_path'] = makefile_path
+        data['newline'] = newline
+
+        # Search the make file for line with the repo in and replace it
+        with open(makefile_path) as f:
+            content = f.readlines()
+        newlines = []
+        for line in content:
+            if search_stub in line:
+                newlines.append(newline)
+            else:
+                newlines.append(line)
+        # Save file
+        new_make_file = open(makefile_path, 'w')
+        for item in newlines:
+            new_make_file.write(item)
+        # Commit cachnage
+        repo.git.commit(makefile_path, m = " 'Updated makefile for " + brand + "'")
+    # Push changes
+    repo.git.push()
+
+    module.exit_json(changed=True, stat=data)
+
+from ansible.module_utils.basic import *
+
+main()
