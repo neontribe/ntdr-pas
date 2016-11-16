@@ -45,7 +45,7 @@ def main():
     data = {}
 
     # Create the pyhton repo
-    repo = Repo(repopath)
+    repo = Repo('git@bitbucket.org:neontabs/' + repopath)
     repo.git.fetch()
     # Fetch latest tag
     all_tags = repo.git.tag("--sort=committerdate").split("\n")
