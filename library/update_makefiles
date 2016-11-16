@@ -53,7 +53,7 @@ def main():
         # Commit cachnage
         repo.git.commit(makefile_path, m = " 'Updated makefile for " + brand + "'")
     # Push changes
-    repo.git.push()
+    repo.git.push("origin", "master")
 
     module.exit_json(changed=True, stat=data)
 
