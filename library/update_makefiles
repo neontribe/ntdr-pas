@@ -51,7 +51,7 @@ def main():
         for item in newlines:
             new_make_file.write(item)
         # Commit cachnage
-        repo.git.commit(makefile_path, m = " 'Updated makefile for " + brand + "'")
+        repo.git.commit("files/" + brand + ".make", m = " 'Updated makefile for " + brand + "'")
     # Push changes
     repo.git.push("origin", "master")
 
