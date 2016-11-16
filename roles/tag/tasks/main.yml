@@ -3,8 +3,8 @@
 - name: Checkout the target repo
   git: repo=ssh://git@bitbucket.org/neontabs/{{ repo }}.git dest={{ tmp }}/{{ repo }} update=yes version=master
 
-- name: Checkout the target repo
-  git: repo=ssh://git@github.com:neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master
+- name: Checkout ntdr-pas repo
+  git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master
 
 - name: Bump version, update change log and push changelog
   bumpup: repo={{ tmp }}/{{ repo }} bump={{ bump }}
