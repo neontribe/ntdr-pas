@@ -154,6 +154,7 @@
   tags:
     - db
     - fullsync
+  ignore_errors: yes
 
 - name: Clean up local SQL
   delegate_to: 127.0.0.1
