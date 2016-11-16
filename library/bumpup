@@ -16,8 +16,6 @@ def createLine(date, commit, log, tag):
     return data
 
 def splitline(line):
-    # 2014-10-08T14:34:08+01:00   115fc50     Merge branch 'master' of bitbucket.org:neontabs/neontabs                                                                   (tag: 3.0.1)
-    # %<(26) %cI %<(10) %h %<(120,trunc) %s %<(80,trunc) %d
     data ={}
     data['datetime'] = line[0:26].strip()
     data['hash'] = line[27:37].strip()
@@ -45,7 +43,8 @@ def main():
     data = {}
 
     # Create the pyhton repo
-    repo = Repo('git@bitbucket.org:neontabs/' + repopath)
+    repo = Repo(repopath)
+    # repo = Repo('ssh://git@bitbucket.org/neontabs/' + repopath)
     repo.git.fetch()
     # Fetch latest tag
     all_tags = repo.git.tag("--sort=committerdate").split("\n")
