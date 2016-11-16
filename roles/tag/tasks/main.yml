@@ -10,4 +10,4 @@
   git: repo=git@github.com:neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master
 
 - name: Update makefile and push makefile
-  update_makefiles: brandcodes={{ brandcodes }} repo={{ repo }} tag={{ bump.stat.new_tag }} ntdrpas={{ tmp }}/ntdr-pas
+  update_makefiles: brandcodes={{ brandcodes }} repo={{ repo }} tag={{ bump.stat.new_tag }} ntdrpas={{ ntdrpas }}
