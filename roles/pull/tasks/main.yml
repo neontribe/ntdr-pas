@@ -3,6 +3,11 @@
 # source = the remote drupal root
 
 # Gather details
+- name: Install required packages
+  apt: pkg={{ item }} state=latest
+  become: yes
+  with_items: [python-git]
+  tags: always
 
 - stat: path={{ local }}/sites/default/settings.php
   delegate_to: 127.0.0.1
@@ -171,4 +176,14 @@
 - name: Re-fix permissions on local
   shell: sudo ntdrchown {{ local }}
   delegate_to: 127.0.0.1
+  tags: always
+
+- name: Checkout branches
+  checkout_branches: path={{ local }} tag={{ branch }}
+  delegate_to: 127.0.0.1
+  when: branch is defined
+  register: branches
+  tags: always
+
+- debug: var=branches
   tags: always

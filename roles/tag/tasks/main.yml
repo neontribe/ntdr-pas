@@ -1,0 +1,13 @@
+---
+- name: Checkout the repo
+  git: repo=git://git@bitbucket.org:neontabs/${repo}.git dest={{ tmp }}/{{ repo }} update=yes version=master
+
+- name: Bump version, update change log and push changelog
+  bumpup: repo={{ tmp }}/{{ repo }} bump={{ bump }}
+  register: bump
+
+- name: Fetch, checkout master and pull ntdr-pas
+  git: repo=git@github.com:neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master
+
+- name: Update makefile and push makefile
+  update_makefiles: brandcodes={{ brandcodes }} repo={{ repo }} tag={{ bump.stat.tag }}

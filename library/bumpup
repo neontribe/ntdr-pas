@@ -1,0 +1,117 @@
+#! /usr/bin/env python
+
+import sys, os, json, shlex, re, json
+from git import Git, Repo
+from datetime import datetime
+
+def clearNonNumeric(ele):
+    return re.sub("[^0-9]", "", ele)
+
+def createLine(date, commit, log, tag):
+    data = {}
+    data['datetime'] = date
+    data['hash'] = commit
+    data['log'] = log
+    data['tag'] = tag
+    return data
+
+def splitline(line):
+    # 2014-10-08T14:34:08+01:00   115fc50     Merge branch 'master' of bitbucket.org:neontabs/neontabs                                                                   (tag: 3.0.1)
+    # %<(26) %cI %<(10) %h %<(120,trunc) %s %<(80,trunc) %d
+    data ={}
+    data['datetime'] = line[0:26].strip()
+    data['hash'] = line[27:37].strip()
+    data['log'] = line[38:157].strip()
+    data['tag'] = line[157:].strip()
+    return data
+
+def extractHash(lastlog):
+    lines = lastlog.split("\n")
+    words = lines[0].split(" ")
+    word = words[-1:]
+    return word[0]
+
+def main():
+    module = AnsibleModule(
+        argument_spec = dict(
+            repo = dict(required=True),
+            bump = dict(required=True),
+        ),
+    )
+
+    repopath = module.params.get('repo')
+    bump = module.params.get('bump')
+
+    data = {}
+
+    # Create the pyhton repo
+    repo = Repo(repopath)
+    repo.git.fetch()
+    # Fetch latest tag
+    all_tags = repo.git.tag("--sort=committerdate").split("\n")
+    # data['tags'] = all_tags
+    latest_tag = all_tags[-1:]
+    data['latest_tag'] = latest_tag
+
+    # Roll up the tag
+    tags = str(latest_tag).split('_')
+    if len(tags) >= 3:
+        tags = [clearNonNumeric(tags[0]), clearNonNumeric(tags[1]), clearNonNumeric(tags[2])]
+    elif len(tags) == 2:
+        tags = [0, clearNonNumeric(tags[0]), clearNonNumeric(tags[1])]
+    elif len(tags) == 1:
+        tags = [0, 0, clearNonNumeric(tags[0])]
+    elif len(tags) == 0:
+        tags = [0, 0, 0]
+
+    if bump == 'major':
+        tags[0] = int(tags[0]) + 1
+        tags[1] = 0
+        tags[2] = 0
+    elif bump == 'minor':
+        tags[0] = int(tags[0])
+        tags[1] = int(tags[1]) + 1
+        tags[2] = 0
+    else:
+        tags[2] = int(tags[2]) + 1
+
+    new_tag = 'v' + str(tags[0]) + '_' + str(tags[1]) + '_' + str(tags[2])
+    data['new_tag'] = new_tag
+
+    # Construct the new frst line of the change log
+    lastlog = repo.git.log("-1",  "--pretty=%B")
+    log = []
+    now = datetime.datetime.now().time()
+    log.append(createLine(now.isoformat(), extractHash(lastlog), lastlog, new_tag))
+
+    # Read all the merge requests
+    raw_existing_tags = repo.git.log("--tags", "--simplify-by-decoration", "--pretty=%<(26) %cI %<(10) %h %<(120,trunc) %s %<(80,trunc) %d")
+    existing_tags = raw_existing_tags.split("\n")
+
+    # Turn each line into an associative array
+    for line in existing_tags:
+        log.append(splitline(line))
+
+    data['logline'] = log[0]
+
+    # Update the change log
+    changelog_fname = os.path.join(repopath, 'changelog.json')
+    data['changelog'] = changelog_fname
+    changelog = open(changelog_fname, 'w')
+    changelog.write(json.dumps(log, indent=4, separators=(',', ': ')))
+    changelog.close()
+
+    # Commit the change log
+    repo.git.add(changelog_fname)
+    repo.git.commit(m='Updated changelog')
+
+    # Tag and push with tags
+    tagmsg = "-m \"%s\"" % lastlog.replace("\n", ",")
+    repo.git.tag(new_tag, tagmsg)
+    repo.git.push("--tags")
+
+    module.exit_json(changed=True, stat=data)
+
+from ansible.module_utils.basic import *
+
+main()

@@ -3,7 +3,7 @@ core = 7.x
 api = 2
 
 projects[neontabs][download][tag] = "v_5_16_1"
-projects[nt_tabs][download][tag] = "v_5_7_0"
+projects[nt_tabs][download][tag] = "v_5_7_2"
 projects[ntfb_theme][download][tag] = "ntfb_0_4_2"
 projects[neontabs_theme][download][tag] = "v_1_2_2"
 projects[ntfb_modules][download][tag] = "ntfb_0_7_3"
@@ -18,6 +18,7 @@ projects[entity][subdir] = "contrib"
 projects[field_group][subdir] = "contrib"
 projects[globalredirect][subdir] = "contrib"
 projects[google_analytics][subdir] = "contrib"
+projects[imagecache_external][subdir] = "contrib"
 projects[jquery_update][subdir] = "contrib"
 projects[libraries][subdir] = "contrib"
 projects[link][subdir] = "contrib"
