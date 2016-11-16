@@ -25,6 +25,12 @@ def splitline(line):
     data['tag'] = line[157:].strip()
     return data
 
+def extractHash(lastlog):
+    lines = lastlog.split("\n")
+    words = lines[0].split(" ")
+    word = words[-1:]
+    return word[0]
+
 def main():
     module = AnsibleModule(
         argument_spec = dict(
@@ -40,6 +46,7 @@ def main():
 
     # Create the pyhton repo
     repo = Repo(repopath)
+    repo.git.fetch()
     # Fetch latest tag
     all_tags = repo.git.tag("--sort=committerdate").split("\n")
     # data['tags'] = all_tags
@@ -49,21 +56,13 @@ def main():
     # Roll up the tag
     tags = str(latest_tag).split('_')
     if len(tags) >= 3:
-        tags[0] = clearNonNumeric(tags[0])
-        tags[1] = clearNonNumeric(tags[1])
-        tags[2] = clearNonNumeric(tags[2])
+        tags = [clearNonNumeric(tags[0]), clearNonNumeric(tags[1]), clearNonNumeric(tags[2])]
     elif len(tags) == 2:
-        tags[0] = 0
-        tags[1] = clearNonNumeric(tags[0])
-        tags[2] = clearNonNumeric(tags[1])
+        tags = [0, clearNonNumeric(tags[0]), clearNonNumeric(tags[1])]
     elif len(tags) == 1:
-        tags[0] = 0
-        tags[1] = 0
-        tags[2] = clearNonNumeric(tags[0])
+        tags = [0, 0, clearNonNumeric(tags[0])]
     elif len(tags) == 0:
-        tags[0] = 0
-        tags[1] = 0
-        tags[2] = 0
+        tags = [0, 0, 0]
 
     if bump == 'major':
         tags[0] = int(tags[0]) + 1
@@ -80,10 +79,10 @@ def main():
     data['new_tag'] = new_tag
 
     # Construct the new frst line of the change log
-    lastlog = repo.git.show()
+    lastlog = repo.git.log("-1",  "--pretty=%B")
     log = []
     now = datetime.datetime.now().time()
-    log.append(createLine(now.isoformat(), '', lastlog, new_tag))
+    log.append(createLine(now.isoformat(), extractHash(lastlog), lastlog, new_tag))
 
     # Read all the merge requests
     raw_existing_tags = repo.git.log("--tags", "--simplify-by-decoration", "--pretty=%<(26) %cI %<(10) %h %<(120,trunc) %s %<(80,trunc) %d")
@@ -93,11 +92,23 @@ def main():
     for line in existing_tags:
         log.append(splitline(line))
 
-    data['log'] = log
+    data['logline'] = log[0]
 
     # Update the change log
+    changelog_fname = os.path.join(repopath, 'changelog.json')
+    data['changelog'] = changelog_fname
+    changelog = open(changelog_fname, 'w')
+    changelog.write(json.dumps(log, indent=4, separators=(',', ': ')))
+    changelog.close()
+
     # Commit the change log
+    repo.git.add(changelog_fname)
+    repo.git.commit(m='Updated changelog')
+
     # Tag and push with tags
+    tagmsg = "-m \"%s\"" % lastlog.replace("\n", ",")
+    repo.git.tag(new_tag, tagmsg)
+    repo.git.push("--tags")
 
     module.exit_json(changed=True, stat=data)
 
