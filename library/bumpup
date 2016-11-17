@@ -44,22 +44,19 @@ def main():
 
     # Create the pyhton repo
     repo = Repo(repopath)
-    # repo = Repo('ssh://git@bitbucket.org/neontabs/' + repopath)
-    repo.git.fetch()
     # Fetch latest tag
     all_tags = repo.git.tag("--sort=committerdate").split("\n")
-    # data['tags'] = all_tags
     latest_tag = all_tags[-1:]
     data['latest_tag'] = latest_tag
 
     # Roll up the tag
-    tags = str(latest_tag).split('_')
+    tags = re.findall(r"\d+", str(latest_tag))
     if len(tags) >= 3:
         tags = [clearNonNumeric(tags[0]), clearNonNumeric(tags[1]), clearNonNumeric(tags[2])]
     elif len(tags) == 2:
         tags = [0, clearNonNumeric(tags[0]), clearNonNumeric(tags[1])]
     elif len(tags) == 1:
-        tags = [0, 0, clearNonNumeric(tags[0])]
+        tags = [1, 0, clearNonNumeric(tags[0])]
     elif len(tags) == 0:
         tags = [0, 0, 0]
 

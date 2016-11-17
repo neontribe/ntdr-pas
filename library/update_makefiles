@@ -27,15 +27,17 @@ def main():
     repo = Repo(ntdrpas_path)
     repo.git.fetch()
 
+    data['brands'] = {}
     for brand in brands:
+        data['brands'][brand] = {}
         # Make file for this brand
         makefile_path = os.path.join(ntdrpas_path, 'files', brand + '.make')
         # make new repo line for the make file projects[neontabs][download][tag] = v_5_16_0
         search_stub = "projects[%s][download][tag]" % repo_name
         newline = search_stub + " = " + tag + "\n"
 
-        data['makefile_path'] = makefile_path
-        data['newline'] = newline
+        data['brands'][brand]['makefile_path'] = makefile_path
+        data['brands'][brand]['newline'] = newline
 
         # Search the make file for line with the repo in and replace it
         with open(makefile_path) as f:
@@ -50,10 +52,6 @@ def main():
         new_make_file = open(makefile_path, 'w')
         for item in newlines:
             new_make_file.write(item)
-        # Commit cachnage
-        repo.git.commit("files/" + brand + ".make", m = " 'Updated makefile for " + brand + "'")
-    # Push changes
-    repo.git.push("origin", "master")
 
     module.exit_json(changed=True, stat=data)
 

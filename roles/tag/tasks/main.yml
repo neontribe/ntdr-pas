@@ -17,3 +17,13 @@
   register: update
 
 - debug: var=update
+
+- name: Commit make files
+  shell: git commit -a -m "Updated make files for {{ brandcodes }}"
+  args:
+    chdir: "{{ tmp }}/ntdr-pas"
+
+- name: Push make files
+  shell: git push origin master
+  args:
+    chdir: "{{ tmp }}/ntdr-pas"
