@@ -1,0 +1,65 @@
+#! /usr/bin/env python
+
+import sys, os, json, shlex, re, json
+from git import Git, Repo
+from datetime import datetime
+
+def createLine(date, commit, log, tag):
+    data = {}
+    data['datetime'] = date
+    data['hash'] = commit
+    data['log'] = log
+    data['tag'] = tag
+    return data
+
+def splitline(line):
+    data ={}
+    data['datetime'] = line[0:26].strip()
+    data['hash'] = line[27:37].strip()
+    data['log'] = line[38:157].strip()
+    data['tag'] = line[157:].strip()
+    return data
+
+def main():
+    module = AnsibleModule(
+        argument_spec = dict(
+            lastlog = dict(required=True),
+            taglogs = dict(required=True),
+            rawlogs = dict(required=True),
+            changelog = dict(required=True),
+            newtag = dict(required=True),
+        ),
+    )
+
+    lastlog = module.params.get('lastlog')
+    taglogs = module.params.get('taglogs')
+    rawlogs = module.params.get('rawlogs')
+    changelog = module.params.get('changelog')
+    newtag = module.params.get('newtag')
+
+    data = {}
+    data['lastlog'] = lastlog
+    data['taglogs'] = "Log length = " + str(len(taglogs))
+    data['changelog'] = changelog
+
+    log = []
+    now = datetime.datetime.now().time()
+    commit, message = lastlog.split('|')
+    log.append(createLine(now.isoformat(), commit, message, '(tag: ' + newtag + ')'))
+
+    with open(rawlogs) as f:
+        lines = f.read().splitlines()
+
+    for line in lines:
+        log.append(splitline(line))
+
+    # Update the change log
+    cl_file = open(changelog, 'w')
+    cl_file.write(json.dumps(log, indent=4, separators=(',', ': ')))
+    cl_file.close()
+
+    module.exit_json(changed=True, stat=data)
+
+from ansible.module_utils.basic import *
+
+main()

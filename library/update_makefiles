@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-# update_makefiles: brandcodes={{ brandcodes }} repo={{ repo }} tag={{ bump.stat.tag }}
 import sys, os, json, shlex, re, json
 from git import Git, Repo
 
@@ -8,31 +7,27 @@ def main():
     module = AnsibleModule(
         argument_spec = dict(
             brandcodes = dict(required=True),
-            repo = dict(required=True),
             tag = dict(required=True),
             ntdrpas = dict(required=True),
+            repo= dict(required=True),
         ),
     )
 
     brandcodes = module.params.get('brandcodes')
-    repo_name = module.params.get('repo')
     tag = module.params.get('tag')
     ntdrpas_path = module.params.get('ntdrpas')
+    repo_name = module.params.get('repo')
 
     data = {}
     data['repo_name'] = repo_name
 
     brands = brandcodes.split(',')
 
-    repo = Repo(ntdrpas_path)
-    repo.git.fetch()
-
     data['brands'] = {}
     for brand in brands:
         data['brands'][brand] = {}
         # Make file for this brand
         makefile_path = os.path.join(ntdrpas_path, 'files', brand + '.make')
-        # make new repo line for the make file projects[neontabs][download][tag] = v_5_16_0
         search_stub = "projects[%s][download][tag]" % repo_name
         newline = search_stub + " = " + tag + "\n"
 

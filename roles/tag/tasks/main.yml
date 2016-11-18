@@ -1,29 +1,81 @@
+---
+#- name: Checkout the target repo
+#  git: repo=ssh://git@bitbucket.org/neontabs/{{ repo }}.git dest={{ tmp }}/{{ repo }} update=yes version=master
 
+#- name: Checkout ntdr-pas repo
+#  git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master
 
-- name: Checkout the target repo
-  git: repo=ssh://git@bitbucket.org/neontabs/{{ repo }}.git dest={{ tmp }}/{{ repo }} update=yes version=master
+- name: Get latests tag
+  shell: git log --tags --simplify-by-decoration --pretty="%d" -n 1
+  args:
+    chdir: "{{ tmp }}/{{ repo }}"
+  register: latest_tag
 
-- name: Checkout ntdr-pas repo
-  git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master
+- debug: var=latest_tag
 
 - name: Bump version, update change log and push changelog
-  bumpup: repo={{ tmp }}/{{ repo }} bump={{ bump }}
+  bumpup: repo={{ tmp }}/{{ repo }} bump={{ bump }} tag={{ latest_tag.stdout }}
   register: bumped
 
 - debug: var=bumped
 
-- name: Update makefile and push makefile
-  update_makefiles: brandcodes={{ brandcodes }} repo={{ repo }} tag={{ bumped.stat.new_tag }} ntdrpas={{ tmp }}/ntdr-pas
-  register: update
+- name: Get last log message
+  shell: git log -1 --pretty="%h|%B"
+  args:
+    chdir: "{{ tmp }}/{{ repo }}"
+  register: last_log
 
+- debug: var=last_log
+
+- name: Get git logs
+  shell: git log --tags --simplify-by-decoration --pretty="%<(26) %cI %<(10) %h %<(120,trunc) %s %<(80,trunc) %d" > {{ tmp }}/{{ repo }}.log
+  args:
+    chdir: "{{ tmp }}/{{ repo }}"
+  register: tag_log
+
+- name: Create changelog
+  create_change_log: 
+    lastlog: "{{ last_log.stdout }}"
+    taglogs: "{{ tag_log.stdout_lines }}"
+    rawlogs: "{{ tmp }}/{{ repo }}.log"
+    changelog: "{{ tmp }}/{{ repo }}/changelog.json"
+    newtag: "{{ bumped.stat.new_tag }}"
+  register: changelog
+
+- debug: var=changelog
+ 
+- name: Commit change log
+  shell: git commit -a -m "Updated changelog"
+  args:
+    chdir: "{{ tmp }}/{{ repo }}"
+  when: pretend is not defined
+
+- name: Tag repo with message
+  shell: git tag {{ bumped.stat.new_tag }} -m "Updated changelog" --allow-empty
+  args:
+    chdir: "{{ tmp }}/{{ repo }}"
+  when: pretend is not defined
+
+- name: Push changelog and tag
+  shell: git push origin master --tags
+  args:
+    chdir: "{{ tmp }}/{{ repo }}"
+  when: pretend is not defined
+
+- name: Update makefile and push makefile
+  update_makefiles: brandcodes={{ brandcodes }} tag={{ bumped.stat.new_tag }} ntdrpas={{ tmp }}/ntdr-pas repo={{ repo }}
+  register: update
+ 
 - debug: var=update
 
 - name: Commit make files
   shell: git commit -a -m "Updated make files for {{ brandcodes }}"
   args:
     chdir: "{{ tmp }}/ntdr-pas"
+  when: pretend is not defined
 
 - name: Push make files
   shell: git push origin master
   args:
     chdir: "{{ tmp }}/ntdr-pas"
+  when: pretend is not defined
