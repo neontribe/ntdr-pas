@@ -51,7 +51,7 @@
   when: pretend is not defined
 
 - name: Tag repo with message
-  shell: git tag {{ bumped.stat.new_tag }} -m "{{ tag_message }}"
+  shell: git tag {{ bumped.stat.new_tag }} -m "{{ latest_tag.stdout }}"
   args:
     chdir: "{{ tmp }}/{{ repo }}"
   when: pretend is not defined
