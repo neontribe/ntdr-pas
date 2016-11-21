@@ -1,9 +1,9 @@
 ---
-#- name: Checkout the target repo
-#  git: repo=ssh://git@bitbucket.org/neontabs/{{ repo }}.git dest={{ tmp }}/{{ repo }} update=yes version=master
+- name: Checkout the target repo
+  git: repo=ssh://git@bitbucket.org/neontabs/{{ repo }}.git dest={{ tmp }}/{{ repo }} update=yes version=master
 
-#- name: Checkout ntdr-pas repo
-#  git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master
+- name: Checkout ntdr-pas repo
+  git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master
 
 - name: Get latests tag
   shell: git log --tags --simplify-by-decoration --pretty="%d" -n 1
@@ -34,7 +34,7 @@
   register: tag_log
 
 - name: Create changelog
-  create_change_log: 
+  create_change_log:
     lastlog: "{{ last_log.stdout }}"
     taglogs: "{{ tag_log.stdout_lines }}"
     rawlogs: "{{ tmp }}/{{ repo }}.log"
@@ -43,7 +43,7 @@
   register: changelog
 
 - debug: var=changelog
- 
+
 - name: Commit change log
   shell: git commit -a -m "Updated changelog"
   args:
@@ -65,7 +65,7 @@
 - name: Update makefile and push makefile
   update_makefiles: brandcodes={{ brandcodes }} tag={{ bumped.stat.new_tag }} ntdrpas={{ tmp }}/ntdr-pas repo={{ repo }}
   register: update
- 
+
 - debug: var=update
 
 - name: Commit make files
