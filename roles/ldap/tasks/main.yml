@@ -12,6 +12,10 @@
   apt: pkg={{ item }} state=latest
   with_items: [libpam-ldap,nscd,autofs,nfs-common]
 
+- name: Enable /net automounter
+  lineinfile: dest=/etc/auto.master regexp="^#/net" line="/net  -hosts"
+  service: name=autofs state=restarted
+
 - lineinfile:
     dest:   /etc/nsswitch.conf
     regexp: "^passwd:"
@@ -38,11 +42,7 @@
 #- lineinfile: dest=/etc/security/access.conf line="-:ALL EXCEPT root sysadmin (admin):ALL"
 
 - lineinfile: dest=/etc/pam.d/common-account line="account required pam_access.so"
-  notify: restart nscd
-
-- name: Enable /net automounter
-  lineinfile: dest=/etc/auto.master regexp="^#/net" line="/net  -hosts"
-  notify: restart autofs
+  service: name=nscd state=restarted
 
 - file: src=/net/192.168.51.4/export/home dest=/home/users state=link
 
