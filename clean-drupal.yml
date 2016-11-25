@@ -1,0 +1,6 @@
+# ansible-playbook -u neontribe -i "192.168.51.47," --ask-become-pass ldap.yml --extra-vars="hostname=FOO"
+---
+- hosts: all
+  become: true
+  roles:
+    - clean-drupal
