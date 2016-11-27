@@ -1,12 +1,13 @@
 ---
 - name: Checkout the target repo
-  git: repo=ssh://git@bitbucket.org/neontabs/{{ repo }}.git dest={{ tmp }}/{{ repo }} update=yes version=master
+  git: repo=ssh://git@bitbucket.org/neontabs/{{ repo }}.git dest={{ tmp }}/{{ repo }} update=yes version=master force=yes
 
 - name: Checkout ntdr-pas repo
-  git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master
+  git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master force=yes
 
 - name: Get latests tag
-  shell: git log --tags --simplify-by-decoration --pretty="%d" -n 1
+  # shell: git log --tags --simplify-by-decoration --pretty="%d" -n 1
+  shell: 'git tag --format="%(refname:strip=2)" --sort=-committerdate |head -n1'
   args:
     chdir: "{{ tmp }}/{{ repo }}"
   register: latest_tag

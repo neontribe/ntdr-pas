@@ -3,3 +3,6 @@ tobias ansible_ssh_host=192.168.21.53 ansible_ssh_user=tobias
 
 [skunk]
 skunk01 ansible_ssh_host=192.168.21.128 ansible_ssh_user=neontribe
+
+[jenkins]
+jenkins ansible_ssh_host=192.168.21.133 ansible_ssh_user=neontribe
