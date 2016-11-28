@@ -1,4 +1,10 @@
 ---
+- name: Clean out local taget repo
+  file: path="{{ tmp }}/{{ repo }}" state=absent
+
+- name: Clean out local ntdr-pas repo
+  file: path="{{ tmp }}/ntdr-pas" state=absent
+
 - name: Checkout the target repo
   git: repo=ssh://git@bitbucket.org/neontabs/{{ repo }}.git dest={{ tmp }}/{{ repo }} update=yes version=master force=yes
 
@@ -29,21 +35,24 @@
 - debug: var=last_log
 
 - name: Get git logs
-  shell: git log --tags --simplify-by-decoration --pretty="%<(26) %cI %<(10) %h %<(120,trunc) %s %<(80,trunc) %d" > {{ tmp }}/{{ repo }}.log
+  shell: "git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit > changelog.raw"
   args:
     chdir: "{{ tmp }}/{{ repo }}"
   register: tag_log
 
 - name: Create changelog
-  create_change_log:
-    lastlog: "{{ last_log.stdout }}"
-    taglogs: "{{ tag_log.stdout_lines }}"
-    rawlogs: "{{ tmp }}/{{ repo }}.log"
-    changelog: "{{ tmp }}/{{ repo }}/changelog.json"
-    newtag: "{{ bumped.stat.new_tag }}"
+  shell: "ansi2html.sh < changelog.raw > changelog.html"
+  args:
+    chdir: "{{ tmp }}/{{ repo }}"
   register: changelog
 
 - debug: var=changelog
+
+- name: Add change log
+  shell: git add -A
+  args:
+    chdir: "{{ tmp }}/{{ repo }}"
+  when: pretend is not defined
 
 - name: Commit change log
   shell: git commit -a -m "Updated changelog"
