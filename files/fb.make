@@ -4,7 +4,7 @@ api = 2
 
 projects[neontabs][download][tag] = v_v6_1_1
 projects[nt_tabs][download][tag] = v5_8_0
-projects[ntfb_theme][download][tag] = ntfb_0_5_0
+projects[ntfb_theme][download][tag] = v0_6_0
 projects[neontabs_theme][download][tag] = "v_1_2_2"
 projects[ntfb_modules][download][tag] = v0_10_0
 
