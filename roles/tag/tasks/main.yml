@@ -11,21 +11,6 @@
 - name: Checkout ntdr-pas repo
   git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master force=yes
 
-- name: Get latests tag
-  # shell: git log --tags --simplify-by-decoration --pretty="%d" -n 1
-  shell: 'git tag --format="%(refname:strip=2)" --sort=-committerdate |head -n1'
-  args:
-    chdir: "{{ tmp }}/{{ repo }}"
-  register: latest_tag
-
-- debug: var=latest_tag
-
-- name: Bump version, update change log and push changelog
-  bumpup: repo={{ tmp }}/{{ repo }} bump={{ bump }} tag={{ latest_tag.stdout }}
-  register: bumped
-
-- debug: var=bumped
-
 - name: Get last log message
   shell: git log -1 --pretty="%h|%B"
   args:
@@ -61,7 +46,7 @@
   when: pretend is not defined
 
 - name: Tag repo with message
-  shell: git tag {{ bumped.stat.new_tag }} -m "{{ latest_tag.stdout }}"
+  shell: git tag {{ new_tag }} -m "{{ tagmessage }}"
   args:
     chdir: "{{ tmp }}/{{ repo }}"
   when: pretend is not defined
@@ -73,7 +58,7 @@
   when: pretend is not defined
 
 - name: Update makefile and push makefile
-  update_makefiles: brandcodes={{ brandcodes }} tag={{ bumped.stat.new_tag }} ntdrpas={{ tmp }}/ntdr-pas repo={{ repo }}
+  update_makefiles: brandcodes={{ brandcodes }} tag={{ new_tag }} ntdrpas={{ tmp }}/ntdr-pas repo={{ repo }}
   register: update
 
 - debug: var=update
