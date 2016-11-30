@@ -1,6 +1,5 @@
 ---
 - hosts: all
-  become: yes
   vars:
     tmp: /var/tmp/autotag
   roles:

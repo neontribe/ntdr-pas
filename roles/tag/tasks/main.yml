@@ -1,8 +1,10 @@
 ---
 - name: Clean out local taget repo
+  become: true
   file: path="{{ tmp }}/{{ repo }}" state=absent
 
 - name: Clean out local ntdr-pas repo
+  become: true
   file: path="{{ tmp }}/ntdr-pas" state=absent
 
 - name: Checkout the target repo
