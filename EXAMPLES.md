@@ -9,6 +9,10 @@
         --vault-password-file ~/.vault_pass.txt \
         --extra-vars="local=/var/www/testing/fb/FB-241"
 
+## Push whole new site to remote
+
+    ansible-playbook -i inventory/cottage-servers --limit=wl_live --extra-vars="local=/home/tobias/workspace/cottaging/sites/wl" provision-from-local.yml
+
 ## Create a whole new local site
 
     drush make --working-copy /path/to/make/file /path/to/new/site

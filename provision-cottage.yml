@@ -1,5 +1,7 @@
 ---
+# ansible-playbook -i inventory/cottage-servers --limit=wl_new --extra-vars="local=/home/tobias/workspace/cottaging/sites/wl" provision-cottage.yml
 - hosts: all
   become: true
   roles:
     - { role: drush }
+    - { role: provision }

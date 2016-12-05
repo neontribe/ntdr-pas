@@ -30,6 +30,12 @@
 - name: Enable PHP 7
   apache2_module: name=rewrite state=present
 
+- name: Enable SSL mod
+  apache2_module: name=ssl state=present
+
+- name: Enable SSL site
+  file:src=/etc/apache2/sites-available/default-ssl.conf dest=/etc/apache2/sites-enabled/default-ssl.conf state=link
+
 - name: Enable rewrite
   apache2_module: name=php7.0 state=present
   notify: restart apache2

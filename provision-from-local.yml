@@ -1,4 +1,5 @@
 ---
+# ansible-playbook -i inventory/cottage-servers --limit=wl_live --extra-vars="local=/home/tobias/workspace/cottaging/sites/wl" provision-from-local.yml
 - hosts: all
   vars:
     var_www: /var/www
