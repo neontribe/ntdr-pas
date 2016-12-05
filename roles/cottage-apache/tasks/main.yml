@@ -1,0 +1,116 @@
+---
+- name: Update apt
+  become: true
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install System Packages
+  become: true
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - apache2
+    - python-letsencrypt-apache
+
+- name: Install certbot
+  become: true
+  git:
+    repo: "https://github.com/certbot/certbot.git"
+    dest: "/opt/certbot"
+    version: master
+    update: yes
+    force: yes
+    accept_hostkey: yes
+
+- name: Create expire rules
+  become: yes
+  template:
+    src: expire_rules.conf
+    dest: "{{ apache_root }}/expire_rules.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create redirects
+  become: yes
+  template:
+    src: redirects.conf
+    dest: "{{ apache_root }}/redirects.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create http vhost
+  become: yes
+  template:
+    src: 010.www.http.conf
+    dest: "{{ apache_root }}/sites-available/010.www.http.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create latest vhost
+  become: yes
+  template:
+    src: 020.www.ssl.conf
+    dest: "{{ apache_root }}/sites-available/020.www.ssl.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create rc vhost
+  become: yes
+  template:
+    src: 050.rc.ssl.conf
+    dest: "{{ apache_root }}/sites-available/050.rc.ssl.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Disable existing sites
+  become: yes
+  file:
+    path: "{{item}}"
+    state: absent
+  with_fileglob:
+    - "{{ apache_root }}/sites-enabled/*"
+
+- name: Enable http site
+  become: yes
+  file:
+    src: "{{ apache_root }}/sites-available/010.www.http.conf"
+    dest: "{{ apache_root }}/sites-enabled/010.www.http.conf"
+    state: link
+
+- name: Enable www site
+  become: yes
+  file:
+    src: "{{ apache_root }}/sites-available/020.www.ssl.conf"
+    dest: "{{ apache_root }}/sites-enabled/020.www.ssl.conf"
+    state: link
+
+- name: Enable rc site
+  become: yes
+  file:
+    src: "{{ apache_root }}/sites-available/050.rc.ssl.conf"
+    dest: "{{ apache_root }}/sites-enabled/050.rc.ssl.conf"
+    state: link
+
+- name: Rewrites
+  become: yes
+  apache2_module:
+    state: present
+    name: rewrite
+
+- name: Headers
+  become: yes
+  apache2_module:
+    state: present
+    name: headers
+
+# Ignore errors on these as the domain name will probably not be valid.
+- name: Certbot
+  become: yes
+  shell: "/opt/certbot/certbot-auto --apache -d {{ item }}.{{ domain_name }} -n"
+  ignore_errors: yes
+  with_items: [ hostnames ]
+  tags: certbot
+

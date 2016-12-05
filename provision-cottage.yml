@@ -1,7 +1,12 @@
 ---
-# ansible-playbook -i inventory/cottage-servers --limit=wl_new --extra-vars="local=/home/tobias/workspace/cottaging/sites/wl" provision-cottage.yml
+# ansible-playbook -i inventory/cottage-servers --limit=wl_new --extra-vars="local=/home/tobias/workspace/cottaging/sites/wl domain_name=wightlocations.co.uk hostnames=new" provision-cottage.yml
+# ansible-playbook -i '127.0.0.1,' --extra-vars="local=/home/tobias/workspace/cottaging/sites/wl domain_name=batch.org.uk hostnames=home" provision-cottage.yml
 - hosts: all
   become: true
+  hostnames:
+    - www
+    - rc
   roles:
-    - { role: drush }
-    - { role: provision }
+    - drush
+    - provision
+    - cottage-apache
