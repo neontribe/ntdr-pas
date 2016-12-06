@@ -1,19 +1,23 @@
 ---
+
 # ansible-playbook -i inventory/cottage-servers --limit=wl_new --extra-vars="local=/home/tobias/workspace/cottaging/sites/wl domain_name=wightlocations.co.uk hostnames=new" provision-cottage.yml
 # ansible-playbook -i '127.0.0.1,' --extra-vars="local=/home/tobias/workspace/cottaging/sites/wl domain_name=batch.org.uk hostnames=home" provision-cottage.yml
 # PREREQ's
 # apt-get install python-mysqldb ssh
 # adduser neonwl
 # usermod neonwl -G admin,www-data
+# INSTALL SSH KEY: ssh-copy-id neonwl@new.wightlocations.co.uk
 - hosts: all
   become: true
+  become_method: sudo
   vars_files:
     - vars/provision-server.yml
-  hostnames:
-    - www
-    - rc
+  vars:
+    - hostnames:
+      - www
+      - rc
   roles:
-    - drush
     - provision-server
+    - drush
     - provision
     - cottage-apache

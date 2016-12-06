@@ -1,0 +1,5 @@
+---
+# ansible-playbook --ask-pass -u root -i inventory/cottage-servers --limit=wl_new --extra-vars="sysuser=neonwl ssh_pub_key=/home/tobias/Desktop/wl_ssh/id_rsa.pub ssh_priv_key=/home/tobias/Desktop/wl_ssh/id_rsa" cottage-preflight.yml
+- hosts: all
+  roles:
+    - cottage-preflight

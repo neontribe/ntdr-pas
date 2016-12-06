@@ -109,8 +109,8 @@
 # Ignore errors on these as the domain name will probably not be valid.
 - name: Certbot
   become: yes
-  shell: "/opt/certbot/certbot-auto --apache -d {{ item }}.{{ domain_name }} -n"
+  shell: "/opt/certbot/certbot-auto --apache -d {{ item }}.{{ domain_name }} -n --agree-tos --email cottages@neontribe.co.uk"
   ignore_errors: yes
-  with_items: [ hostnames ]
+  with_items: "{{ hostnames.split(',') }}"
   tags: certbot
 

@@ -1,54 +1,54 @@
 ---
 - name: Update apt
-  become: ture
+  become: true
   apt: update_cache=yes cache_valid_time=3600
 
 - name: Template up the debconf data
-  become: ture
+  become: true
   template: src=debconf-set-selections.j2 dest=/tmp/debconf-set-selections
 
 - name: Set mysql-server/root_password
-  become: ture
+  become: true
   shell: "debconf-set-selections /tmp/debconf-set-selections"
 
 - name: Remove debconf file
-  become: ture
+  become: true
   file: path=/tmp/debconf-set-selections state=absent
 
 - name: Configure the timezone
-  become: ture
+  become: true
   template: src=timezone.tpl dest=/etc/timezone
 
 - name: More Configure the timezone
-  become: ture
+  become: true
   file: src=/usr/share/zoneinfo/{{server.timezone}} dest=/etc/localtime state=link force=yes backup=yes
 
 - name: Set default system language pack
-  become: ture
+  become: true
   shell: locale-gen {{server.locale}}
 
 - name: Install System Packages
-  become: ture
+  become: true
   apt: pkg={{ item }} state=latest
   with_items: server.packages
 
 - name: Set vim as default editor
-  become: ture
+  become: true
   alternatives: name=editor path=/usr/bin/vim.basic
 
 - name: Enable PHP 7
-  become: ture
+  become: true
   apache2_module: name=rewrite state=present
 
 - name: Enable SSL mod
-  become: ture
+  become: true
   apache2_module: name=ssl state=present
 
 - name: Enable SSL site
-  become: ture
-  file:src=/etc/apache2/sites-available/default-ssl.conf dest=/etc/apache2/sites-enabled/default-ssl.conf state=link
+  become: true
+  file: src=/etc/apache2/sites-available/default-ssl.conf dest=/etc/apache2/sites-enabled/default-ssl.conf state=link
 
 - name: Enable rewrite
-  become: ture
+  become: true
   apache2_module: name=php7.0 state=present
   notify: restart apache2
