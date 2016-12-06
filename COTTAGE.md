@@ -15,3 +15,4 @@ The you should be able to run these two:
 And to run the certbot later:
 
     ansible-playbook -i inventory/cottage-servers --limit=wl_new --extra-vars="local=/home/tobias/workspace/cottaging/sites/wl domain_name=wightlocations.co.uk hostnames=new apache_root=/etc/apache2" provision-cottage.yml --tags=certbot
+
