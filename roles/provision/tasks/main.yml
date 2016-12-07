@@ -103,6 +103,15 @@
 - name: Copy make file to tmp
   copy: src={{ brandcode }}.make dest={{ new_site }}/{{ brandcode }}.make
 
+- name: import SQL
+  mysql_db:
+    name: "{{ db_name }}"
+    login_password: "{{ db_pass }}"
+    login_user: "{{ db_user }}"
+    state: import
+    target: "{{ sql_file }}"
+  when: sql_file is defined
+
 - name: Stat latest link
   stat: path="{{ var_www }}/latest"
   register: latest_link

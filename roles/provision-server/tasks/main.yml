@@ -52,3 +52,26 @@
   become: true
   apache2_module: name=php7.0 state=present
   notify: restart apache2
+
+- name: Clone shell tools
+  become: true
+  git:
+    repo: "https://github.com/tobybatch/Shell-tools.git"
+    dest: "/opt/shell-tools"
+    version: master
+    update: yes
+    force: yes
+    accept_hostkey: yes
+  tags: sheltools
+
+- name: Adding shell tools to the path
+  copy:
+    content: PATH=$PATH:/opt/shell-tools/
+    dest: /etc/profile.d/shell-tools.sh
+  #  lineinfile:
+  #  dest: /etc/environment
+  #  line: 'export PATH=$PATH:/opt/shell-tools/'
+  #  insertafter: 'EOF'
+  #  regexp: 'export PATH=\$PATH:/opt/shell-tools/'
+  #  state: present
+  tags: sheltools

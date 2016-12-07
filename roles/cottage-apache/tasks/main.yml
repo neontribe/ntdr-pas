@@ -80,6 +80,11 @@
     state: link
   with_indexed_items: "{{ hostnames.split(',') }}"
 
+- name: Fix symlinks to latest
+  include: cottage-apache-create-links.yml source=/var/www/latest dest=/var/www/{{ item }}
+  with_items: "{{ hostnames.split(',') }}"
+  tags: links
+
 - name: Rewrites
   become: yes
   apache2_module:
@@ -99,4 +104,3 @@
   ignore_errors: yes
   with_items: "{{ hostnames.split(',') }}"
   tags: certbot
-

@@ -1,0 +1,14 @@
+---
+- debug: msg="{{ dest }}"
+- debug: msg="{{ source }}"
+
+- name: Stat link target
+  stat: path="{{ dest }}"
+  register: target
+
+- name: Create link to latest if the link does not exist
+  file:
+    src: "{{ source }}"
+    dest: "{{ dest }}"
+    state: link
+  when: not target.stat.exists

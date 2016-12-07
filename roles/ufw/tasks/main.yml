@@ -2,22 +2,26 @@
 - name: turn on default policy
   # Deny everything and enable UFW
   ufw: state=enabled policy=deny
-  
+
 - name: allow-ssh
   # Allow ssh
   ufw: rule=allow port=22
-  
+
 - name: prevent-dos
   # Prevent DOS through SSH
   ufw: rule=limit port=ssh proto=tcp
-  
+
 - name: allow-http
-  # Allow HTTP  
+  # Allow HTTP
   ufw: rule=allow port=80
-  
+
 - name: allow-https
-  # Allow HTTPS 
+  # Allow HTTPS
   ufw: rule=allow port=443
+
+- name: allow-nrpe from neontabs.co.uk
+  # Allow HTTPS
+  ufw: rule=allow port=5666 proto=tcp from_ip=188.166.147.66
 
 - name: logging on
   # allow logging
