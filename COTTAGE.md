@@ -1,3 +1,8 @@
+To get these to work you will need a local version of a site to push up:
+
+    drush make --working-copy /path/to/make/file /path/to/new/site
+    ansible-playbook -i inventory/cottage-servers --limit=BRANDCODE_live --extra-vars="local=$HOME/workspace/BRANDCODE" --tags=db,filesync pull.yml
+
 This assumes that the group vars for this host are populated:
 
     brandcode: wl

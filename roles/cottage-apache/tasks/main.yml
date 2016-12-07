@@ -75,16 +75,10 @@
 - name: Enable www site
   become: yes
   file:
-    src: "{{ apache_root }}/sites-available/020.www.ssl.conf"
-    dest: "{{ apache_root }}/sites-enabled/020.www.ssl.conf"
+    src: "{{ apache_root }}/sites-available/1{{ item.0 }}0.{{ item.1 }}.ssl.conf"
+    dest: "{{ apache_root }}/sites-enabled/1{{ item.0 }}0.{{ item.1 }}.ssl.conf"
     state: link
-
-- name: Enable rc site
-  become: yes
-  file:
-    src: "{{ apache_root }}/sites-available/050.rc.ssl.conf"
-    dest: "{{ apache_root }}/sites-enabled/050.rc.ssl.conf"
-    state: link
+  with_indexed_items: "{{ hostnames.split(',') }}"
 
 - name: Rewrites
   become: yes
