@@ -4,15 +4,22 @@
   shell: drush sql-dump --result-file=/tmp/dump.sql
   become: no
   args:
-    chdir: "{{ local }}"
+    chdir: "{{ local_drupal }}"
   delegate_to: 127.0.0.1
-  when: local is defined
+  when: local_drupal is defined
+  tags: local
+
+- name: Define local dump as SQL file
+  set_fact:
+    sql_file: /tmp/dump.sql
+  when: local_drupal is defined and sql_file is not defined
+  tags: local
 
 - name: Tar up files folder (this may take some time)
-  shell: tar -C {{ local }} -zcf /tmp/files.tgz sites/default/files
+  shell: tar -C {{ local_drupal }} -zcf /tmp/files.tgz sites/default/files
   become: no
   delegate_to: 127.0.0.1
-  when: local is defined
+  when: local_drupal is defined
 
 # Gathering deployment data
 - name: Check deploy directory
@@ -34,7 +41,9 @@
 
 - name: Check for local sql
   local_action: stat path={{ sql_file }}
+  become: false
   register: local_sql
+  delegate_to: 127.0.0.1
   when: sql_file is defined
 
 - name: Upload local sql "{{ sql_file }}"
