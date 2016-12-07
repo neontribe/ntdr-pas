@@ -47,23 +47,15 @@
     group: root
     mode: 0644
 
-- name: Create latest vhost
+- name: Create vhosts
   become: yes
   template:
-    src: 020.www.ssl.conf
-    dest: "{{ apache_root }}/sites-available/020.www.ssl.conf"
+    src: ssl_host.conf
+    dest: "{{ apache_root }}/sites-available/1{{ item.0 }}0.{{ item.1 }}.ssl.conf"
     owner: root
     group: root
     mode: 0644
-
-- name: Create rc vhost
-  become: yes
-  template:
-    src: 050.rc.ssl.conf
-    dest: "{{ apache_root }}/sites-available/050.rc.ssl.conf"
-    owner: root
-    group: root
-    mode: 0644
+  with_indexed_items: "{{ hostnames.split(',') }}"
 
 - name: Disable existing sites
   become: yes
