@@ -18,7 +18,8 @@ lb_live ansible_ssh_host=178.62.79.248 ansible_ssh_user=neonlb
 
 [wl]
 wl_live ansible_ssh_host=178.62.7.133 ansible_ssh_user=neonwl
-wl_new ansible_ssh_host=138.68.130.109 ansible_ssh_user=neonwl
+# wl_new ansible_ssh_host=46.101.24.171
+wl_new ansible_ssh_host=46.101.24.171 ansible_ssh_user=neonwl
 
 [zz]
 zz_live ansible_ssh_host=188.166.147.66  ansible_ssh_user=neonzz

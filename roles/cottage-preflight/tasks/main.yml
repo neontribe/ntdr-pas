@@ -1,7 +1,21 @@
 ---
+- name: Clean apt
+  become: true
+  shell: apt-get clean
+  # apt: autoremove=yes # Uncomment after ansible at 2.1
+
 - name: Update apt
   become: true
-  apt: update_cache=yes cache_valid_time=3600
+  apt: update_cache=yes cache_valid_time=3600 upgrade=dist
+  # apt: update_cache=yes cache_valid_time=3600 upgrade=dist autoremove=yes # Uncomment after ansible at 2.1
+
+- name: Auto clean apt # This can get removed after ansible at 2.1
+  become: true
+  shell: apt-get autoclean
+
+- name: update-grub
+  become: true
+  shell: update-grub
 
 - name: Install System Packages
   become: true
@@ -12,6 +26,7 @@
 - name: Add user
   user:
     name: "{{ sysuser }}"
+    password: "{{ ansible_become_pass }}"
     shell: /bin/bash
     groups: admin,www-data
     append: yes

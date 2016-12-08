@@ -16,10 +16,16 @@
   tags: local
 
 - name: Tar up files folder (this may take some time)
-  shell: tar -C {{ local_drupal }} -zcf /tmp/files.tgz sites/default/files
+  shell: tar -C {{ local_drupal }}/sites/default/ -zcf /tmp/files.tgz files
   become: no
   delegate_to: 127.0.0.1
   when: local_drupal is defined
+
+- name: Define local files as file
+  set_fact:
+    files_bundle: /tmp/files.tgz
+  when: local_drupal is defined and files_bundle is not defined
+  tags: local
 
 # Gathering deployment data
 - name: Check deploy directory
@@ -142,3 +148,40 @@
     - testing_link.stat.exists
     - not rc_link.stat.exists
 
+# When we get ansible 2.2 the rest of this role can be replaced with include_role
+# role/fixpermissions
+- name: Stat {{ new_site }}
+  stat: path="{{ new_site }}"
+  register: target_folder
+
+- name: Fix permissions on {{ new_site }} as a folder
+  file: path={{ new_site }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
+  become: yes
+  when: target_folder.stat.islnk is defined and target_folder.stat.islnk == False
+
+- name: Fix permissions on {{ new_site }} as a symlink
+  file: path={{ target_folder.stat.lnk_source }} state=directory owner={{ ansible_ssh_user }} mode="u=rwX,g=rwX,o=rX" recurse=yes
+  become: yes
+  when: target_folder.stat.islnk is defined and target_folder.stat.islnk
+
+- name: Stat files {{ new_site }}/sites/default/files
+  stat: path="{{ new_site }}/sites/default/files"
+  register: files_folder
+
+- name: Fix permissions on {{ new_site }}/sites/default/files folder
+  file: path={{ files_folder.stat.path }} state=directory owner=www-data mode="u=rwX,g=rwX,o=rX" recurse=yes
+  become: yes
+  when: files_folder.stat.isdir is defined and files_folder.stat.isdir and ownall is undefined
+
+# role/ccall
+- name: Flush caches on {{ new_site }}
+  shell: "drush -r {{ new_site }} --uri=default cc all"
+
+- name: Compass compile of site theme
+  shell: "compass compile {{ new_site }}/{{ theme_folder }}"
+
+# roles/robots-nofollow
+- name: Install nofollow robots.txt
+  copy:
+    dest: "{{ new_site }}/robots.txt"
+    src: robots.nofollow.txt

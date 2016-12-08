@@ -1,4 +1,22 @@
 ---
+# The line in inventory/cottage-servers should now look like this: "wl_new ansible_ssh_host=46.101.24.171 ansible_ssh_user=neonwl"
+# And the vault file for this group shuld look like:
+#    brandcode: wl
+#    drupal_su_pass: <VALID PASSWORD>
+#    mysql_root_pw: <VALID PASSWORD>
+#    ansible_become_pass: <VALID PASSWORD>
+#    domain_name: wightlocations.co.uk
+#    var_www: /var/www
+#
+#    local: /var/www/sites/latest/wl
+#    theme_folder: sites/all/themes/ntwl_theme
+#
+#    # These are only used when we are updating password, not used in tear up
+#    drupal_su_pass_new: <VALID PASSWORD>
+#    mysql_root_pw_new: <VALID PASSWORD>
+#    ansible_become_pass_new: <VALID PASSWORD>
+#    ansible_become_pass_new_hash: <VALID PASSWORD HASH>
+
 # ansible-playbook -i inventory/cottage-servers --limit=wl_new --extra-vars="local_drupal=/home/tobias/workspace/cottaging/sites/wl domain_name=wightlocations.co.uk hostnames=new apache_root=/etc/apache2" provision-cottage.yml
 - hosts: all
   become: true
@@ -10,7 +28,3 @@
     - drush
     - provision
     - cottage-apache
-    # new_site was declared in provision
-    - { role: fixpermissions,  target: "/var/www/{{ new_site }}" }
-    - { role: robots-nofollow, target: "/var/www/{{ new_site }}" }
-    - { role: ccall,           target: "/var/www/{{ new_site }}" }

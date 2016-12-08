@@ -1,4 +1,6 @@
 ---
+- debug: msg="{{ target }}"
+
 - name: Stat {{ target }}
   stat: path="{{ target }}"
   register: target_folder
