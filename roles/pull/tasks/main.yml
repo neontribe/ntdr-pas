@@ -71,6 +71,7 @@
     rsync_opts:
       - "--no-motd"
       - "--size-only"
+      - "--info=progress2"
       - "--exclude={{ source }}/sites/default/files/tabs-imagecache"
       - "--exclude={{ source }}/sites/default/files/styles"
       - "--exclude={{ source }}/sites/default/files/js"
