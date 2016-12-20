@@ -1,0 +1,7 @@
+---
+# ansible-playbook -i '192.168.21.235,' --extra-vars="domain_name=neontribe.org hostnames=fai" certbot.yml
+
+- hosts: all
+  become: true
+  roles:
+    - certbot

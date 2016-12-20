@@ -98,6 +98,7 @@
     name: headers
 
 # Ignore errors on these as the domain name will probably not be valid.
+# TODO when we hit Ansible 2.2 change this to include_role: certbot
 - name: Certbot
   become: yes
   shell: "/opt/certbot/certbot-auto --apache -d {{ item }}.{{ domain_name }} -n --agree-tos --email cottages@neontribe.co.uk"

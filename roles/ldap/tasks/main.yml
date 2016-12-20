@@ -14,16 +14,20 @@
 
 - name: Enable /net automounter
   lineinfile: dest=/etc/auto.master regexp="^#/net" line="/net  -hosts"
+
+- name: Restart autofs
   service: name=autofs state=restarted
 
 - lineinfile:
     dest:   /etc/nsswitch.conf
     regexp: "^passwd:"
     line:   "passwd:          ldap compat"
+
 - lineinfile:
     dest:   /etc/nsswitch.conf
     regexp: "^group:"
     line:   "group:           ldap compat"
+
 - lineinfile:
     dest:   /etc/nsswitch.conf
     regexp: "^shadow:"
@@ -42,7 +46,8 @@
 #- lineinfile: dest=/etc/security/access.conf line="-:ALL EXCEPT root sysadmin (admin):ALL"
 
 - lineinfile: dest=/etc/pam.d/common-account line="account required pam_access.so"
-  service: name=nscd state=restarted
+
+- service: name=nscd state=restarted
 
 - file: src=/net/192.168.51.4/export/home dest=/home/users state=link
 

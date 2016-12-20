@@ -34,4 +34,15 @@
   service: name=slapd state=started
 
 - name: Insert users into LDAP
-  shell: ldapadd -x -w {{ ldap_pass }} -H ldapi:/// -D '{{ ldap_admin }}' -f /tmp/users.ldif
+  # shell: ldapadd -x -w {{ ldap_pass }} -H ldapi:/// -D '{{ ldap_admin }}' -f /tmp/users.ldif
+  shell: ldapmodify -c -a -H ldapi:/// -D '{{ ldap_admin }}' -w {{ ldap_pass }} -f /tmp/users.ldif
+  # This is not ideal but it allow the import to be run on an already populated ldap
+  ignore_errors: yes
+
+# OpenVPN
+# DNS Masq
+# Transmission
+# Docker?
+# Automounter + links to 192.168.51.5
+# Motion
+# Apache confs, books.conf camera.conf media.conf transmission.conf media.conf

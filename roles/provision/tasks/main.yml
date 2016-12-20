@@ -148,7 +148,7 @@
     - testing_link.stat.exists
     - not rc_link.stat.exists
 
-# When we get ansible 2.2 the rest of this role can be replaced with include_role
+# TODO When we get ansible 2.2 the rest of this role can be replaced with include_role
 # role/fixpermissions
 - name: Stat {{ new_site }}
   stat: path="{{ new_site }}"

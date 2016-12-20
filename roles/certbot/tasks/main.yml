@@ -1,0 +1,40 @@
+---
+- name: Update apt
+  become: true
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install System Packages
+  become: true
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - apache2
+    - python-letsencrypt-apache
+    - python
+    - python-dev
+    - virtualenv
+    - python-virtualenv
+    - gcc
+    - dialog
+    - libaugeas0
+    - augeas-lenses
+    - libssl-dev
+    - libffi-dev
+    - ca-certificates
+
+- name: Install certbot
+  become: true
+  git:
+    repo: "https://github.com/certbot/certbot.git"
+    dest: "/opt/certbot"
+    version: master
+    update: yes
+    force: yes
+    accept_hostkey: yes
+
+# Ignore errors on these as the domain name will probably not be valid.
+- name: Certbot
+  become: yes
+  shell: "/opt/certbot/certbot-auto --apache -d {{ item }}.{{ domain_name }} -n --agree-tos --email cottages@neontribe.co.uk"
+  ignore_errors: yes
+  with_items: "{{ hostnames.split(',') }}"
+  tags: certbot
