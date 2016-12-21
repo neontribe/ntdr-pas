@@ -29,3 +29,11 @@
   with_fileglob:
     - /net/192.168.51.5/mnt/HD/HD_a2/public/books/to-add/*
 
+- name: Create calibre apache conf
+  copy: src=a2_calibre.conf  dest=/etc/apache2/conf-available/calibre.conf
+
+- name: Enable calibre apache conf
+  file: path=/etc/apache2/conf-enabled/calibre.conf dest=/etc/apache2/conf-enabled/calibre.conf state=link
+
+- name: Restart apache2
+  service: name=apache2  enabled=yes state=restarted

@@ -36,7 +36,7 @@ GID=calibre
 # Edit the USERNAME variable below to your desired username
 # Edit the PASSWORD variable below to your desired password
 CONTENT=/var/lib/calibre
-PORT=8080
+PORT=8180
 MAX_COVER=300x400
 USERNAME=CALIBRE_USER
 PASSWORD=CALIBRE_PASSWORD
