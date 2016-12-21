@@ -6,7 +6,10 @@
     - vars/provision-server.yml
     - vars/victory.yml
     - vars/victory-secure.yml
+    - vars/calibre-server.yml
   become: true
   roles:
-    - provision-server
-    - victory
+    # - provision-server
+    # - victory
+    - autofs
+    - calibre-server

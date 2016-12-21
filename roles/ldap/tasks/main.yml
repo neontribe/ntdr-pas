@@ -10,13 +10,7 @@
 
 - name: Install LDAP Pam modules
   apt: pkg={{ item }} state=latest
-  with_items: [libpam-ldap,nscd,autofs,nfs-common]
-
-- name: Enable /net automounter
-  lineinfile: dest=/etc/auto.master regexp="^#/net" line="/net  -hosts"
-
-- name: Restart autofs
-  service: name=autofs state=restarted
+  with_items: [libpam-ldap,nscd]
 
 - lineinfile:
     dest:   /etc/nsswitch.conf

@@ -5,7 +5,8 @@
       - dnsmasq
       - ffmpeg
       # - motion
-      # - openvpn
+      - openvpn
+      - easy-rsa
       - rtkit
       - tidy
       - tree

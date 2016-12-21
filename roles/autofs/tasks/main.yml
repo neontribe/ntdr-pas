@@ -1,0 +1,11 @@
+---
+- name: Install Autofs
+  apt: pkg={{ item }} state=latest
+  with_items: [autofs,nfs-common]
+
+- name: Enable /net automounter
+  lineinfile: dest=/etc/auto.master regexp="^#/net" line="/net  -hosts"
+
+- name: Restart autofs
+  service: name=autofs state=restarted
+

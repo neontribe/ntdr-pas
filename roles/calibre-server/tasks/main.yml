@@ -4,12 +4,28 @@
 
 - name: Install System Packages
   apt: pkg={{ item }} state=latest
-  with_items: calibre-server.packages
+  with_items: calibreserver.packages
 
 - name: Get bleeding edge package
-  get_url: 'https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py'
-  dest: /tmp/linux-installer.py
-  mode: 0644
+  get_url:
+    url: 'https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py'
+    dest: /tmp/linux-installer.py
+    mode: 0644
 
 - name: Install calibre server
-  shell: python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+  shell: python /tmp/linux-installer.py
+
+- name: Create calibre-library
+  file: path=/var/calibre-library state=directory
+
+- name: calibre-library/toadd
+  file: path=/var/calibre-library/toadd state=directory
+
+- name: Copy the books off the NAS
+  copy:
+    src: "{{ item }}"
+    dest: /var/calibre-library/toadd
+    mode: 664
+  with_fileglob:
+    - /net/192.168.51.5/mnt/HD/HD_a2/public/books/to-add/*
+

@@ -1,5 +1,5 @@
 ---
-- calibre-server:
+- calibreserver:
     packages:
       - apache2
       - xvfb

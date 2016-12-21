@@ -39,10 +39,33 @@
   # This is not ideal but it allow the import to be run on an already populated ldap
   ignore_errors: yes
 
-# OpenVPN
-# DNS Masq
+###########################################################
+# This whole chunk needs ansible 2.1 at least to upload and decrypt the easy rsa keys
+#- name: Make easy rsa dir
+#  file:
+#    path: /etc/openvpn/easy-rsa
+#    state: directory
+#
+#- name: Upload easy RSA files for VPN
+#  copy: src=easyrsa.tgz dest=/tmp/easyrsa.tgz
+#
+# Use this until 2.2 when we can use the "remote_src: yes" becomes available
+#- name: Unpack easy rsa files
+#  shell: tar zxf /tmp/easyrsa.tgz
+#  args:
+#     chdir: /etc/openvpn/easy-rsa
+
+#- name: Unpack easy rsa files
+#  unarchive:
+#    src: easyrsa.tgz
+#    dest: /etc/openvpn/easy-rsa
+#    remote_src: yes
+#######################################################
+
+# Calibre server
 # Transmission
-# Docker?
-# Automounter + links to 192.168.51.5
 # Motion
-# Apache confs, books.conf camera.conf media.conf transmission.conf media.conf
+
+# DNS Masq
+# Automounter + links to 192.168.51.5
+# Apache confs, camera.conf media.conf transmission.conf media.conf
