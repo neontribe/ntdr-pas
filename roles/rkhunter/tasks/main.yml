@@ -1,0 +1,21 @@
+---
+
+- name: Install rkhunter packages
+  apt: pkg="rkhunter" state=latest
+  register: rkhunter_install
+
+  # These next two will bitch but they are the first time they are run
+
+- name: Update rkhunter
+  command: rkhunter --update --cronjob --rwo
+  ignore_errors: true
+
+- name: Update rkhunter propupd
+  command: rkhunter --propupd --cronjob --rwo
+  ignore_errors: true
+
+- name: Set rkhunter deafults
+  template: src=rkhunter dest=/etc/default/rkhunter mode=0755 backup=yes
+
+- name: Copy daily virus check
+  template: src=daily.j2 dest="/etc/cron.daily/rkhunter" mode=0755 owner=root group=root

@@ -30,7 +30,7 @@
 - name: Install System Packages
   become: true
   apt: pkg={{ item }} state=latest
-  with_items: server.packages
+  with_items: "{{ server.packages }}"
 
 - name: Set vim as default editor
   become: true

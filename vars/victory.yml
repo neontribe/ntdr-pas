@@ -1,38 +1,8 @@
----
 - victory:
-    packages:
-      - apache2
-      - dnsmasq
-      - ffmpeg
-      # - motion
-      - openvpn
-      - easy-rsa
-      - rtkit
-      - tidy
-      - tree
-      - ldap-utils
-      - slapd
-      # - phpmyadmin
-      - phpldapadmin
-      - phpsysinfo
-      # - transmission
-      - xvfb
-      - imagemagick
+    packages: [apache2, dnsmasq, ffmpeg, motion, openvpn, easy-rsa, rtkit, tidy, tree, ldap-utils, slapd, phpldapadmin, phpsysinfo, transmission, xvfb, imagemagick]
+    #, phpmyadmin
     ufw:
       ports: [22,80,443,1194]
-
-
-# http -> 81
-# ssh +80
-# ssh hash known hosts
-# minecraft server (add ports to ufw)
-#
-# books.conf
-# camera.conf
-# cottages.conf
-# media.conf
-# phpldapadmin.conf
-# phpmyadmin.conf
-# phpsysinfo.conf
-# transmission.conf + ports
-#
+  books_to_add: "/net/192.168.51.5/mnt/HD/HD_a2/public/books/to-add/*"
+  admin_email: sysadmin@nfn.org.uk
+  hostname: victory

@@ -1,0 +1,24 @@
+---
+- name: Update apt
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install Clamav packages
+  apt: pkg="{{ item }}" state=latest
+  with_items:
+    - clamav
+  register: clamav_install
+
+- name: Stop clamav
+  service: name=clamav-freshclam state=stopped
+
+- name: Update virus definition
+  command: freshclam --quiet
+
+- name: Start clamav
+  service: name=clamav-freshclam state=started enabled=yes
+
+- name: Copy daily virus check
+  template: src=daily.j2 dest="/etc/cron.daily/clamscan" mode=0755 owner=root group=root
+
+- name: Copy weekly virus check
+  template: src=weekly.j2 dest="/etc/cron.weekly/clamscan" mode=0755 owner=root group=root

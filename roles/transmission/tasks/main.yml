@@ -1,0 +1,9 @@
+---
+- name: Update apt
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install System Packages
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - transmission
+

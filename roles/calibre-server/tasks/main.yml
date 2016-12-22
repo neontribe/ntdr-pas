@@ -4,7 +4,7 @@
 
 - name: Install System Packages
   apt: pkg={{ item }} state=latest
-  with_items: calibreserver.packages
+  with_items: "{{ calibreserver.packages }}"
 
 - name: Get bleeding edge package
   get_url:
@@ -21,19 +21,27 @@
 - name: calibre-library/toadd
   file: path=/var/calibre-library/toadd state=directory
 
+  #- name: Copy the books off the NAS
+  #copy:
+  #  src: "{{ item }}"
+  #  dest: /var/calibre-library/toadd
+  #  mode: 664
+  #with_fileglob:
+  #  - "{{ books_to_add }}"
+
 - name: Copy the books off the NAS
-  copy:
-    src: "{{ item }}"
+  synchronize:
+    src: "{{ books_to_add }}"
     dest: /var/calibre-library/toadd
-    mode: 664
-  with_fileglob:
-    - /net/192.168.51.5/mnt/HD/HD_a2/public/books/to-add/*
+    checksum: yes
+    times: yes
+    mode: pull
 
 - name: Create calibre apache conf
   copy: src=a2_calibre.conf  dest=/etc/apache2/conf-available/calibre.conf
 
 - name: Enable calibre apache conf
-  file: path=/etc/apache2/conf-enabled/calibre.conf dest=/etc/apache2/conf-enabled/calibre.conf state=link
+  file: src=/etc/apache2/conf-enabled/calibre.conf dest=/etc/apache2/conf-enabled/calibre.conf state=link
 
 - name: Restart apache2
   service: name=apache2  enabled=yes state=restarted

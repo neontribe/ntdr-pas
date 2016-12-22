@@ -1,15 +1,38 @@
-# ansible-playbook -u neontribe -i "192.168.51.47," --ask-become-pass ldap.yml --extra-vars="hostname=FOO"
 ---
 - hosts: all
   become: true
   vars_files:
-    - vars/provision-server.yml
     - vars/victory.yml
-    - vars/victory-secure.yml
-    - vars/calibre-server.yml
-  become: true
+    - vars/victory_secure.yml
+    - vars/provision_server.yml
+    - vars/calibre_server.yml
   roles:
     # - provision-server
     # - victory
-    - autofs
-    - calibre-server
+    # - autofs
+    # - rkhunter
+    # - ntpd
+    # - ssh
+    # - clamav
+    # - calibre-server
+
+    # - transmission
+    # - motion
+    # - dnsmasq
+
+    # ansible-playbook -u neontribe -i "192.168.51.47," --ask-become-pass ldap.yml --extra-vars="hostname=FOO"
+
+    # http -> 81
+    # ssh +80
+    # ssh hash known hosts
+    # minecraft server (add ports to ufw)
+    #
+    # books.conf
+    # camera.conf
+    # cottages.conf
+    # media.conf
+    # phpldapadmin.conf
+    # phpmyadmin.conf
+    # phpsysinfo.conf
+    # transmission.conf + ports
+
