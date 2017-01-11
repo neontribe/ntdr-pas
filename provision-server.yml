@@ -2,7 +2,7 @@
 ---
 - hosts: all
   vars_files:
-    - vars/provision-server.yml
+    - vars/provision_server.yml
   become: true
   roles:
     - { role: provision-server }

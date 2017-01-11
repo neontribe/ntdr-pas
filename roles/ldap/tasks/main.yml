@@ -12,6 +12,8 @@
   apt: pkg={{ item }} state=latest
   with_items: [libpam-ldap,nscd]
 
+- copy: src=mkhomedir dest=/usr/share/pam-configs/mkhomedir owner=root mode=0755
+
 - lineinfile:
     dest:   /etc/nsswitch.conf
     regexp: "^passwd:"

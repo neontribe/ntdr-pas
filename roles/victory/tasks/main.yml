@@ -39,6 +39,12 @@
   # This is not ideal but it allow the import to be run on an already populated ldap
   ignore_errors: yes
 
+- name: Export /exports
+  lineinfile:
+    dest: /etc/exports
+    regexp: '^/export'
+    line: '/export  *(rw,sync,no_subtree_check,no_root_squash)'
+
 ###########################################################
 # This whole chunk needs ansible 2.1 at least to upload and decrypt the easy rsa keys
 #- name: Make easy rsa dir

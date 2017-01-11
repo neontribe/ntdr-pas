@@ -7,14 +7,14 @@
     - vars/provision_server.yml
     - vars/calibre_server.yml
   roles:
-    # - provision-server
-    # - victory
-    # - autofs
-    # - rkhunter
-    # - ntpd
-    # - ssh
-    # - clamav
-    # - calibre-server
+    - provision-server
+    - victory
+    - autofs
+    - rkhunter
+    - ntpd
+    - ssh
+    - clamav
+    - calibre-server
 
     # - transmission
     # - motion

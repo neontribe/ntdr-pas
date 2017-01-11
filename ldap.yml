@@ -1,8 +1,4 @@
-# ansible-playbook \
-#   -u trafalgar \
-#   --ask-become-pass \
-#   -i "192.168.51.11," \
-#   --extra-vars="ldap_srv=ldap://192.168.51.4 ldap_pass=FOOBAR ldap_basedn='dc=batch,dc=org,dc=uk' ldap_admin='cn=admin,dc=batch,dc=org,dc=uk' autofs_home_dir=/net/192.168.51.4/export/home/" ldap.yml
+# ansible-playbook -u trafalgar --ask-become-pass -i "192.168.51.11," --extra-vars="ldap_srv=ldap://192.168.51.4 ldap_pass=FOOBAR ldap_basedn='dc=batch,dc=org,dc=uk' ldap_admin='cn=admin,dc=batch,dc=org,dc=uk' autofs_home_dir=/net/192.168.51.4/export/home/" ldap.yml
 ---
 - hosts: all
   become: true
