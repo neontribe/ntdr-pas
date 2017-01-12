@@ -11,10 +11,12 @@ projects[neontabs_theme][download][tag] = "v_1_2_2"
 ; Core
 projects[drupal][version] = "7.x"
 
+projects[calendar][subdir] = "contrib"
 projects[ctools][subdir] = "contrib"
 projects[context][subdir] = "contrib"
 projects[date][subdir] = "contrib"
 projects[entity][subdir] = "contrib"
+projects[features][subdir] = "contrib"
 projects[field_group][subdir] = "contrib"
 projects[globalredirect][subdir] = "contrib"
 projects[google_analytics][subdir] = "contrib"
