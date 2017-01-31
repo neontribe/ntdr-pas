@@ -2,7 +2,7 @@
 core = 7.x
 api = 2
 
-projects[ntlb_modules][download][tag] = v2_3_0
+projects[ntlb_modules][download][tag] = v2_3_1
 projects[neontabs][download][tag] = v5_8_5
 projects[nt_tabs][download][tag] = v5_8_0
 projects[ntlb_theme][download][tag] = v1_12_0
