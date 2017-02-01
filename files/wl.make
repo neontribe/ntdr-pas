@@ -2,10 +2,10 @@
 core = 7.x
 api = 2
 
-projects[neontabs][download][tag] = v6_1_6
+projects[neontabs][download][tag] = v5_8_4
 projects[nt_tabs][download][tag] = v5_8_0
 projects[ntwl_modules][download][tag] = "v3_0_1"
-projects[ntwl_theme][download][tag] = v3_0_1
+projects[ntwl_theme][download][tag] = v3_0_3
 projects[neontabs_theme][download][tag] = "v_1_2_2"
 
 ; Core
@@ -23,6 +23,7 @@ projects[globalredirect][subdir] = "contrib"
 projects[google_analytics][subdir] = "contrib"
 projects[gss][subdir] = "contrib"
 projects[imagecache_external][subdir] = "contrib"
+projects[imagecache_token][subdir] = "contrib"
 projects[jquery_update][subdir] = "contrib"
 projects[libraries][subdir] = "contrib"
 projects[link][subdir] = "contrib"
@@ -38,6 +39,7 @@ projects[seckit][subdir] = "contrib"
 projects[site_map][subdir] = "contrib"
 projects[tagclouds][subdir] = "contrib"
 projects[token][subdir] = "contrib"
+projects[transliteration][subdir] = "contrib"
 projects[views][subdir] = "contrib"
 projects[webform][subdir] = "contrib"
 projects[webform][version] = "3.24"

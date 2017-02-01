@@ -6,10 +6,10 @@ api = 2
 ; Core
 projects[drupal][version] = "7.x"
 
-projects[neontabs][download][tag] = v6_1_16
+projects[neontabs][download][tag] = v5_8_4
 projects[nt_tabs][download][tag] = v5_8_2
-projects[ntbr_modules][download][tag] = v2_5_9
-projects[ntbr_theme2][download][tag] = v1_0_13
+projects[ntbr_modules][download][tag] = v2_5_12
+projects[ntbr_theme2][download][tag] = v1_1_2
 
 
 projects[advagg][subdir] = "contrib"
@@ -20,6 +20,7 @@ projects[field_group][subdir] = "contrib"
 projects[globalredirect][subdir] = "contrib"
 projects[google_analytics][subdir] = "contrib"
 projects[gss][subdir] = "contrib"
+projects[imagecache_external][subdir] = "contrib"
 projects[imagecache_token][subdir] = "contrib"
 projects[jquery_update][subdir] = "contrib"
 projects[libraries][subdir] = "contrib"

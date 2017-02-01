@@ -2,10 +2,10 @@
 core = 7.x
 api = 2
 
-projects[ntlb_modules][download][tag] = v2_7_1
-projects[neontabs][download][tag] = v6_1_15
-projects[nt_tabs][download][tag] = v5_8_0
-projects[ntlb_theme][download][tag] = v1_11_2
+projects[ntlb_modules][download][tag] = v2_3_1
+projects[neontabs][download][tag] = v5_8_5
+projects[nt_tabs][download][tag] = v5_8_4
+projects[ntlb_theme][download][tag] = v1_12_0
 projects[neontabs_theme][download][tag] = "v_1_2_2"
 
 ; Core
@@ -32,6 +32,7 @@ projects[menu_expanded][subdir] = "contrib"
 projects[metatag][subdir] = "contrib"
 projects[references][subdir] = "contrib"
 projects[pathauto][subdir] = "contrib"
+projects[nagios][subdir] = "contrib"
 projects[readonlymode][subdir] = "contrib"
 projects[redirect][subdir] = "contrib"
 projects[seckit][subdir] = "contrib"
