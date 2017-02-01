@@ -85,3 +85,7 @@
   #  regexp: 'export PATH=\$PATH:/opt/shell-tools/'
   #  state: present
   tags: sheltools
+
+- name: Fix postfix destinations
+  shell: postconf -e 'mydestination = localhost.localdomain, localhost'
+  become: true
