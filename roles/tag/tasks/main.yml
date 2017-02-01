@@ -46,7 +46,7 @@
   when: pretend is not defined
 
 - name: Tag repo with message
-  shell: git tag {{ newtag }} -m "{{ tagmessage }}"
+  shell: git tag {{ newtag }} -m "[{{ ansible_date_time.iso8601 }}] {{ tagmessage }}"
   args:
     chdir: "{{ tmp }}/{{ repo }}"
   when: pretend is not defined
@@ -64,7 +64,7 @@
 - debug: var=update
 
 - name: Commit make files
-  shell: git commit -a -m "Updated make files for {{ brandcodes }}"
+  shell: git commit -a -m "Updated make files for {{ brandcodes }}: {{ newtag }}, {{ tagmessage }}"
   args:
     chdir: "{{ tmp }}/ntdr-pas"
   when: pretend is not defined
