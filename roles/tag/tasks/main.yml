@@ -64,7 +64,7 @@
 - debug: var=update
 
 - name: Commit make files
-  shell: git commit -a -m "Updated make files for {{ brandcodes }}: {{ newtag }}, {{ tagmessage }}"
+  shell: git commit -a -m "Updated make files for {{ brandcodes }} - {{ newtag }}, {{ tagmessage }}"
   args:
     chdir: "{{ tmp }}/ntdr-pas"
   when: pretend is not defined

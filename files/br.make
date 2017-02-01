@@ -9,7 +9,7 @@ projects[drupal][version] = "7.x"
 projects[neontabs][download][tag] = v5_8_4
 projects[nt_tabs][download][tag] = v5_8_2
 projects[ntbr_modules][download][tag] = v2_5_12
-projects[ntbr_theme2][download][tag] = v1_1_2
+projects[ntbr_theme2][download][tag] = v1_1_3
 
 
 projects[advagg][subdir] = "contrib"
