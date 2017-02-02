@@ -1,0 +1,43 @@
+---
+- name: Update apt
+  become: true
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install System Packages (16.04+)
+  become: true
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - nagios-nrpe-server
+    - monitoring-plugins-standard
+    - nagios-plugins-contrib
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version|int >= 16
+
+- name: Install System Packages (<16.04)
+  become: true
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - nagios-nrpe-server
+    - nagios-plugins-contrib
+    - nagios-plugins
+    - nagios-plugins-basic
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version|int < 16
+
+- name: Open firewall
+  ufw:
+    rule: allow
+    src: 188.166.147.66
+    port: 5666
+
+- name: Install master nrpe config (/etc/nagios/nrpe.cfg)
+  copy:
+    src: etc_nagios_nrpe.cfg
+    dest: /etc/nagios/nrpe.cfg
+
+- name: Install extra nrpe config (/etc/nagios/nrpe.d/nrpe.cfg)
+  copy:
+    src: etc_nagios_nrpe.d_nrpe.cfg
+    dest: /etc/nagios/nrpe.d/nrpe.cfg
+
+- name: Restart nrpe server
+  service: name=nagios-nrpe-server state=restarted
+

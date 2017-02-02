@@ -1,0 +1,6 @@
+# ansible-playbook -i inventory/cottage-servers --limit=wl_new nagios-nrpe-server.yml
+---
+- hosts: all
+  become: true
+  roles:
+    - nagios-nrpe-server
