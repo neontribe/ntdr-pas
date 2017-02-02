@@ -29,12 +29,12 @@
     port: 5666
 
 - name: Install master nrpe config (/etc/nagios/nrpe.cfg)
-  copy:
+  template:
     src: etc_nagios_nrpe.cfg
     dest: /etc/nagios/nrpe.cfg
 
 - name: Install extra nrpe config (/etc/nagios/nrpe.d/nrpe.cfg)
-  copy:
+  template:
     src: etc_nagios_nrpe.d_nrpe.cfg
     dest: /etc/nagios/nrpe.d/nrpe.cfg
 

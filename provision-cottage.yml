@@ -28,3 +28,5 @@
     - drush
     - provision
     - cottage-apache
+    - nagios-nrpe-server
+    - cottage-cron

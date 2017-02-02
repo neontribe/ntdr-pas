@@ -1,0 +1,6 @@
+# ansible-playbook -i inventory/cottage-servers --limit=wl_new cottage-cron.yml
+---
+- hosts: all
+  become: true
+  roles:
+    - cottage-cron

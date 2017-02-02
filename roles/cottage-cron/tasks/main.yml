@@ -1,0 +1,12 @@
+---
+- name: Add cron for latest
+  become: true
+  lineinfile:
+    line: "*/15 * * * * www-data drush -r /var/www/latest cron"
+    dest: "/etc/crontab"
+
+- name: Add cron for rc
+  become: true
+  lineinfile:
+    line: "*/15 * * * * www-data drush -r /var/www/rc cron"
+    dest: /etc/crontab
