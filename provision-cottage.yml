@@ -26,6 +26,7 @@
   roles:
     - provision-server
     - drush
+    - ufw
     - provision
     - cottage-apache
     - nagios-nrpe-server
