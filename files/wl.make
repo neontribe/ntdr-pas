@@ -4,7 +4,7 @@ api = 2
 
 projects[neontabs][download][tag] = v5_8_4
 projects[nt_tabs][download][tag] = v5_8_0
-projects[ntwl_modules][download][tag] = "v3_0_1"
+projects[ntwl][download][tag] = v3_0_4
 projects[ntwl_theme][download][tag] = v3_0_3
 projects[neontabs_theme][download][tag] = "v_1_2_2"
 
@@ -58,10 +58,10 @@ projects[nt_tabs][download][url] = "git@bitbucket.org:neontabs/nt_tabs.git"
 projects[nt_tabs][type] = "module"
 projects[nt_tabs][subdir] = "custom"
 
-projects[ntwl_modules][type] = "module"
-projects[ntwl_modules][download][type] = "git"
-projects[ntwl_modules][download][url] = "git@bitbucket.org:neontabs/ntwl.git"
-projects[ntwl_modules][subdir] = "custom"
+projects[ntwl][type] = "module"
+projects[ntwl][download][type] = "git"
+projects[ntwl][download][url] = "git@bitbucket.org:neontabs/ntwl.git"
+projects[ntwl][subdir] = "custom"
 
 ; Themes
 projects[ntwl_theme][type] = "theme"
