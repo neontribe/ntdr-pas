@@ -8,7 +8,7 @@ projects[drupal][version] = "7.x"
 
 projects[neontabs][download][tag] = v6_3_2
 projects[nt_tabs][download][tag] = v5_8_2
-projects[ntbr_modules][download][tag] = v2_5_13
+projects[ntbr_modules][download][tag] = v2_5_14
 projects[ntbr_theme2][download][tag] = v1_1_5
 
 
