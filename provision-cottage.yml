@@ -17,17 +17,18 @@
 #    ansible_become_pass_new: <VALID PASSWORD>
 #    ansible_become_pass_new_hash: <VALID PASSWORD HASH>
 
-# ansible-playbook -i inventory/cottage-servers --limit=wl_new --extra-vars="local_drupal=/home/tobias/workspace/cottaging/sites/wl domain_name=wightlocations.co.uk hostnames=new apache_root=/etc/apache2" provision-cottage.yml
+# ansible-playbook -i inventory/cottage-servers --limit=wl_new --extra-vars="local_drupal=/home/tobias/workspace/cottaging/sites/wl domain_name=wightlocations.co.uk hostnames=www,rc,skunk,new" provision-cottage.yml
 - hosts: all
   become: true
   become_method: sudo
   vars_files:
-    - vars/provision-server.yml
+    - vars/provision_server.yml
+  vars:
+    - apache_root: /etc/apache2
   roles:
     - provision-server
     - drush
     - ufw
-    - provision
     - cottage-apache
     - nagios-nrpe-server
     - cottage-cron

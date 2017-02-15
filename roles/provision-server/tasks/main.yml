@@ -48,14 +48,13 @@
   become: true
   file: src=/etc/apache2/sites-available/default-ssl.conf dest=/etc/apache2/sites-enabled/default-ssl.conf state=link
 
-- name: Enable rewrite
-  become: true
-  apache2_module: name=php7.0 state=present
-  notify: restart apache2
-
 - name: Enable headers
   become: true
   apache2_module: name=headers state=present
+
+- name: Enable rewrite
+  become: true
+  apache2_module: name=php7.0 state=present
   notify: restart apache2
 
 - name: Turn off all deafult confs

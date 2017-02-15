@@ -80,9 +80,9 @@
     state: link
   with_indexed_items: "{{ hostnames.split(',') }}"
 
-- name: Fix symlinks to latest
-  include: cottage-apache-create-links.yml source=/var/www/latest dest=/var/www/{{ item }}
-  with_items: "{{ hostnames.split(',') }}"
+  #- name: Fix symlinks to latest
+  #include: cottage-apache-create-links.yml source=/var/www/latest dest=/var/www/{{ item }}
+  #with_items: "{{ hostnames.split(',') }}"
   tags: links
 
 - name: Rewrites
@@ -97,11 +97,3 @@
     state: present
     name: headers
 
-# Ignore errors on these as the domain name will probably not be valid.
-# TODO when we hit Ansible 2.2 change this to include_role: certbot
-- name: Certbot
-  become: yes
-  shell: "/opt/certbot/certbot-auto --apache -d {{ item }}.{{ domain_name }} -n --agree-tos --email cottages@neontribe.co.uk"
-  ignore_errors: yes
-  with_items: "{{ hostnames.split(',') }}"
-  tags: certbot

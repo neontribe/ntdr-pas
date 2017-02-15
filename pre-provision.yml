@@ -1,6 +1,9 @@
 # python -c 'import crypt; print crypt.crypt("This is my Password", "$1$SomeSalt$")'
 # ansible-playbook -u root --ask-become-pass -i "192.168.21.138," --extra-vars="user=neonzz pass=foobar" pre-provision.yml
+
+# NEEDS GITHUB IN KNOWN HOSTS
 ---
 - hosts: all
-  become: true  roles:
+  become: true
+  roles:
    - pre-provision
