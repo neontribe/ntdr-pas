@@ -1,0 +1,3 @@
+---
+- name: Run updb
+  shell: drush -y -r {{ target }} --uri=default chdir={{ target }} up

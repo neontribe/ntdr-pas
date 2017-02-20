@@ -26,6 +26,6 @@
     # Fix permissions
     - { role: fixpermissions }
     - { role: set-read-only, rw: "yes" }
-    - { role: updb }
+    - { role: up }
     - { role: robots-nofollow }
     - { role: ccall }
