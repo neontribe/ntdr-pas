@@ -86,5 +86,5 @@ libraries[ckeditor][type] = "library"
 ; Profiles
 projects[neontabs_profile][download][type] = "git"
 projects[neontabs_profile][download][url] = "git@bitbucket.org:neontabs/neontabs_profile.git"
-projects[neontabs_profile][download][tag] = "1.0.0"
+projects[neontabs_profile][download][tag] = "v1_0_0"
 projects[neontabs_profile][type] = "profile"
