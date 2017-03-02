@@ -10,6 +10,7 @@
       # Target gets defined in the provision script
       - { role: importdb,        target: "{{ new_site }}" }
       - { role: fixpermissions,  target: "{{ new_site }}" }
+      - { role: up,              target: "{{ new_site }}" }
       - { role: robots-nofollow, target: "{{ new_site }}" }
       - { role: ccall,           target: "{{ new_site }}" }
       - { role: swaplinks,       target: "{{ new_site }}" }
