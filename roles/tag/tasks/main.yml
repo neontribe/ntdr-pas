@@ -11,6 +11,8 @@
 - name: Checkout ntdr-pas repo
   git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master force=yes accept_hostkey=yes
 
+########################################
+# Depricate this when we stop using it #
 - name: Get last log message
   shell: git log -1 --pretty="%h|%B"
   args:
@@ -30,8 +32,9 @@
   args:
     chdir: "{{ tmp }}/{{ repo }}"
   register: changelog
-
-- debug: var=changelog
+################################
+- name: Generate new changelog
+  shell: "drush ntc {{ tmp }}/{{ repo }} > {{ tmp }}/{{ repo }}/changelog.json"
 
 - name: Add change log
   shell: git add -A
