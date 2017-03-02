@@ -6,7 +6,7 @@ api = 2
 ; Core
 projects[drupal][version] = "7.x"
 
-projects[neontabs][download][tag] = v6_7_0
+projects[neontabs][download][tag] = v6_8_0
 projects[nt_tabs][download][tag] = v5_9_7
 projects[ntbr_modules][download][tag] = v2_6_1
 projects[ntbr_theme2][download][tag] = v1_1_10
