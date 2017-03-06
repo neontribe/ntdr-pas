@@ -6,7 +6,7 @@ api = 2
 
 projects[nthh_theme][download][tag] = v0_10_0
 projects[nthh_modules][download][tag] = v0_10_18
-projects[nt_tabs][download][tag] = v5_9_4
+projects[nt_tabs][download][tag] = v5_9_9
 projects[neontabs][download][tag] = v6_8_0
 projects[neontabs_theme][download][tag] = v1_2_2
 
