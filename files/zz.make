@@ -2,7 +2,7 @@
 core = 7.x
 api = 2
 
-projects[nt_tabs][download][tag] = v5_10_1
+projects[nt_tabs][download][tag] = v5_10_2
 projects[neontabs][download][tag] = v6_8_2
 projects[ntzz_modules][download][tag] = v_v2_0_10
 ; projects[zzdepricated][download][tag] = v7_0_0
