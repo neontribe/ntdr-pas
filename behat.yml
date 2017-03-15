@@ -1,0 +1,9 @@
+
+---
+- hosts: all
+  vars:
+    target: /home/tobias/workspace/cottaging/sites/cm/
+    jobnumber: 123
+    uri: "http://localhost/workspace/cottaging/sites/cm"
+  roles:
+      - behat

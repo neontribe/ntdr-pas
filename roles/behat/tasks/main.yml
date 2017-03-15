@@ -1,0 +1,51 @@
+---
+- name: Create behat folder
+  become: true
+  file:
+    path: /opt/drupalextension
+    state: directory
+    mode: 0755
+
+- name: Check composer.json
+  stat:
+    path: /opt/drupalextension/composer.json
+  register: composerfile
+
+- name: Create composer.json
+  become: true
+  when: not composerfile.stat.exists
+  copy:
+    src: composer.json
+    dest: /opt/drupalextension/composer.json
+    mode: 0644
+
+- name: Set permissions
+  become: true
+  file:
+    path: /opt/drupalextension
+    owner: "{{ ansible_ssh_user }}"
+    recurse: yes
+
+- name: Composer install
+  shell: "composer install"
+  args:
+    chdir: /opt/drupalextension
+
+- name: Check Global behat
+  stat:
+    path: /usr/local/bin/behat
+  register: behatbin
+
+- name: Link behat globally
+  become: true
+  when: not behatbin.stat.exists
+  file:
+    src: /opt/drupalextension/bin/behat
+    dest: /usr/local/bin/behat
+    state: link
+
+- name: Generate behat.yml
+  shell: "drush -r {{ target }} ntwby {{ uri }} > /tmp/{{ jobnumber }}.yml"
+
+- name: Run behat
+  shell: behat -c /tmp/{{ jobnumber }}.yml
