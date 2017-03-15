@@ -11,10 +11,16 @@
 - name: Checkout ntdr-pas repo
   git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master force=yes accept_hostkey=yes
 
+- debug: msg="{{ tmp }}/{{ repo }}/changelog.json"
+
+- name: Tag repo with message
+  shell: git tag {{ newtag }} -m "[{{ ansible_date_time.iso8601 }}] {{ tagmessage }}"
+  args:
+    chdir: "{{ tmp }}/{{ repo }}"
+  when: pretend is not defined
+
 - name: Generate new changelog
   shell: "drush ntc {{ tmp }}/{{ repo }} > {{ tmp }}/{{ repo }}/changelog.json"
-
-- debug: msg="{{ tmp }}/{{ repo }}/changelog.json"
 
 - name: Add change log
   shell: git add -A
@@ -24,12 +30,6 @@
 
 - name: Commit change log
   shell: git commit -a -m "Updated changelog"
-  args:
-    chdir: "{{ tmp }}/{{ repo }}"
-  when: pretend is not defined
-
-- name: Tag repo with message
-  shell: git tag {{ newtag }} -m "[{{ ansible_date_time.iso8601 }}] {{ tagmessage }}"
   args:
     chdir: "{{ tmp }}/{{ repo }}"
   when: pretend is not defined
