@@ -11,30 +11,10 @@
 - name: Checkout ntdr-pas repo
   git: repo=ssh://git@github.com/neontribe/ntdr-pas.git dest={{ tmp }}/ntdr-pas update=yes version=master force=yes accept_hostkey=yes
 
-########################################
-# Depricate this when we stop using it #
-- name: Get last log message
-  shell: git log -1 --pretty="%h|%B"
-  args:
-    chdir: "{{ tmp }}/{{ repo }}"
-  register: last_log
-
-- debug: var=last_log
-
-- name: Get git logs
-  shell: "git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit > changelog.raw"
-  args:
-    chdir: "{{ tmp }}/{{ repo }}"
-  register: tag_log
-
-- name: Create changelog
-  shell: "ansi2html.sh < changelog.raw > changelog.html"
-  args:
-    chdir: "{{ tmp }}/{{ repo }}"
-  register: changelog
-################################
 - name: Generate new changelog
   shell: "drush ntc {{ tmp }}/{{ repo }} > {{ tmp }}/{{ repo }}/changelog.json"
+
+- debug: msg="{{ tmp }}/{{ repo }}/changelog.json"
 
 - name: Add change log
   shell: git add -A
