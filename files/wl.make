@@ -84,6 +84,11 @@ libraries[ckeditor][download][url] = "https://ftp.drupal.org/files/projects/cked
 libraries[ckeditor][directory_name] = "ckeditor"
 libraries[ckeditor][type] = "library"
 
+libraries[createsend-php][download][type] = "get"
+libraries[createsend-php][download][url] = "https://staging.neontribe.org/.resources/createsend-php-5.0.2.zip"
+libraries[createsend-php][directory_name] = "createsend-php"
+libraries[createsend-php][type] = "library"
+
 ; Profiles
 projects[neontabs_profile][download][type] = "git"
 projects[neontabs_profile][download][url] = "git@bitbucket.org:neontabs/neontabs_profile.git"
