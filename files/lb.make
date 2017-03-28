@@ -5,7 +5,7 @@ api = 2
 projects[ntlb_modules][download][tag] = v1_13_2
 projects[neontabs][download][tag] = v1_12_9
 projects[nt_tabs][download][tag] = v5_10_2
-projects[ntlb_theme][download][tag] = v1_13_6
+projects[ntlb_theme][download][tag] = v1_13_7
 projects[neontabs_theme][download][tag] = "v1_2_2"
 
 ; Core
