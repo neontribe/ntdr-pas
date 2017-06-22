@@ -5,7 +5,7 @@ api = 2
 ; These are the lines that need to kept up to date with releases, they are grouped here
 
 projects[nthh_theme][download][tag] = v0_11_6
-projects[nthh_modules][download][tag] = v0_11_5
+projects[nthh_modules][download][tag] = v0_11_6
 projects[nt_tabs][download][tag] = v5_10_7
 projects[neontabs][download][tag] = v6_9_3
 projects[neontabs_theme][download][tag] = v1_2_2
