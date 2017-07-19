@@ -3,10 +3,10 @@
   ntdr_get_db_details.py: path={{ local }}/sites/default/settings.php autofix=true
   register: db
 
-- name: Archive the site
-  shell: drush arb --destination={{ archive }} --no-core --overwrite
-  args:
-    chdir: "{{ local }}"
+  #- name: Archive the site
+  #shell: drush arb --destination={{ archive }} --no-core --overwrite
+  #args:
+  #chdir: "{{ local }}"
 
 - name: Drop DB
   mysql_db: name={{ db.stat.dbname }} state=absent
