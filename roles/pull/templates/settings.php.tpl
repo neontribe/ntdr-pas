@@ -1,13 +1,13 @@
 <?php
 
 $databases = array (
-  'default' => 
+  'default' =>
   array (
-    'default' => 
+    'default' =>
     array (
-      'database' => '{{ source_version.stat.latest.shortver }}',
-      'username' => '{{ source_version.stat.latest.shortver }}',
-      'password' => '{{ source_version.stat.latest.shortver }}',
+      'database' => '{% if db is defined %}{{ db }}{% else %}{{ source_version.stat.latest.shortver }}{% endif %}',
+      'username' => '{% if db is defined %}{{ db }}{% else %}{{ source_version.stat.latest.shortver }}{% endif %}',
+      'password' => '{% if db is defined %}{{ db }}{% else %}{{ source_version.stat.latest.shortver }}{% endif %}',
       'host' => 'localhost',
       'port' => '',
       'driver' => 'mysql',

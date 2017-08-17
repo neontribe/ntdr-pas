@@ -97,15 +97,15 @@
 - name: Create settings.php if local settings does not exists and db IS NOT set
   template: src=settings.php.tpl dest={{ local }}/sites/default/settings.php
   delegate_to: 127.0.0.1
-  when: (not local_settings.stat.exists) and db is undefined
+  when: (not local_settings.stat.exists)
   tags:
     - db
     - fullsync
 
-- name: Create settings.php if local settings does not exists and db IS set {{ db }}
-  template: src=settings_force_db.php.tpl dest={{ local }}/sites/default/settings.php
+- name: Create settings.php from Brecon settings template if brand is BR
+  template: src=settings_br.php.tpl dest={{ local }}/sites/default/settings.php
   delegate_to: 127.0.0.1
-  when: (not local_settings.stat.exists) and db is defined
+  when: (not local_settings.stat.exists) and ('br' in ansible_hostname)
   tags:
     - db
     - fullsync
