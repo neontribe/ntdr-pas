@@ -12,7 +12,6 @@ projects[ntbr_modules][download][tag] = v2_6_9
 projects[ntbr_theme2][download][tag] = v1_2_5
 
 projects[advagg][subdir] = "contrib"
-projects[domain][subdir] = "contrib"
 projects[ctools][subdir] = "contrib"
 projects[cacheexclude][subdir] = "contrib"
 projects[entity][subdir] = "contrib"
