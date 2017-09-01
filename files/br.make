@@ -14,6 +14,7 @@ projects[ntbr_theme2][download][tag] = v1_2_5
 projects[advagg][subdir] = "contrib"
 projects[ctools][subdir] = "contrib"
 projects[cacheexclude][subdir] = "contrib"
+projects[eu_cookie_compliance][subdir] = "contrib"
 projects[entity][subdir] = "contrib"
 projects[field_group][subdir] = "contrib"
 projects[git_deploy][subdir] = "contrib"
