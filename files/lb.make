@@ -6,7 +6,7 @@ projects[ntlb_modules][download][tag] = v1_13_7
 projects[neontabs][download][tag] = v6_9_3
 projects[nt_tabs][download][tag] = v5_10_7
 projects[ntlb_theme][download][tag] = v1_13_10
-projects[neontabs_theme][download][tag] = "v1_2_2"
+projects[neontabs_theme][download][tag] = v1_2_3
 
 ; Core
 projects[drupal][version] = "7.x"

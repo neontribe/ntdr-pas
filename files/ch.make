@@ -67,7 +67,7 @@ projects[ntch_theme][download][url] = "git@bitbucket.org:neontabs/ntch_theme.git
 projects[neontabs_theme][download][type] = "git"
 projects[neontabs_theme][download][url] = "git@bitbucket.org:neontabs/neontabs_theme.git"
 projects[neontabs_theme][type] = "theme"
-projects[neontabs_theme][download][tag] = "v1_2_0"
+projects[neontabs_theme][download][tag] = v1_2_3
 
 ; Libraries
 libraries[tabs-api-client][download][type] = "get"
