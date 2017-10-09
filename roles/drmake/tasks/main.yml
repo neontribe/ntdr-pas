@@ -1,0 +1,3 @@
+---
+- name: Drush make
+  shell: "drush make --working-copy {{ playbook_dir }}/files/{{ brandcode }}.make {{ local }}"
