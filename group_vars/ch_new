@@ -1,0 +1,14 @@
+brandcode: ch
+drupal_su_pass: howdressguardpublic
+mysql_root_pw: everybodyillcarmixture
+ansible_become_pass: bowlhimselffencenice
+
+local: /var/www/sites/latest/ch
+theme_folder: sites/all/themes/ntch_theme
+
+drupal_su_pass_new: howdressguardpublic
+mysql_root_pw_new: everybodyillcarmixture
+ansible_become_pass_new: bowlhimselffencenice
+ansible_become_pass_new_hash: $6$azQ5hGeMZdgwn6b$3O2Zm8UAx2T1couIZNjhzgEzpWYaOpQfqyV0RFC05IHffAFweKUQ3AMIjubtMJcmotBBkaLL7DnAzIpjJsp6h/
+root_pass: churchdesignersuntanbattery
+neontribe_pass: identityanklepremiumscandal

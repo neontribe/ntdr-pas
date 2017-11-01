@@ -1,3 +1,9 @@
+# On remote server
+#    apt update && apt install python python-mysqldb
+#    adduser --ingroup sudo neontribe
+# On ansible (local) host
+#    ssh-copy-id neontribe@some.ip.address
+#
 # ansible-playbook -u neontribe --ask-become-pass -i "192.168.21.138," --extra-vars="mysql_root_pw=foobar domain_name=foo.bar.com" provision-server.yml
 # add-apt-repository ppa:ondrej/php
 # apt-get update

@@ -3,6 +3,7 @@ br_live ansible_ssh_host=139.59.167.207 ansible_ssh_user=neonbr
 
 [ch]
 ch_live ansible_ssh_host=178.62.24.86 ansible_ssh_user=neonch
+ch_new ansible_ssh_host=46.101.89.36 ansible_ssh_user=neonch
 
 [cm]
 cm_live ansible_ssh_host=138.68.153.82 ansible_ssh_user=neoncm
