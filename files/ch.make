@@ -3,7 +3,7 @@ core = 7.x
 api = 2
 
 projects[neontabs][download][tag] = v1_1_22
-projects[nt_tabs][download][tag] = v5_14_2
+projects[nt_tabs][download][tag] = v5_14_3
 projects[ntch_modules][download][tag] = v1_11_5
 projects[ntch_theme][download][tag] = v1_1_23
 
