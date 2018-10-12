@@ -43,3 +43,5 @@
 - name: Remove the clear link
   file: path="{{ clear_folder.stat.path }}" state=absent
   when: clear_folder.stat.path is defined
+  ignore_errors: yes
+
